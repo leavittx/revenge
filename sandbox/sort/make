@@ -1,0 +1,4 @@
+echo "Compiling sources into object files"
+for i in *.c; do gcc -march=native -O2 -pipe -c $i -o ${i/.c/.o}; done;
+echo "Building main program"
+gcc -march=native -O2 -pipe -lm *.o -o sort
