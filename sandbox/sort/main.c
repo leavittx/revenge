@@ -7,9 +7,7 @@
 #include <stdio.h>
 
 #include "../common/common.h"
-#include "introsort.h"
-
-#define N 8
+#include "sort.h"
 
 void print_array(double *a, int n)
 {
@@ -23,11 +21,12 @@ void print_array(double *a, int n)
 
 int main( void )
 {
-	double a[N] = {22.2, 23.5, 49.3, 0.1, -2.5, 44.5, -77.5, 200.0};
+	double a[] = {22.2, 23.5, 49.3, 0.1, -2.5, 44.5, -77.5, 200.0, 99, 28, 91.2, 49.3};
+	int N = NELEMS(a);
 	
 	print_array(a, N);
 	
-	IntroSort(a, N);
+	Sort(a, N);
 	
 	print_array(a, N);
 	

@@ -6,4 +6,4 @@
 
 #pragma once
 
-void IntroSort(double *a, int n);
+void Sort(double *a, int n);
