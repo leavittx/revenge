@@ -6,12 +6,12 @@
 
 #include <math.h>
 
-/* optimal value: */
-#define size_threshold 64
-/* default value: */
-//#define size_threshold 16
+#include "swap.h"
 
-inline static void swap(double *a, double *b);
+/* default value: */
+#define size_threshold 16
+//#define size_threshold 64
+
 inline static int floor_lg(int a);
 static int partition(double *a, int lo, int hi, double x);
 static double medianof3(double *a, int lo, int mid, int hi);
@@ -19,14 +19,8 @@ static void insertionsort(double *a, int lo, int hi);
 static void downheap(double *a, int i, int n, int lo);
 static void heapsort(double *a, int lo, int hi );
 static void introsort_loop(double *a, int lo, int hi, int depth_limit);
-static void IntroSort(double *a, int n);
 
-void Sort(double *a, int n)
-{
-    IntroSort(a, n);
-}
-
-static void IntroSort(double *a, int n)
+void IntroSort(double *a, int n)
 {
 	introsort_loop(a, 0, n, 2 * floor_lg(n));
 	insertionsort(a, 0, n);
@@ -156,13 +150,4 @@ static void insertionsort(double *a, int lo, int hi)
 inline static int floor_lg(int a)
 {
 	return (int)floor(log(a) / log(2));
-}
-
-inline static void swap(double *a, double *b)
-{
-	register double tmp;
-	
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
 }
