@@ -2,13 +2,18 @@
 // Includes
 //-------------------------------------------------------
 
+#ifdef _WIN32
 #include <windows.h>
 #include <commctrl.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "../globals.h"
+#ifdef _WIN32
 #include "../resources/resource.h"
+#endif
 #include "config.h"
 
 

@@ -3,6 +3,8 @@
 #include <math.h>
 #include "vector3.h"
 
+class Vector3;
+
 /*
     A simple 3x3 matrix class. 
 

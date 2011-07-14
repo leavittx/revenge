@@ -2,7 +2,10 @@
 
 #include "stdio.h"
 #include <vector>
+
+#ifdef _WIN32
 #include <windows.h>
+#endif
 
 /*
     Config class used for the demo settings. Includes the startup dialog.

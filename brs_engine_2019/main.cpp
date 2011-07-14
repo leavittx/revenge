@@ -16,12 +16,16 @@ PostProcess g_postprocess;
 
 Demo *g_demo; //bad, mmkay
 
+#ifdef _WIN32
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
 	MSG msg = {0};
+#else
+int main(void) {
+#endif
 
 	//first initialize system
 	g_system.init();
@@ -94,6 +98,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 			g_system.setWindowTitle("Brainstorm :: 2019");
 			demorunning = g_system.demoRunning();
 
+#ifdef _WIN32
 		    if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		    {
 			    if(msg.message == WM_QUIT)
@@ -116,10 +121,16 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         demo->stop();
 		g_textures.dumpUnusedImages();
     }
+#else
+#endif
+        }
+    }
 
     delete demo;
+
+#ifdef _WIN32
     return msg.wParam;
+#else
+    return 0;
+#endif
 }
-
-
-

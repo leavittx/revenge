@@ -1,11 +1,21 @@
 #pragma once
 
 //fix visual studio "debug information truncated to 255 bytes"-whining
+#ifdef _WIN32
 #pragma warning ( disable : 4786)
+#endif
 
 #define GLEW_STATIC /* use static version and not the DLL */
+
+#ifdef _WIN32
 #include <windows.h>
-#include <gl/glew.h>
+#else
+typedef unsigned long DWORD;
+typedef unsigned short WORD;
+typedef unsigned int UNINT32;
+#endif
+
+#include <GL/glew.h>
 #include <map>
 #include <vector>
 #include <list>
@@ -48,7 +58,7 @@ using namespace std;
 #include "core/sound.h"
 #include "core/bpm.h"
 #include "core/parameter.h"
-#include "core/BPM.h"
+#include "core/bpm.h"
 #include "core/trigger.h"
 #include "core/event.h"
 #include "core/image.h"
