@@ -1,0 +1,696 @@
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     config                                                                                   ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; sound = true/false
+; debug = true/false
+
+config
+{
+	sound = true;
+	debug = true;
+	song = hansee-its_alive.mp3
+	endtime = 2000
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     oikeat efektit                                                                           ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+event someevent
+{
+	time = 40000
+	length = 1000
+}
+
+trigger sometriggers
+{
+	1000 1000
+	2000 1000
+	3000 1000
+	4000 1000
+}
+
+
+event animalfadein
+{
+	time = 4000
+	length = 10000
+}
+event dashedanimalstart
+{
+	time = 20300
+	length = 8000
+}
+
+event backgroundfadeinstart
+{
+	time = 10000
+	length = 4000
+}
+event backgroundfadeout
+{
+	time = 130000
+	length = 8000
+}
+event flowerfadeout
+{
+	time = 75000
+	length = 1000
+}
+event symbolstart 
+{
+	time = 48000
+	length = 1000
+}
+
+event camerazoominstart
+{
+	time = 7000
+	length = 7000
+}
+event treefadein
+{
+	time = 20000
+	length = 6000
+}
+event treefadeout
+{
+	time = 135000
+	length = 1000
+}
+
+event circuitfadein
+{
+	time = 155000
+	length = 5000
+}
+
+event circuitfadeout
+{
+	time = 235000
+	length = 3000
+
+}
+
+event plantfadein
+{
+	time = 33000
+	length = 2000
+}
+
+event plantfadeout
+{
+	time = 150000
+	length = 1000
+}
+
+event plantstartagain
+{
+	time = 185000
+	length = 1000
+
+}
+event plantgooutforgood
+{
+	time = 235000
+	length = 3000
+
+}
+event animalfadeout
+{
+	time = 149000
+	length = 3000
+
+}
+
+event equplantfadein
+{
+	time = 51000
+	length = 1000
+
+}
+
+event dashedplantfadein
+{
+	time = 61000
+	length = 1000
+}
+
+
+
+event treequantfadein
+{
+	time = 89150
+	length = 50
+}
+
+event cloudscomein
+{
+	time = 75000
+	length = 1000
+}
+
+event cloudsgoout
+{
+	time = 227000
+	length = 1000
+}
+
+event cloudsturnround
+{
+	time = 150000
+	length = 1000
+
+}
+event beatcircles
+{
+	time = 75500
+	length = 1000
+}
+
+event upplantfadein
+{
+	time = 120000
+	length = 50
+}
+
+event towerfadein
+{
+	time = 180000
+	length = 50
+
+}
+event towerfadeout
+{
+	time = 225000
+	length = 50
+
+}
+
+event globalfadeout
+{
+	time = 236000
+	length = 3000
+
+}
+
+event cloudstopstart
+{
+	time = 140000
+	length = 1000
+}
+
+event rainstart
+{
+	time = 161000
+	length = 15000
+
+}
+
+event cloudstopend
+{
+	time = 157000
+	length = 4000
+}
+
+event windstart
+{
+	time = 158000
+	length = 4000
+}
+event windfadeout
+{
+	time = 230000
+	length = 1000
+
+}
+
+event colorize
+{
+	time = 33000
+	length = 100000
+}
+
+event emitparticles
+{
+	time = 21000
+	length = 40000
+}
+event firegoesout
+{
+	time = 152000
+	length = 1000
+}
+event circuitprocreationstop
+{
+	time = 230000
+	length = 1000
+
+}
+
+event whoosh
+{
+	time = 73000
+	length = 4000
+}
+
+event brsfadein
+{
+	time = 2000
+	length = 4000
+}
+event brsfadeout
+{
+	time = 8000
+	length = 3000
+}
+event titlefadein1
+{
+	time = 13000
+	length = 2000
+}
+event titlefadeout1
+{
+	time = 17000
+	length = 3000
+}
+event titlefadein2
+{
+	time = 13250
+	length = 2000
+}
+event titlefadeout2
+{
+	time = 17250
+	length = 3000
+}
+event titlefadein3
+{
+	time = 13500
+	length = 2000
+}
+event titlefadeout3
+{
+	time = 17500
+	length = 3000
+}
+event titlefadein4
+{
+	time = 13750
+	length = 2000
+}
+event titlefadeout4
+{
+	time = 17500
+	length = 3000
+}
+event creditsfadein
+{
+	time = 228000
+	length = 4000
+}
+event creditsfadeout
+{
+	time = 235000
+	length = 3000
+}
+event creditszoom
+{
+	time = 228000
+	length = 21000
+
+}
+
+event buildingstopdie
+{
+	time = 228000
+	length = 31000
+
+
+}
+
+trigger sync
+{
+	72000 5000
+	127000 5000
+	154000 5000
+	209000 5000
+
+}
+namespace tree
+{
+	int randomseed = 666
+	int treecount = 3
+	float movementspeed = 0.02f
+	float animationspeed = 0.01f
+	float anglespeed = 0.003f
+	float cameradistance = 28.0f;
+	float cameradistancebeforezoom = 53.0f;
+	float camerazoomspeed = 0.005f
+	float camerazoomamount = 2.0f
+	float cameraglobalzoomspeed = 0.0002f
+	float cameraglobalzoomamount = 3.0f
+	
+	float treequantvalue = 0.2f
+	
+	float backgroundgridsize = 40.0f
+	int backgroundgridsteps = 40
+	
+	range travelspeed = 0.001f 0.01f
+	float waypointaddthreshold = 0.3
+	float waypointinitialtime = 8.0
+	range waypointspread = 0.0 1.5
+	
+	float plantthreshold = 0.3f;
+	range plantrange = 0.1f 14.0f
+
+	range plantflowertime = 2.0f 3.0f
+	range plantflowerradius = 0.3f 0.9f
+	range plantflowerfade = 0.3f 0.5f
+	range plantflowerpetals = 7 14
+	range plantflowerpetallength = 3.1f 5.5f
+	range plantflowerrotationspeed = -0.0005f 0.0005f
+	
+	range planttowertime = 30.0f 50.0f
+	range planttowerradius = 0.6f 1.3f
+	range planttowerfade = 0.5f 0.8f
+	range planttowerheight = 5.7f 10.9f
+	range planttowerfloors = 6 11
+	range planttowergrowspeed = 0.003 0.01
+	
+	range plantdashedtime = 2.0f 3.0f
+	range plantdashedradius = 3.3f 6.9f
+	range plantdashedfade = 0.5f 0.9f
+		
+	range plantequtime = 7.0f 11.0f
+	range plantequradius = 0.3f 0.5f
+	range plantequfade = 0.5f 0.9f
+	range plantequpetals = 3 6
+	range plantequpetallength = 1.1f 1.5f
+	range plantequpointcount = 6 11
+	range plantequpointspread = 0.42f 0.9f;
+	range plantequpointwidth = 0.01f 0.03f;
+	
+	float symbolrowprobability = 0.4f
+	float symbolupwardsprobability = 0.115f
+	range symbolrotation = -0.005f 0.005f
+	range symbolrowcount = 5 8
+	range plantsymboltime = 3.5f 6.0f
+	range plantsymbolfade = 0.47f 0.96f
+	range plantsymbolsize = 0.5f 1.5f
+	
+	float animalthreshold = 0.01f;
+	range animallife = 0.5f 0.9f
+	range animalspeed = 0.01f 0.1f
+	range animalsize = 0.1f 0.3f
+	
+	float cloudthreshold = 0.4f
+	float cloudthreshold2 = 0.3f
+	float cloudfade = 4.0f
+	range cloudsize = 0.2f 1.2f
+	range cloudheight = 2.2f 9.2f
+	range cloudrange = 6.0f 18.0f
+	range cloudspeed = 0.5f 3.0f
+	range cloudlife = 4.0f 6.0f
+	range cloudquads = 1 7
+	range cloudquadspread = 0.6f 2.0f
+	float cloudshadow = 0.50f
+	range cloudquadspeed = 0.000f 0.003f
+	range cloudtransparency = 0.9f 1.0f
+	range cloudtransparencyround = 0.6f 1.0f
+	
+	range windparticletime = 1.0f 3.2f
+	range windparticlelength = 0.03f 0.07f
+	range windrange = 1.1f 25.0f
+	range winddeviation_x = -0.2f 0.2f
+	range winddeviation_y = -0.2f 0.2f
+	range winddeviation_z = -0.2f 0.2f
+	range windspeed = 0.95f 1.05f
+	range windheight = 0.04f 2.0f
+	range windrotation_x = -0.02f 0.09f
+	range windrotation_y = -0.02f 0.09f
+	range windrotation_z = -0.02f 0.09f
+	vector3 winddirection = -0.03 0.00 0.0
+	float windthreshold = 0.1f
+	int windaddcount = 2
+	int maxwindparticles = 300
+	
+	range rainparticletime = 1.0f 3.2f
+	range rainparticlelength = 0.05f 0.1f
+	range rainfallspeed = 0.01 0.03f
+	range rainrotation_x = -0.02f 0.09f
+	range rainrotation_y = -0.02f 0.09f
+	range rainrotation_z = -0.02f 0.09f
+	range rainparticlelife = 3.0f 9.0f
+	float rainthreshold = 0.1f
+	int rainaddcount = 3
+	
+	float circuitthreshold = 0.3f
+	range circuitrange = 0.1f 4.0f
+	range circuitcirclesize = 0.1f 0.4f
+	range circuitlinelength = 1.2f 2.3f
+	range circuittime = 1.3f 1.6f
+	range circuitspawntime = 0.7f 1.0f
+	int circuitadd = 1
+	float circuitdiedistance = 14.0f
+	float circuitdoubleprobability = 0.3f
+	int circuitmax = 1000
+	
+	float particlethreshold = 0.04f
+	range particleadd = 4 9
+	range particletime = 1.4f 8.6f
+	range particlesize = 0.1f 0.5f
+	range particlefade = 0.1f 0.5f
+	range particlespeed = 0.0001 0.0004
+	range particlesmoketime = 2.0 3.0
+	range particleblack = 0.1 0.6
+	range particlesmokefade = 0.4 0.7f
+	range particlesmokesize = 0.1 1.3f
+	range particlesmokesizeincrease = 0.001 0.003
+	range particlerise = 0.01 0.03
+	
+	int glowcount = 7
+	float glow_x = 0.01f
+	float glow_y = 0.01f
+	float glow_alpha = 0.92f
+	float glow_exp = 0.0f
+
+	int treeglowcount = 7
+	float treeglow_x = 0.01f
+	float treeglow_y = 0.01f
+	float treeglow_alpha = 0.95f
+	float treeglow_exp = 0.0f
+		
+	int cloudglowcount = 7
+	float cloudglow_x = 0.08f
+	float cloudglow_y = 0.08f
+	float cloudglow_alpha = 0.97f
+	float cloudglow_exp = 0.0f
+
+	int cloudglowcount2 = 9
+	float cloudglow_x2 = 0.08f
+	float cloudglow_y2 = 0.08f
+	float cloudglow_alpha2 = 0.97f
+	float cloudglow_exp2 = 0.0f
+
+}
+
+material somematerial
+{
+	diffuse = 1 1 1
+	ambient = 0.4 0.4 0.4
+	specular = 1 1 1
+	shininess = 100
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     beat				                                                                        ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+BPM basicbeat0
+{
+	bpm = 35
+	offset = 0
+
+}
+BPM basicbeat1
+{
+	bpm = 70
+	offset = 0
+}
+
+BPM basicbeat2
+{
+	bpm = 140
+	offset = 0
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     meshes																					;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+/*
+mesh testi.obj
+{
+	usevbo = true
+	autotexture = false
+	texture = texture1.jpg
+	usefacenormals = false
+	calculatenormals = false
+	retain = true
+}
+*/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     textures                                                                                 ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; upload = true/false 
+; wrap 	 = repeat/clamp
+; retain = true/false 
+; mipmap = true/false
+; filter = nearest / linear 
+
+texture ground.jpg
+{
+	mipmap = true
+	wrap = repeat
+	filter = linear
+}
+
+texture ceiling.jpg
+{
+	mipmap = true
+	wrap = repeat
+	filter = linear
+}
+texture brslogo.png
+{
+	wrap = clamp
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     postprocessing rendertargets                                                             ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;; NOTE! these are hardcoded into the postprocessing code so if any names are changed, they need to be 
+;;;;; changed in the code as well!
+
+rendertarget postprocess_1024
+{
+	width = 1024;
+	height = 1024;
+}
+rendertarget postprocess_1024_2
+{
+	width = 1024;
+	height = 1024;
+}
+
+rendertarget postprocess_1024_3
+{
+	width = 1024;
+	height = 1024;
+}
+rendertarget postprocess_1024_4
+{
+	width = 1024;
+	height = 1024;
+}
+
+rendertarget postprocess_512
+{
+	width = 512;
+	height = 512;
+}
+rendertarget postprocess_512_2
+{
+	width = 512;
+	height = 512;
+}
+rendertarget postprocess_256
+{
+	width = 256;
+	height = 256;
+}
+rendertarget postprocess_256_2
+{
+	width = 256;
+	height = 256;
+}
+rendertarget postprocess_128
+{
+	width = 128;
+	height = 128;
+}
+rendertarget postprocess_128_2
+{
+	width = 128;
+	height = 128;
+}
+rendertarget postprocess_64
+{
+	width = 64;
+	height = 64;
+}
+rendertarget postprocess_64_2
+{
+	width = 64;
+	height = 64;
+}
+rendertarget postprocess_32
+{
+	width = 32;
+	height = 32;
+}
+
+
+texture postprocess_1024
+{
+	wrap = clamp;
+}
+texture postprocess_1024_2
+{
+	wrap = clamp;
+}
+texture postprocess_512
+{
+	wrap = clamp;
+}
+texture postprocess_512_2
+{
+	wrap = clamp;
+}
+texture postprocess_256
+{
+	wrap = clamp;
+}
+texture postprocess_256_2
+{
+	wrap = clamp;
+}
+texture postprocess_1284
+{
+	wrap = clamp;
+}
+texture postprocess_128_2
+{
+	wrap = clamp;
+}
+texture postprocess_64
+{
+	wrap = clamp;
+}
+texture postprocess_64_2
+{
+	wrap = clamp;
+}
+
+; this is for the pixelize shader mainly
+texture postprocess_32
+{
+	filter = nearest
+	wrap = clamp
+}
+
+
+; some whitespade needed :)
