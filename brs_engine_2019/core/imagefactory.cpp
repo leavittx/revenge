@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "imagefactory.h"
 #include "DevIL/il.h"
 #include "DevIL/ilu.h"
@@ -5,93 +7,93 @@
 
 Image* ImageFactory::createEmpty(int width, int height)
 {
-	Image *image = new Image();
-	//create image and 
-	image->m_width = width;
-	image->m_height = height;
-	image->m_data = new unsigned int [image->m_width * image->m_height];
-	memset(image->m_data, 0, image->m_width*image->m_height*sizeof(unsigned int));
-	return image;
+    Image *image = new Image();
+    //create image and
+    image->m_width = width;
+    image->m_height = height;
+    image->m_data = new unsigned int [image->m_width * image->m_height];
+    memset(image->m_data, 0, image->m_width*image->m_height*sizeof(unsigned int));
+    return image;
 }
 Image* ImageFactory::loadJPG(string filename)
 {
-	unsigned int imageID;
-	unsigned char *ptr = NULL, *dest = NULL;
+    unsigned int imageID;
+    unsigned char *ptr = NULL, *dest = NULL;
 
-	ilInit();
-	ilGenImages(1, &imageID);
-	ilBindImage(imageID);
+    ilInit();
+    ilGenImages(1, &imageID);
+    ilBindImage(imageID);
 
-	// Load image from a file
-	if(!ilLoadImage((char *)filename.c_str()))
-	{
-		g_debug << "loading image " << filename << " failed!" << endl;
-		return 0;
-	}
+    // Load image from a file
+    if(!ilLoadImage((char *)filename.c_str()))
+    {
+        g_debug << "loading image " << filename << " failed!" << endl;
+        return 0;
+    }
 
-	Image *image = new Image();
-	image->m_width = ilGetInteger(IL_IMAGE_WIDTH);
-	image->m_height = ilGetInteger(IL_IMAGE_HEIGHT);
-	image->m_data = new unsigned int[image->m_width*image->m_height];
+    Image *image = new Image();
+    image->m_width = ilGetInteger(IL_IMAGE_WIDTH);
+    image->m_height = ilGetInteger(IL_IMAGE_HEIGHT);
+    image->m_data = new unsigned int[image->m_width*image->m_height];
 
-	ilConvertImage(IL_RGB, IL_BYTE);
-	ptr = ilGetData();
-	dest = (unsigned char *)image->m_data;
+    ilConvertImage(IL_RGB, IL_BYTE);
+    ptr = ilGetData();
+    dest = (unsigned char *)image->m_data;
 
-	for(int i = 0; i < image->m_width*image->m_height; i++)
-	{
-		*dest++ = *ptr++;
-		*dest++ = *ptr++;
-		*dest++ = *ptr++;
-		*dest++ = 255; //TODO: adjustable alpha channel? 
-	}
-	ilDeleteImages(1, &imageID);
+    for(int i = 0; i < image->m_width*image->m_height; i++)
+    {
+        *dest++ = *ptr++;
+        *dest++ = *ptr++;
+        *dest++ = *ptr++;
+        *dest++ = 255; //TODO: adjustable alpha channel?
+    }
+    ilDeleteImages(1, &imageID);
 
-	return image;
+    return image;
 
 }
 
 Image* ImageFactory::loadPNG(string filename)
 {
-	unsigned int imageID;
+    unsigned int imageID;
 
-	ilInit();
-	ilGenImages(1, &imageID);
-	ilBindImage(imageID);
+    ilInit();
+    ilGenImages(1, &imageID);
+    ilBindImage(imageID);
 
-	// Load image from a file
-	if(!ilLoadImage((char *)filename.c_str()))
-	{
-		g_debug << "loading image " << filename << " failed!" << endl;
-		return 0;
-	}
+    // Load image from a file
+    if(!ilLoadImage((char *)filename.c_str()))
+    {
+        g_debug << "loading image " << filename << " failed!" << endl;
+        return 0;
+    }
 
-	Image *image = new Image();
-	image->m_width = ilGetInteger(IL_IMAGE_WIDTH);
-	image->m_height = ilGetInteger(IL_IMAGE_HEIGHT);
-	image->m_data = new unsigned int[image->m_width*image->m_height];
+    Image *image = new Image();
+    image->m_width = ilGetInteger(IL_IMAGE_WIDTH);
+    image->m_height = ilGetInteger(IL_IMAGE_HEIGHT);
+    image->m_data = new unsigned int[image->m_width*image->m_height];
 
-	ilConvertImage(IL_RGBA, IL_BYTE);
-	unsigned int *source = (unsigned int *)ilGetData();
-	unsigned int *dest = image->m_data;
-	for(int i = 0; i < image->m_width*image->m_height; i++)
-	{
-		*dest++ = *source++;
-	}
+    ilConvertImage(IL_RGBA, IL_BYTE);
+    unsigned int *source = (unsigned int *)ilGetData();
+    unsigned int *dest = image->m_data;
+    for(int i = 0; i < image->m_width*image->m_height; i++)
+    {
+        *dest++ = *source++;
+    }
 
-/*
-	ptr = ilGetData();
-	dest = (unsigned int *)m_data;
+    /*
+ ptr = ilGetData();
+ dest = (unsigned int *)m_data;
 
-	for(int i = 0; i < m_width*m_height; i++)
-	{
-		*dest++ = *ptr++;
-		*dest++ = *ptr++;
-		*dest++ = *ptr++;
-		*dest++ = 255; //TODO: adjustable alpha channel? 
-	}
+ for(int i = 0; i < m_width*m_height; i++)
+ {
+  *dest++ = *ptr++;
+  *dest++ = *ptr++;
+  *dest++ = *ptr++;
+  *dest++ = 255; //TODO: adjustable alpha channel?
+ }
 */
-	ilDeleteImages(1, &imageID);
+    ilDeleteImages(1, &imageID);
 
-	return image;
+    return image;
 }

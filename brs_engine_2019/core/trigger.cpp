@@ -39,7 +39,7 @@ float TriggerSystem::getValue()
 		}
 	}
 	//clamp
-	value = min(value, 1);
+	value = min(value, 1.0f);
 	return value;
 }
 

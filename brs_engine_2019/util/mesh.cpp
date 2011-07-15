@@ -326,8 +326,16 @@ void Mesh::center()
 	if (vertexCount <= 0)
 		return;
 
-	Vector3 center = Vector3(0, 0, 0);
+        Vector3 center = Vector3(0, 0, 0);
+
+#if defined(_MSC_VER)
 	for each (Vertex v in m_vertices)
+#else
+//#if defined(__GXX_EXPERIMENTAL_CXX0X__)
+        for (Vertex& v: m_vertices)
+//#else
+//#error
+#endif
 	{
 		center += v.position;
 	}

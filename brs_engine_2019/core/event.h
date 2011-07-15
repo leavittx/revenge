@@ -9,13 +9,13 @@
 class Event
 {
 public:
-	Event() {};
-	~Event() {};
+    Event() {};
+    ~Event() {};
 
-	float getValue();
-	bool hasPassed();
+    float getValue();
+    bool hasPassed();
 
-	int m_time;
-	int m_length;
+    int m_time;
+    int m_length;
 };
 

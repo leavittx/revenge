@@ -1,4 +1,4 @@
-#include "Matrix.h"
+#include "matrix.h"
 
 Matrix::Matrix()
 {
@@ -128,14 +128,14 @@ Matrix Matrix::rotation(float x, float y, float z)
     return m;
 }
 
-Matrix Matrix::rotation(Vector3 &v)
+Matrix Matrix::rotation(const Vector3 &v)
 {
     Matrix m;
     m.makeRotation(v.x, v.y, v.z);
     return m;
 }
 
-Matrix Matrix::scale(float x, float y, float z)
+Matrix& Matrix::scale(float x, float y, float z)
 {
     Matrix m;
 

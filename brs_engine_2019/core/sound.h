@@ -6,82 +6,88 @@
 
 //#include "fmod.h"
 //#include "fmod_errors.h"
+
+#if defined(_WIN32)
 #include "fmod/fmod.hpp"
 #include "fmod/fmod_errors.h"
+#else
+#include <fmodex/fmod.hpp>
+#include <fmodex/fmod_errors.h>
+#endif
 
 class Song;
 
 class Sound
 {
-	friend class Song;
+    friend class Song;
 
-	public:
+public:
 
-		~Sound();
+    ~Sound();
 
-		static Sound *create();
-		static bool checkEnabled();
-		bool init();		
+    static Sound *create();
+    static bool checkEnabled();
+    bool init();
 
-		void setVolume( Song *music, float i );
-		void close();
-		void update();
+    void setVolume( Song *music, float i );
+    void close();
+    void update();
 
-		static bool checkSync();
-		static void setEnabled(bool f);
-		static bool getEnabled();
-		static void setSync(bool f);
+    static bool checkSync();
+    static void setEnabled(bool f);
+    static bool getEnabled();
+    static void setSync(bool f);
 
-	private:
+private:
 
-		static bool createdFlag;
-		static bool enabled;
-		static Sound *instance;
-		static bool syncFlag;
-		static FMOD::System *fmodSystem;
+    static bool createdFlag;
+    static bool enabled;
+    static Sound *instance;
+    static bool syncFlag;
+    static FMOD::System *fmodSystem;
 
-		void checkError(FMOD_RESULT result);
-		
-		Sound() {}
-		Sound(const Sound &) {}
-		Sound& operator = (const Sound &) {}
+    void checkError(FMOD_RESULT result);
+
+    Sound() {}
+    Sound(const Sound &) {}
+    //Sound& operator = (const Sound &) {}
 };
 
 
 class Song
 {
-	friend class Sound;
+    friend class Sound;
 
-	public:
+public:
 
-		Song();
-		~Song();
-		
-		bool loadStream(char *name);
-		bool loadStream2(char *memdata, int length);
-		
-		void start();
-		void stop();
-		void release();		
-		
-        void changePosition(int delta);
-		void setPosition(unsigned int offset);
-		void setPaused(bool f);
-		void togglePause();
+    Song();
+    ~Song();
 
-		int getLength();
-		int getPosition();
-		bool checkPlaying();
-		void getWaveData(float *array, int size); //pcm
-		void getSpectrum(float *array, int size); //spectrum
+    bool loadStream(char *name);
+    bool loadStream2(char *memdata, int length);
 
-	private:
-		bool isPlaying;
-		FMOD::Sound *stream;
-		float volume;
-		char *data;
-		unsigned int length;
-		FMOD::Channel *m_channel;
+    void start();
+    void stop();
+    void release();
+
+    void changePosition(int delta);
+    void setPosition(unsigned int offset);
+    void setPaused(bool f);
+    void togglePause();
+
+    int getLength();
+    int getPosition();
+    bool checkPlaying();
+    void getWaveData(float *array, int size); //pcm
+    void getSpectrum(float *array, int size); //spectrum
+
+private:
+    bool isPlaying;
+    FMOD::Sound *stream;
+    float volume;
+    char *data;
+    unsigned int length;
+    FMOD::Channel *m_channel;
 };
 
 

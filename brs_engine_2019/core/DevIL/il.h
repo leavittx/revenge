@@ -118,7 +118,9 @@ typedef float          ILfloat;
 typedef float          ILclampf;
 typedef double         ILdouble;
 typedef double         ILclampd;
-typedef void           ILvoid;
+//wtf
+//typedef void           ILvoid;
+#define ILvoid void
 
 #ifdef _UNICODE
 	#ifndef _WIN32_WCE

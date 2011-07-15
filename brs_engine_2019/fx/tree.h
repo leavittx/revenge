@@ -44,7 +44,7 @@ public:
 
 	static AnimalType getAnimalType();
 	
-	void init(Vector3& position);
+	void init(const Vector3& position);
 	void update();
 	void draw(float alpha);
 	void release();
@@ -81,7 +81,7 @@ public:
 	PlantType m_type;
 
 	static void initStatic();
-	void init(Vector3 &position, PlantType type = TYPE_NONE);
+	void init(const Vector3 &position, PlantType type = TYPE_NONE);
 	void update();
 	void draw(float alpha);
 	void drawMask();
@@ -190,7 +190,7 @@ public:
 		TYPE_SYMBOL,
 		TYPE_ROUND,
 	};
-	void init(Vector3 &position);
+	void init(const Vector3 &position);
 	void update();
 	void draw(float alpha, bool useTransparency);
 	void drawGlow(float alpha);
@@ -254,7 +254,7 @@ public:
 	bool m_dying;
 
 	static CircuitType getCircuitElementType();
-	void init(Vector3& position, CircuitElement *parent);
+	void init(Vector3 position, CircuitElement *parent);
 	void update(Vector3 &cameraposition);
 	void draw(float alpha);
 	bool isDead();
@@ -298,8 +298,8 @@ public:
 	void drawParticles(bool glow);
 
 	Vector3 getCameraPoint();
-	void addFireParticle(Vector3& position);
-	void addSmokeParticle(Vector3& position, Vector3& speed);
+	void addFireParticle(const Vector3& position);
+	void addSmokeParticle(const Vector3& position, const Vector3& speed);
 
 	void updateSmokeParticles(vector<FadeParticle*>& particles);
 	void renderSmokeParticles(vector<FadeParticle*>& particles);

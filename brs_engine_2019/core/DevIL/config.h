@@ -42,7 +42,10 @@
 /* #undef ILUT_USE_DIRECTX8 */
 #define ILUT_USE_OPENGL 1
 /* #undef ILUT_USE_SDL */
+
+#if defined(_WIN32)
 #define ILUT_USE_WIN32 1
+#endif
 
 
 /* Define to 1 if you have the <dlfcn.h> header file. */

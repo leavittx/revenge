@@ -16,8 +16,11 @@ void Light::setDefaults()
 	setAmbient(0.0f, 0.0f, 0.0f, 0.0f);
 	setAttenuation(1.0f, 0.0f, 0.0f); //?
 
+//wtf
 	setPosition(Vector3(1.0f, 0.0f, 0.0f));
 	setSpotDirection(Vector3(0.0f, 0.0f, 0.0f));
+//        setPosition(1.0f, 0.0f, 0.0f);
+//        setSpotDirection(0.0f, 0.0f, 0.0f);
 	setSpotExponent(0.0f);
 }
 
@@ -43,7 +46,7 @@ void Light::setPosition(float x, float y, float z)
 	m_position[2] = z;
 	m_position[3] = 1;
 }
-void Light::setPosition(Vector3 &position)
+void Light::setPosition(const Vector3 &position)
 {
 	m_position[0] = position.x;
 	m_position[1] = position.y;
@@ -58,13 +61,14 @@ void Light::setSpotDirection(float x, float y, float z)
 	m_spotDirection[2] = z;
 	m_spotDirection[3] = 1;
 }
-void Light::setSpotDirection(Vector3 &direction)
+void Light::setSpotDirection(const Vector3 &direction)
 {
 	m_spotDirection[0] = direction.x;
 	m_spotDirection[1] = direction.y;
 	m_spotDirection[2] = direction.z;
 	m_spotDirection[3] = 1.0f;
 }
+
 void Light::setDiffuse(float r, float g, float b, float a)
 {
 	m_diffuse[0] = r;

@@ -9,13 +9,13 @@ public:
 	~Material();
 
 	void setDiffuse(float r, float g, float b, float a);
-	void setDiffuse(Color3 &olor, float a = 1.0f);
+	void setDiffuse(const Color3 &olor, float a = 1.0f);
 	void setAmbient(float r, float g, float b, float a);
-	void setAmbient(Color3 &olor, float a = 1.0f);
+	void setAmbient(const Color3 &olor, float a = 1.0f);
 	void setSpecular(float r, float g, float b, float a);
-	void setSpecular(Color3 &olor, float a = 1.0f);
+	void setSpecular(const Color3 &olor, float a = 1.0f);
 	void setEmission(float r, float g, float b, float a);
-	void setEmission(Color3 &olor, float a = 1.0f);
+	void setEmission(const Color3 &olor, float a = 1.0f);
 	void setShininess(float shininess);
 	
 	void use(bool diffuse = true, bool ambient = true, bool specular = true, bool emission = true, bool shininess = true);

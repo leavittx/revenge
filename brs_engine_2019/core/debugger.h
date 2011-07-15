@@ -10,7 +10,7 @@
 using namespace std;
 
 /*
-    Debug class used for writing the log file. 
+    Debug class used for writing the log file.
 
 */
 
@@ -20,10 +20,10 @@ public:
     Debugger(bool enabled = true);
     ~Debugger();
 
-	void setEnabled(bool enabled);
+    void setEnabled(bool enabled);
     void flush()
     {
-       m_debugFile.flush();
+        m_debugFile.flush();
     }
 
     template<class T>
@@ -36,12 +36,12 @@ public:
     }
 
     template<class T>
-	ofstream& operator + (const T &str)
-	{
+    ofstream& operator + (const T &str)
+    {
         m_debugFile << str << endl;
         m_debugFile.flush();
         return m_debugFile;
-	}
+    }
 
 private:
     void printDate();

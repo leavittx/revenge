@@ -7,16 +7,16 @@ class Image;
 class TextureParameters
 {
 public:
-	TextureParameters();
-	~TextureParameters();
-	void init(string name);
+    TextureParameters();
+    ~TextureParameters();
+    void init(string name);
 
-	bool m_upload;
-	bool m_retain;
-	bool m_linear;
-	bool m_repeat;
-	bool m_mipmap;
-	void setDefaults();
+    bool m_upload;
+    bool m_retain;
+    bool m_linear;
+    bool m_repeat;
+    bool m_mipmap;
+    void setDefaults();
 
 private:
 };
@@ -25,18 +25,18 @@ private:
 class Texture
 {
 public:
-	Texture();
-	~Texture();
+    Texture();
+    ~Texture();
 
-	GLuint getID() { return m_ID; };
-	void upload(Image &sourceimage, TextureParameters &params);
-	void bind(int texunit = 0);
-	bool hasBeenUsed();
+    GLuint getID() { return m_ID; };
+    void upload(Image &sourceimage, TextureParameters &params);
+    void bind(int texunit = 0);
+    bool hasBeenUsed();
 private:
 
-	TextureParameters m_params;
-	GLuint m_ID;
-	bool m_hasBeenBound;
+    TextureParameters m_params;
+    GLuint m_ID;
+    bool m_hasBeenBound;
 
 };
 

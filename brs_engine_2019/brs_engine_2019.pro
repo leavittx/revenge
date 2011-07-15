@@ -71,7 +71,6 @@ SOURCES += \
     util/stringutils.cpp \
     util/skybox.cpp \
     util/range.cpp \
-    util/primitives.cpp \
     util/particlesystem.cpp \
     util/meshfactory.cpp \
     util/mesh.cpp \
@@ -90,7 +89,6 @@ SOURCES += \
     util/catmullrom.cpp \
     util/billboard.cpp \
     util/bezier.cpp \
-    fx/tree.cpp \
     fx/runko.cpp \
     core/trigger.cpp \
     core/timer.cpp \
@@ -104,7 +102,6 @@ SOURCES += \
     core/postprocess.cpp \
     core/parser.cpp \
     core/parameter.cpp \
-    core/opengl.cpp \
     core/imagefactory.cpp \
     core/image.cpp \
     core/frametimer.cpp \
@@ -115,7 +112,10 @@ SOURCES += \
     core/cubemap.cpp \
     core/config.cpp \
     core/camera.cpp \
-    core/bpm.cpp
+    core/bpm.cpp \
+    core/opengl.cpp \
+    util/primitives.cpp \
+    fx/tree.cpp
 
 OTHER_FILES += \
     data/script.txt \
@@ -145,4 +145,21 @@ OTHER_FILES += \
     data/shaders/lighting_directionalflat.fs
 
 QMAKE_CXXFLAGS += \
-    -Wno-write-strings # don't warn about the deprecated conversion from string literals to char *
+    -std=c++0x \
+    -Wno-write-strings \ # don't warn about the deprecated conversion from string literals to char *
+    -Wno-unused-parameter \
+    -Wno-return-type \
+    -Wno-ignored-qualifiers \
+    -Wno-sign-compare \
+    -Wno-unused-variable \
+    -fno-permissive
+
+LIBS += \
+    -lGLEW -lGLU -lGL \
+    -lfmodex \
+    -lIL -lILU -lILUT
+
+INCLUDEPATH += \
+    /usr/include/c++/4.6.1/
+
+

@@ -17,7 +17,7 @@ public:
     CatmullRomCurve *clone();
 
     void begin();
-    void addPoint(Vector3 &point);
+    void addPoint(const Vector3 &point);
     void end();
 
     //parametrisoi kaaren pituuden mukaan (laittaa pisteet tasavälein)

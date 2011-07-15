@@ -13,37 +13,39 @@
 
 class Config
 {		
-	public:
-		
-		Config();
-		~Config();
+public:
 
-		bool run();
-		
-		// getterit
-		int getScreenX();
-		int getScreenY();
-		int getBpp();		
-		int getGamma();
-		int getFsaa();
-		int getAspectRatio();
-		int getFrequency();
-		bool getFullscreen();
-		bool getSound();
-		bool getVsync();
-		bool getOnTop();
-		bool getAnaglyphic();
-		bool getRunFlag();
-		int getGlasses();
-		bool getRandomized();
-		
-		static int ConfigProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-		
-		static int resolution, bpp, gamma, fsaa, aspectratio, glasses, frequency;
-		static bool fullscreen, sound, vsync, runFlag, anaglyphic, alwaysOnTop, nv7, randomized;
-		static int smDesktopWidth, smDesktopHeight;
+    Config();
+    ~Config();
 
-	private: 
+    bool run();
+
+    // getterit
+    int getScreenX();
+    int getScreenY();
+    int getBpp();
+    int getGamma();
+    int getFsaa();
+    int getAspectRatio();
+    int getFrequency();
+    bool getFullscreen();
+    bool getSound();
+    bool getVsync();
+    bool getOnTop();
+    bool getAnaglyphic();
+    bool getRunFlag();
+    int getGlasses();
+    bool getRandomized();
+
+#if defined(_WIN32)
+    static int ConfigProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+#endif /* defined(_WIN32) */
+
+    static int resolution, bpp, gamma, fsaa, aspectratio, glasses, frequency;
+    static bool fullscreen, sound, vsync, runFlag, anaglyphic, alwaysOnTop, nv7, randomized;
+    static int smDesktopWidth, smDesktopHeight;
+
+private:
 
 };
 

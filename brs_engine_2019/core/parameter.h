@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <vector>
 #include <map>
@@ -26,36 +27,36 @@ public:
     void addColor3(string name, Color3& value);
     void addColor4(string name, Color4& value);
     void addString(string name, string &value);
-	void addBool(string name, bool value);
-	void addBlendMode(string name, GLenum blendmode);
-	void addRange(string name, Range& range);
-	
+    void addBool(string name, bool value);
+    void addBlendMode(string name, GLenum blendmode);
+    void addRange(string name, Range& range);
+
     //accessors
     float getFloat(string name);
     int getInt(string name);
     Vector3 getVector3(string name);
     Color3 getColor3(string name);
     Color4 getColor4(string name);
-	Range getRange(string name);
+    Range getRange(string name);
     string getString(string name);
-	bool getBool(string name);
-	GLenum getBlendMode(string name);
+    bool getBool(string name);
+    GLenum getBlendMode(string name);
 
 private:
-    //these maps contain the parameters, one map per type. 
+    //these maps contain the parameters, one map per type.
     map<string, float> m_floats;
     map<string, int> m_ints;
     map<string, Vector3> m_vectors;
     map<string, Color3> m_color3s;
     map<string, Color4> m_color4s;
     map<string, string> m_strings;
-	map<string, bool> m_bools;
-	map<string, GLenum> m_blendModes;
-	map<string, Range> m_ranges;
+    map<string, bool> m_bools;
+    map<string, GLenum> m_blendModes;
+    map<string, Range> m_ranges;
 };
 
 /*
-    A global object that contains all the parameters read from the script file. 
+    A global object that contains all the parameters read from the script file.
     
 */
 
@@ -69,8 +70,8 @@ public:
     void useNamespace(string space);
     //clear it all out
     void clear();
-	//write it into a file
-	void save(string filename);
+    //write it into a file
+    void save(string filename);
 
     //insertion
     void addFloat(string space, string name, float value);
@@ -79,9 +80,9 @@ public:
     void addColor3(string space, string name, Color3 &value);
     void addColor4(string space, string name, Color4 &value);
     void addString(string space, string name, string &value);
-	void addBool(string space, string name, bool value);
-	void addBlendMode(string space, string name, GLenum blendmode);
-	void addRange(string space, string name, Range &range);
+    void addBool(string space, string name, bool value);
+    void addBlendMode(string space, string name, GLenum blendmode);
+    void addRange(string space, string name, Range &range);
 
     //accessors
     float getFloat(string space, string name);
@@ -90,16 +91,16 @@ public:
     int getInt(string name);
     string getString(string space, string name);
     string getString(string name);
-	Range getRange(string space, string name);
-	Range getRange(string name);
+    Range getRange(string space, string name);
+    Range getRange(string name);
     Vector3 getVector3(string space, string name);
     Vector3 getVector3(string name);
     Color3 getColor3(string space, string name);
     Color3 getColor3(string name);
     Color4 getColor4(string space, string name);
     Color4 getColor4(string name);
-	bool getBool(string space, string name);
-	bool getBool(string name);
+    bool getBool(string space, string name);
+    bool getBool(string name);
     GLenum getBlendMode(string space, string name);
     GLenum getBlendMode(string name);
 

@@ -1,13 +1,18 @@
 /*
-	Note: this whole thing started out from a simple test (that's why it's called Tree.cpp). That's also why the code looks 
-	like this and yes, it needs serious refactoring but it's a demo made in a few weeks that changed direction during the 
-	development so what do you expect? :) 
+	Note: this whole thing started out from a simple test (that's why it's called Tree.cpp). That's also why the code looks
+	like this and yes, it needs serious refactoring but it's a demo made in a few weeks that changed direction during the
+	development so what do you expect? :)
 
-	Also, a bit more dynamic randomization stuff added to this in the last minute. Yay.. 
+	Also, a bit more dynamic randomization stuff added to this in the last minute. Yay..
 */
 
 #include <algorithm>
-#include "Tree.h"
+#include "tree.h"
+
+//for random seed on linux
+#if !defined(_WIN32)
+#include <time.h>
+#endif
 
 using namespace std;
 
@@ -79,7 +84,7 @@ Color3 getCircuitColor()
 		if (!circuitcolorinit)
 		{
 			circuitcolor = Color3(Math::randBetween(0.3f, 1.0f),
-								  Math::randBetween(0.3f, 1.0f), 
+								  Math::randBetween(0.3f, 1.0f),
 								  Math::randBetween(0.3f, 1.0f)).normalize();
 			if (Math::randFloat() < 0.5f)
 			{
@@ -90,7 +95,7 @@ Color3 getCircuitColor()
 		if (circuitsdifferentcolor)
 		{
 			circuitcolor = Color3(Math::randBetween(0.3f, 1.0f),
-								  Math::randBetween(0.3f, 1.0f), 
+								  Math::randBetween(0.3f, 1.0f),
 								  Math::randBetween(0.3f, 1.0f)).normalize();
 		}
 		return circuitcolor;
@@ -176,13 +181,18 @@ void CircuitElement::draw(float alpha)
 		{
 			glBegin(GL_LINES);
 			glVertex3fv((float *)&m_v1);
+#if defined(_MSC_VER)
 			glVertex3fv((float *)&(m_v1 + (m_v2 - m_v1) * fadein));
+#else
+                        Vector3 tmp = m_v1 + (m_v2 - m_v1) * fadein;
+                        glVertex3fv((float *)&(tmp));
+#endif
 			glEnd();
 
 		} break;
 	}
 }
-void CircuitElement::init(Vector3& position, CircuitElement *parent)
+void CircuitElement::init(Vector3 position, CircuitElement *parent)
 {
 	m_color = getCircuitColor();
 
@@ -214,7 +224,7 @@ void CircuitElement::init(Vector3& position, CircuitElement *parent)
 			}
 			else
 			{
-				//pallo tulee tikun päähän
+				//pallo tulee tikun pÃ¤Ã¤hÃ¤n
 				Vector3 parentdir = (parent->m_v2 - parent->m_v1).normalize();
 				m_position = parent->m_v2 + parentdir * m_size * 0.5f;
 			}
@@ -318,7 +328,7 @@ void Tree::init()
 
 	m_circuit.clear();
 	m_circuitTimer = 0.0f;
-	
+
 	m_particlesFire1.clear();
 	m_particlesFire2.clear();
 	m_particlesFire3.clear();
@@ -333,13 +343,13 @@ void Tree::init()
 void FadeParticle::update()
 {
 	m_timer -= 0.01f;
-	m_timer = max(0, m_timer);
+	m_timer = max(0.0f, m_timer);
 	m_alpha = m_fade * powf(sinf((m_timer / m_startTimer)*3.141592f), 3.0f);
 	m_size += m_sizeIncrease;
 	m_position += m_speed;
 }
 
-void Tree::addFireParticle(Vector3& position)
+void Tree::addFireParticle(const Vector3& position)
 {
 //	if (g_system.event("firegoesout").hasPassed())
 //		return;
@@ -368,7 +378,7 @@ void Tree::addFireParticle(Vector3& position)
 	}
 }
 
-void Tree::addSmokeParticle(Vector3& position, Vector3& speed)
+void Tree::addSmokeParticle(const Vector3& position, const Vector3& speed)
 {
 	FadeParticle *s = new FadeParticle();
 	s->m_position = position;
@@ -686,7 +696,7 @@ void Tree::renderSmokeParticles(vector<FadeParticle*>& particles)
 
 		switch(p->m_orientation)
 		{
-			case 0: 
+			case 0:
 			{
 				glTexCoord2f(0, 0);
 				glVertex3fv((float *)&v1);
@@ -697,7 +707,7 @@ void Tree::renderSmokeParticles(vector<FadeParticle*>& particles)
 				glTexCoord2f(0, 1);
 				glVertex3fv((float *)&v4);
 			} break;
-			case 1: 
+			case 1:
 			{
 				glTexCoord2f(0, 0);
 				glVertex3fv((float *)&v2);
@@ -708,7 +718,7 @@ void Tree::renderSmokeParticles(vector<FadeParticle*>& particles)
 				glTexCoord2f(0, 1);
 				glVertex3fv((float *)&v1);
 			} break;
-			case 2: 
+			case 2:
 			{
 				glTexCoord2f(0, 0);
 				glVertex3fv((float *)&v3);
@@ -719,7 +729,7 @@ void Tree::renderSmokeParticles(vector<FadeParticle*>& particles)
 				glTexCoord2f(0, 1);
 				glVertex3fv((float *)&v2);
 			} break;
-			case 3: 
+			case 3:
 			{
 				glTexCoord2f(0, 0);
 				glVertex3fv((float *)&v4);
@@ -833,10 +843,10 @@ void Tree::drawRegular(float alpha, bool glow)
 */
 
 	glDisable(GL_TEXTURE_2D);
-	glEnable(GL_DEPTH_TEST); 
+	glEnable(GL_DEPTH_TEST);
 	glDepthMask(1);
 /*
-	
+
 
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
@@ -964,7 +974,7 @@ Animal::AnimalType Animal::getAnimalType()
 	return type;
 }
 
-void Animal::init(Vector3& position)
+void Animal::init(const Vector3& position)
 {
 	m_type = getAnimalType();
 
@@ -1057,7 +1067,7 @@ static bool towersinstart = false;
 
 Plant::PlantType Plant::getPlantType()
 {
-	//can has what? 
+	//can has what?
 	if (!planttypeinit)
 	{
 		if (g_system.getRandomized())
@@ -1179,10 +1189,10 @@ string getTextureName(TextureType type)
 		int index = rand()%4;
 		switch(index)
 		{
-			case 0: return "2.png"; 
-			case 1: return "0.png"; 
-			case 2: return "1.png"; 
-			case 3: return "9.png"; 
+			case 0: return "2.png";
+			case 1: return "0.png";
+			case 2: return "1.png";
+			case 3: return "9.png";
 		}
 	}
 	else if (type == TYPE_KATAGANA)
@@ -1205,7 +1215,7 @@ string getTextureName(TextureType type)
 	}
 	return "makecompilerhappy";
 }
-void Plant::init(Vector3 &position, PlantType type)
+void Plant::init(const Vector3 &position, PlantType type)
 {
 	if (type == TYPE_NONE)
 	{
@@ -1221,7 +1231,7 @@ void Plant::init(Vector3 &position, PlantType type)
 	m_beat = -666.0f;
 	m_beat2 = 0.0f;
 	m_blink = false;
-	
+
 	if (m_type == TYPE_FLOWER)
 	{
 		m_startTimer = g_params.getRange("plantflowertime").getRandomValue();
@@ -1365,13 +1375,17 @@ void Plant::init(Vector3 &position, PlantType type)
 		if (m_type == TYPE_DASHED)
 		{
 			m_position = position;
-			m_position2 = position + (Vector3(0, 1, 0) * Matrix::rotation(0, 0, (rand()%4)*0.50f * 3.141592f)) * m_radius;
+                        //wtf
+			//m_position2 = position + (Vector3(0, 1, 0) * Matrix::rotation(0, 0, (rand()%4)*0.50f * 3.141592f)) * m_radius;
+                        m_position2 = m_position + (Vector3(0, 1, 0) * Matrix::rotation(0, 0, (rand()%4)*0.50f * 3.141592f)) * m_radius;
 		}
 		else
 		{
 			//up
 			m_position = position;
-			m_position2 = position + Vector3(0, 0, 1) * m_radius;
+                        //wtf
+			//m_position2 = position + Vector3(0, 0, 1) * m_radius;
+                        m_position2 = m_position + Vector3(0, 0, 1) * m_radius;
 		}
 	}
 	else if (m_type == TYPE_EQU)
@@ -1434,7 +1448,7 @@ void Plant::update()
 		m_currentHeight += m_growSpeed;
 		m_currentHeight = min(m_currentHeight, m_height);
 		m_currentHeight *= min(m_life * 10.0f, 1.0f);
-		
+
 	}
 
 	if (m_type == TYPE_DASHED || m_type == TYPE_DASHED_UP)
@@ -1560,7 +1574,7 @@ void Plant::draw(float alpha)
 				Vector3 v1 = m_position + Vector3(sinf(a), cosf(a), 0) * r;
 				glVertex3fv((float *)&v1);
 			}
-			glEnd();	
+			glEnd();
 		}
 
 		for (int i = 0; i < m_petals; i++)
@@ -1674,7 +1688,7 @@ void Plant::draw(float alpha)
 		glDisable(GL_DEPTH_TEST);
 		glDepthMask(0);
 
-		float fadein = min(1, (1.0f - m_life) * 3.0f);
+		float fadein = min(1.0f, (1.0f - m_life) * 3.0f);
 		float alphafadeout = min(m_life * 5.0f, 1.0f);
 
 		int drawcount = (int)(m_symbolCount * fadein);
@@ -1798,7 +1812,7 @@ void Plant::draw(float alpha)
 				Vector3 v1 = m_position + Vector3(sinf(a), cosf(a), 0) * r;
 				glVertex3fv((float *)&v1);
 			}
-			glEnd();	
+			glEnd();
 		}
 /*
 		Color3 tqwer = Color3(1,1,1);
@@ -1832,7 +1846,7 @@ void Plant::draw(float alpha)
 				Vector3 v1 = m_position + Vector3(sinf(a), cosf(a), 0) * r;
 				glVertex3fv((float *)&v1);
 			}
-			glEnd();	
+			glEnd();
 		}
 	}
 }
@@ -1882,7 +1896,7 @@ void Cloud::updateRain()
 
 			it = sm_rain.erase(it);
 		}
-		else 
+		else
 		{
 			it++;
 		}
@@ -2005,13 +2019,13 @@ Cloud::CloudType Cloud::getCloudType()
 	return type;
 }
 
-void Cloud::init(Vector3& position)
+void Cloud::init(const Vector3& position)
 {
 	m_quads.clear();
 	m_timer = g_params.getRange("cloudlife").getRandomValue();
 	m_startTimer = m_timer;
 	m_rainTimer = 0.0f;
-	
+
 	m_type = getCloudType();
 	m_textureNames.push_back(getTextureName(TYPE_KANJI));
 
@@ -2176,7 +2190,7 @@ void Cloud::draw(float alpha, bool useTransparency)
 			}
 			glEnd();
 
-		} break; 
+		} break;
 
 		case TYPE_SYMBOL:
 		{
@@ -2215,7 +2229,7 @@ void Cloud::draw(float alpha, bool useTransparency)
 				glEnd();
 			}
 
-		} break; 
+		} break;
 
 		case TYPE_ROUND:
 		{
@@ -2223,7 +2237,7 @@ void Cloud::draw(float alpha, bool useTransparency)
 			{
 				Quad *q = *it;
 				Vector3 v = q->v1 + q->v2 +	q->v3 + q->v4;
-				
+
 				v *= 1 / 4.0f;
 
 				glBegin(GL_TRIANGLE_FAN);
@@ -2283,7 +2297,7 @@ void Cloud::drawShadow(float alpha)
 			{
 				Quad *q = *it;
 				Vector3 v = q->v1 + q->v2 +	q->v3 + q->v4;
-				
+
 				v *= 1 / 4.0f;
 
 				glBegin(GL_TRIANGLE_FAN);
@@ -2414,7 +2428,11 @@ bool Cloud::isDead()
 
 	if (g_system.getRandomized())
 	{
+#if defined(_WIN32)
 		srand(timeGetTime());
+#else
+                srand(time(NULL));
+#endif
 		m_angleTurnVelocity = 0.002f * Math::randBetween(-3.0f, 3.0f);
 		m_angleTurnSpeed = 200.0f * Math::randBetween(-3.0f, 3.0f);
 		m_travelSpeedMod = Math::randBetween(0.4f, 1.2f);
@@ -2451,8 +2469,8 @@ struct cloudComparison
 };
 struct plantComparison
 {
-	bool operator() (Plant *p1, Plant *p2) 
-	{ 
+	bool operator() (Plant *p1, Plant *p2)
+	{
 		return p2->m_type == Plant::TYPE_TOWER;
 	}
 };
@@ -2472,7 +2490,7 @@ void TreeScene::updatePlants(vector<Plant*> &plants)
 				g_particleTree->addFireParticle(p->m_position2);
 				g_particleTree->addFireParticle(p->m_position);
 				g_particleTree->addFireParticle(p->m_position2);
-				
+
 			}
 			delete p;
 			it = plants.erase(it);
@@ -2496,7 +2514,7 @@ void TreeScene::update()
 	}
 
 	int plantcount = 0;
-	g_particleTree = m_trees[0]; //... 
+	g_particleTree = m_trees[0]; //...
 	updatePlants(m_plants);
 	updatePlants(m_buildings);
 
@@ -2541,7 +2559,7 @@ void TreeScene::update()
 	}
 */
 	Cloud::updateRain();
-	
+
 	if (g_system.event("beatcircles").hasPassed())
 	{
 		static int lastBeat = 0;
@@ -2670,7 +2688,7 @@ void TreeScene::update()
 		{
 			m_cloudTimer += 0.01f;
 
-			const float CLOUD_THRESHOLD = g_system.event("cloudsturnround").hasPassed() ? g_params.getFloat("cloudthreshold2") : 
+			const float CLOUD_THRESHOLD = g_system.event("cloudsturnround").hasPassed() ? g_params.getFloat("cloudthreshold2") :
 				g_params.getFloat("cloudthreshold");
 
 			bool inCloudStop = g_system.event("cloudstopstart").hasPassed() && !g_system.event("cloudstopend").hasPassed();
@@ -2720,7 +2738,7 @@ void TreeScene::update()
 			{
 				int addcount = g_params.getInt("windaddcount");
 				int maxcount = g_params.getInt("maxwindparticles");
-				
+
 				float r = g_system.event("windstart").getValue();
 
 				if (Math::randFloat() < r)
@@ -2996,7 +3014,7 @@ void TreeScene::drawBackground()
 	}
 
 
-	//wireframe part 
+	//wireframe part
 	float wireframealpha = g_system.event("backgroundfadeinstart").getValue() * (1.0f - g_system.event("backgroundfadeout").getValue());
 	if (wireframealpha > 0.0001f && haswireframe)
 	{
@@ -3169,7 +3187,7 @@ void TreeScene::setCam()
 			}
 			else
 			{
-				cameramode = 1; 
+				cameramode = 1;
 			}
 			if (Math::randFloat() < 0.8f)
 			{
@@ -3193,19 +3211,19 @@ void TreeScene::setCam()
 	{
 		case 0: //default mode
 		{
-			gluLookAt(m_cameraPosition.x, m_cameraPosition.y, m_cameraPosition.z, 
-					  m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z, 
+			gluLookAt(m_cameraPosition.x, m_cameraPosition.y, m_cameraPosition.z,
+					  m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z,
 					  cameraUp.x, cameraUp.y, cameraUp.z);
 
 		} break;
 		case 1:
 		{
-			gluLookAt(m_cameraPosition.x, 
-					  m_cameraPosition.y, 
-					  m_cameraPosition.z, 
-					  m_cameraPosition.x + (m_cameraTarget.x - m_cameraPosition.x) * camerafocus, 
-					  m_cameraPosition.y + (m_cameraTarget.y - m_cameraPosition.y) * camerafocus, 
-					  m_cameraPosition.z + (m_cameraTarget.z - m_cameraPosition.z) * camerafocus, 
+			gluLookAt(m_cameraPosition.x,
+					  m_cameraPosition.y,
+					  m_cameraPosition.z,
+					  m_cameraPosition.x + (m_cameraTarget.x - m_cameraPosition.x) * camerafocus,
+					  m_cameraPosition.y + (m_cameraTarget.y - m_cameraPosition.y) * camerafocus,
+					  m_cameraPosition.z + (m_cameraTarget.z - m_cameraPosition.z) * camerafocus,
 					  cameraUp.x, cameraUp.y, cameraUp.z);
 
 		} break;
@@ -3214,7 +3232,7 @@ void TreeScene::setCam()
 void TreeScene::draw()
 {
 	g_params.useNamespace("Tree");
-	
+
 	glLoadIdentity();
 	setCam();
 
@@ -3227,7 +3245,7 @@ void TreeScene::draw()
 	g_postprocess.init(RENDERTARGET_0);
 	drawTree(true);
 	drawPlantsMask(m_buildings);
-	g_postprocess.glow(RENDERTARGET_0, g_params.getInt("treeglowcount"), g_params.getFloat("treeglow_x"), g_params.getFloat("treeglow_y"), 
+	g_postprocess.glow(RENDERTARGET_0, g_params.getInt("treeglowcount"), g_params.getFloat("treeglow_x"), g_params.getFloat("treeglow_y"),
 						g_params.getFloat("treeglow_alpha"), g_params.getFloat("treeglow_exp"), true);
 	setCam();
 	g_postprocess.init(RENDERTARGET_0);
@@ -3235,8 +3253,8 @@ void TreeScene::draw()
 	drawPlants(m_plants);
 	drawPlants(m_buildings);
 	float s = sinf(g_system.triggers("sync").getValue()*3.141592f) * 0.04f;
-	g_postprocess.glow(RENDERTARGET_0, g_params.getInt("glowcount"), g_params.getFloat("glow_x") + s, g_params.getFloat("glow_y") + s, 
-		g_params.getFloat("glow_alpha") + s, 
+	g_postprocess.glow(RENDERTARGET_0, g_params.getInt("glowcount"), g_params.getFloat("glow_x") + s, g_params.getFloat("glow_y") + s,
+		g_params.getFloat("glow_alpha") + s,
 		g_params.getFloat("glow_exp"), true);
 
 	//savu ja maskit
@@ -3246,23 +3264,23 @@ void TreeScene::draw()
 	g_postprocess.init(RENDERTARGET_0);
 
 	//pilvet
-	drawClouds();		   //hohtavat reunat 
-	drawCloudsMask(false); //ylimääräiset reunat pois
+	drawClouds();		   //hohtavat reunat
+	drawCloudsMask(false); //ylimÃ¤Ã¤rÃ¤iset reunat pois
 
 	if (g_system.event("cloudstopend").hasPassed())
 	{
-		g_postprocess.glow(RENDERTARGET_0, g_params.getInt("cloudglowcount2"), 
-										   g_params.getFloat("cloudglow_x2"), 
-										   g_params.getFloat("cloudglow_y2"), 
-										   g_params.getFloat("cloudglow_alpha2"), 
+		g_postprocess.glow(RENDERTARGET_0, g_params.getInt("cloudglowcount2"),
+										   g_params.getFloat("cloudglow_x2"),
+										   g_params.getFloat("cloudglow_y2"),
+										   g_params.getFloat("cloudglow_alpha2"),
 										   g_params.getFloat("cloudglow_exp2"), true);
 	}
 	else
 	{
-		g_postprocess.glow(RENDERTARGET_0, g_params.getInt("cloudglowcount"), 
-										   g_params.getFloat("cloudglow_x"), 
-										   g_params.getFloat("cloudglow_y"), 
-										   g_params.getFloat("cloudglow_alpha"), 
+		g_postprocess.glow(RENDERTARGET_0, g_params.getInt("cloudglowcount"),
+										   g_params.getFloat("cloudglow_x"),
+										   g_params.getFloat("cloudglow_y"),
+										   g_params.getFloat("cloudglow_alpha"),
 										   g_params.getFloat("cloudglow_exp"), true);
 	}
 	float brsalpha = g_system.event("brsfadein").getValue() * (1.0f - g_system.event("brsfadeout").getValue());
@@ -3317,3 +3335,4 @@ void TreeScene::draw()
 		Primitives::picture2D("credits.png", 0.5f, 0.5f, 0.30f + g_system.event("creditszoom").getValue()*0.19f);
 	}
 }
+
