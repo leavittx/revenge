@@ -29,7 +29,7 @@ GLWindow::GLWindow()
     title = "Brainstorm :: 2019";
     className = "DemoGL";
     onTop = false;
-    fsaa = 0;
+    fsaa = 0; //todo - 2 ???
 
     //	wglSwapIntervalEXT = NULL;
     //	wglGetSwapIntervalEXT = NULL;
@@ -1143,7 +1143,7 @@ GLWindow::GLWindow()
     title = "Brainstorm :: 2019";
     className = "DemoGL";
     onTop = false;
-    fsaa = 0;
+    fsaa = 0; //todo - 2 ???
 
     //	wglSwapIntervalEXT = NULL;
     //	wglGetSwapIntervalEXT = NULL;
