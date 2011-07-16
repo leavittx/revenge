@@ -18,6 +18,7 @@ void Debugger::setEnabled(bool enabled)
 
 void Debugger::printDate()
 {
+#if defined(_WIN32)
    SYSTEMTIME t;
    GetSystemTime(&t);
    m_debugFile << t.wYear << "-";
@@ -31,5 +32,8 @@ void Debugger::printDate()
    m_debugFile << t.wMinute << ":";
    if(t.wSecond < 10)m_debugFile << "0";
    m_debugFile << t.wSecond << "     ";
+#else
+    //todo
+#endif
 }
 

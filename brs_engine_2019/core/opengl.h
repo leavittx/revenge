@@ -12,78 +12,85 @@
 
 class GLWindow
 {	
-	friend class GLSystem;
+    friend class GLSystem;
 
-	public:
+public:
 
-		GLWindow();
-		~GLWindow();
+    GLWindow();
+    ~GLWindow();
 
-		bool init();		
-		bool kill();
-		
-		bool createWindow();
-		bool createWindow(int w, int h, int b, bool screen, bool onTop, int fsaa, int frequency);
+    bool init();
+    bool kill();
 
-		bool getFullscreen();
-		bool getActive();
-		unsigned int getWidth();
-		unsigned int getHeight();
-		HWND getHandle();
-		HINSTANCE getInstance();
-		HDC getHDC();
+    bool createWindow();
+    bool createWindow(int w, int h, int b, bool screen, bool onTop, int fsaa, int frequency);
 
-		void setPerspective2D();
-		void setPerspective2D(int w, int h);
-		void setPerspective3D();
-		void setWidth(unsigned int w);
-		void setHeight(unsigned int h);
-		void setBpp(unsigned int b);
-		void setZbpp(unsigned int z);
-		void setSbpp(unsigned int s);
-		void setFullscreen(bool f);
-		void setTitle(char *t);
-		void setClassName(char *c);
-		void setActive(bool a);
-        void setWindowTitle(const string title);
+    bool getFullscreen();
+    bool getActive();
+    unsigned int getWidth();
+    unsigned int getHeight();
 
-		friend LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+#if defined(_WIN32)
+    HWND getHandle();
+    HINSTANCE getInstance();
+    HDC getHDC();
+#endif /* defined(_WIN32) */
 
-		bool getKeyDown(int i);
-		bool getKeyPressed(int i);
+    void setPerspective2D();
+    void setPerspective2D(int w, int h);
+    void setPerspective3D();
+    void setWidth(unsigned int w);
+    void setHeight(unsigned int h);
+    void setBpp(unsigned int b);
+    void setZbpp(unsigned int z);
+    void setSbpp(unsigned int s);
+    void setFullscreen(bool f);
+    void setTitle(char *t);
+    void setClassName(char *c);
+    void setActive(bool a);
+    void setWindowTitle(const string title);
 
-		bool	leftMouse;
-		bool	rightMouse;
-		float	mouseX, mouseY;
-		
+#if defined(_WIN32)
+    friend LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+#endif /* defined(_WIN32) */
 
-	private:
+    bool getKeyDown(int i);
+    bool getKeyPressed(int i);
 
-//	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT;
-//	PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT;	
+    bool	leftMouse;
+    bool	rightMouse;
+    float	mouseX, mouseY;
 
-	unsigned int bpp, zbpp, sbpp;		// Bit Depths for buffers
-	unsigned int width, height;			// Window width and height
-	bool fullscreen;					// Fullscreen flag
-	char *title;						// Window name
-	char *className;					// Class name for registeration
 
-	int fsaa;							// Fullscreenalias multisamples
-	bool onTop;							// Always-on-top 
-	bool active;
-	bool verticalSyncFlag;				// Flag for Vertical retrace
-	int verticalSync;					// Holds the value of vertical retrace (on/off)
+private:
+
+    //	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT;
+    //	PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT;
+
+    unsigned int bpp, zbpp, sbpp;		// Bit Depths for buffers
+    unsigned int width, height;			// Window width and height
+    bool fullscreen;					// Fullscreen flag
+    char *title;						// Window name
+    char *className;					// Class name for registeration
+
+    int fsaa;							// Fullscreenalias multisamples
+    bool onTop;							// Always-on-top
+    bool active;
+    bool verticalSyncFlag;				// Flag for Vertical retrace
+    int verticalSync;					// Holds the value of vertical retrace (on/off)
 
     bool keysPressed[256];
-	bool keysDown[256];
+    bool keysDown[256];
 
-	HWND hwnd;
-	HINSTANCE hinstance;
-	HDC hdc;
-	HGLRC hrc;
+#if defined(_WIN32)
+    HWND hwnd;
+    HINSTANCE hinstance;
+    HDC hdc;
+    HGLRC hrc;
 
-	int fetchFSAAMode(HDC hdc,int suggestedFormat, PIXELFORMATDESCRIPTOR p, int requestedmultisamples);
-	bool extensionExist(const char *extension);
+    int fetchFSAAMode(HDC hdc,int suggestedFormat, PIXELFORMATDESCRIPTOR p, int requestedmultisamples);
+#endif /* defined(_WIN32) */
+    bool extensionExist(const char *extension);
 
 
 };
@@ -94,38 +101,38 @@ class GLWindow
 
 class GLSystem
 {
-	friend class GLWindow;
+    friend class GLWindow;
 
-	public:
+public:
 
-		GLSystem();
-		~GLSystem();
+    GLSystem();
+    ~GLSystem();
 
-		bool init(int w, int h, int aspectratio=0);
-		void resize(int w, int h);
-		void resetViewport();
-		void setNormalPerspective();
-								
-		// Setters
-		void setFov(float fov);			
-		void setPerspective(float fov, float zNear, float zFar);
-		void setClearColor(float r, float g, float b, float a);					
+    bool init(int w, int h, int aspectratio=0);
+    void resize(int w, int h);
+    void resetViewport();
+    void setNormalPerspective();
 
-		float getScreenAspectRatio();
-		float getZNear();
-		float getZFar();
-		float getFov();
-		int getWidth();
-		int getHeight();
-		int getAspectRatio();
+    // Setters
+    void setFov(float fov);
+    void setPerspective(float fov, float zNear, float zFar);
+    void setClearColor(float r, float g, float b, float a);
 
-	private:		
+    float getScreenAspectRatio();
+    float getZNear();
+    float getZFar();
+    float getFov();
+    int getWidth();
+    int getHeight();
+    int getAspectRatio();
 
-		float zNear, zFar, fov;
+private:
 
-		int width, height;			
+    float zNear, zFar, fov;
 
-		int aspectratio;
-		float screenaspectratio;
+    int width, height;
+
+    int aspectratio;
+    float screenaspectratio;
 };
 

@@ -35,7 +35,7 @@ public:
 	static void dashedLine(Vector3 &v1, Vector3 &v2, float steplength, float spacing = 0.5f);
 	
 	//common
-	static void fullscreenFade(Color4& color);
+	static void fullscreenFade(const Color4& color);
 	static void fullscreenPicture(bool xflip = false, bool yflip = false, float xoff = 0.0f, float yoff = 0.0f);
 	static void picture2D(string picture, float x, float y, float size);
 	static void cubeWireframe(float size);

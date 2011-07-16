@@ -1,5 +1,5 @@
-#include <gl/glew.h>
-#include "Color3.h"
+#include <GL/glew.h>
+#include "color3.h"
 
 Color3::Color3()
 {

@@ -1,13 +1,13 @@
 #pragma once
 
+#if defined(_MSC_VER)
 //fix visual studio "debug information truncated to 255 bytes"-whining
-#ifdef _WIN32
 #pragma warning ( disable : 4786)
 #endif
 
 #define GLEW_STATIC /* use static version and not the DLL */
 
-#ifdef _WIN32
+#if defined(_WIN32)
 #include <windows.h>
 #else
 typedef unsigned long DWORD;
@@ -16,6 +16,11 @@ typedef unsigned int UNINT32;
 #endif
 
 #include <GL/glew.h>
+
+#if !defined(_WIN32)
+#include "core/GLUS/GL/glus.h"
+#endif
+
 #include <map>
 #include <vector>
 #include <list>
@@ -79,5 +84,3 @@ extern class Parameters g_params;
 extern class PostProcess g_postprocess;
 extern class System g_system;
 extern class Demo *g_demo;
-
-

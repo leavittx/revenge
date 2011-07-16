@@ -23,7 +23,7 @@ void glUtil::antiRotate(Vector3& x, Vector3& y, Vector3& z)
 	y = Vector3(matrix[1], matrix[5], matrix[9]);
 	z = Vector3(matrix[2], matrix[6], matrix[10]);
 }
-void glUtil::camLook(Vector3& cam, Vector3& target, Vector3& up)
+void glUtil::camLook(Vector3& cam, Vector3& target, const Vector3& up)
 {
 	glLoadIdentity();
 	gluLookAt(cam.x, cam.y, cam.z,

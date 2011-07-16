@@ -10,7 +10,7 @@ class FrameTimer
 {
 public:
     FrameTimer();
-	~FrameTimer() {};
+    ~FrameTimer() {};
     //first number = interval between updates (ms), second number is the maximum number of iterations
     FrameTimer(int updatetime, int maxiterations);
 
@@ -25,7 +25,7 @@ public:
     void endStep();
 
 private:
-    int m_dt; //delta time 
+    int m_dt; //delta time
     int m_prevtime; //time previous frame
     int m_cumultime; //accumulated time
     int m_updatetime; //how often the update is done (ms)

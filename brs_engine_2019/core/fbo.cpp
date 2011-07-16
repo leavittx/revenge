@@ -1,5 +1,10 @@
 #include "fbo.h"
 
+//dirty hack
+#if !defined(_MSC_VER)
+#define sprintf_s snprintf
+#endif
+
 FBOManager::FBOManager()
 {
 }

@@ -239,6 +239,7 @@ void Demo::toggleRunning()
 }
 void Demo::update()
 {
+#if defined(_WIN32)
 	bool F1 = GetAsyncKeyState(VK_F1) != 0; //reload params & shaders
 	bool F2 = GetAsyncKeyState(VK_F2) != 0; //reload params & shaders & reinit effects
 	bool F3 = GetAsyncKeyState(VK_F3) != 0; //reload resources
@@ -291,6 +292,7 @@ void Demo::update()
 			returnDown = false;
 		}
 	}
+#endif
 
     if (m_running)
     {

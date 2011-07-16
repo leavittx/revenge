@@ -1,4 +1,7 @@
+#if defined(_MSC_VER)
 #pragma warning ( disable : 4786)
+#endif
+
 #include "parameter.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,10 +24,10 @@ void ParameterSpace::clear()
     m_color3s.clear();
     m_color4s.clear();
     m_strings.clear();
-	m_bools.clear();
-	m_blendModes.clear();
-	m_ranges.clear();
-	
+    m_bools.clear();
+    m_blendModes.clear();
+    m_ranges.clear();
+
 }
 Vector3 ParameterSpace::getVector3(string name)
 {
@@ -78,15 +81,15 @@ float ParameterSpace::getFloat(string name)
 
 Range ParameterSpace::getRange(string name)
 {
-	if (m_ranges.find(name) == m_ranges.end())
-	{
-		g_debug << "trying to get range \"" << name << "\" from params though it doesn't exist!" << endl;
-		return Range(0, 0);
-	}
-	else
-	{
-		return m_ranges[name];
-	}
+    if (m_ranges.find(name) == m_ranges.end())
+    {
+        g_debug << "trying to get range \"" << name << "\" from params though it doesn't exist!" << endl;
+        return Range(0, 0);
+    }
+    else
+    {
+        return m_ranges[name];
+    }
 }
 int ParameterSpace::getInt(string name)
 {
@@ -268,8 +271,8 @@ void Parameters::save(string filename)
 }
 void Parameters::useNamespace(string space)
 {
-	//force lowercase
-	transform(space.begin(), space.end(), space.begin(), tolower);
+    //force lowercase
+//    transform(space.begin(), space.end(), space.begin(), tolower);
     m_currentName = space;
 }
 
@@ -287,7 +290,7 @@ void Parameters::addBool(string space, string name, bool value)
 void Parameters::addBlendMode(string space, string name, GLenum value)
 {
     ParameterSpace &s = m_params[space];
-	s.addBlendMode(name, value);
+    s.addBlendMode(name, value);
 }
 void Parameters::addInt(string space, string name, int value)
 {

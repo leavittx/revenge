@@ -6,7 +6,7 @@
 #include "frametimer.h"
 
 /*
-    An entry in the timeline. It has a pointer to the actual effect that it'll run, plus a bunch of other related stuff. 
+    An entry in the timeline. It has a pointer to the actual effect that it'll run, plus a bunch of other related stuff.
 */
 
 class TimelineEntry
@@ -16,10 +16,10 @@ public:
     ~TimelineEntry();
     void destroy();
 
-	//comparison operator for STL sort 
-	inline bool operator < (const TimelineEntry& otherEntry) const 
-	{
-		return m_priority < otherEntry.m_priority;
+    //comparison operator for STL sort
+    inline bool operator < (const TimelineEntry& otherEntry) const
+    {
+        return m_priority < otherEntry.m_priority;
     }
     Scene *m_scene; //ptr to the scene
     FrameTimer *m_frametimer; //frameskipper
@@ -30,14 +30,14 @@ public:
 };
 
 /*
-    The main class for the demo. 
+    The main class for the demo.
 */
 
 
 class Demo
 {
 public:
-    Demo(string scriptfile); 
+    Demo(string scriptfile);
     ~Demo();
 
     //returns true if we are all go for launch
@@ -47,18 +47,18 @@ public:
     void addScene(string name, Scene* s);
     //add a scene to the timeline
     void addSceneToTimeline(string name, int startTime, int endTime, int priority);
-	//get scene from the scene list
-	Scene* getScene(string name);
+    //get scene from the scene list
+    Scene* getScene(string name);
 
     //inits all effects
     void initEffects();
-	//releases all effects
-	void releaseEffects();
+    //releases all effects
+    void releaseEffects();
     //toggles running state
     void toggleRunning();
 
     //start the demo
-    void start(); 
+    void start();
     //stop the demo
     void stop();
 

@@ -44,9 +44,9 @@ public:
 	bool setVertexAttrib3f(char* name, GLfloat v0, GLfloat v1, GLfloat v2);
 	bool setVertexAttrib4f(char* name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);	
 
-	const GLhandleARB getVS() const { return m_vertex; };
-	const GLhandleARB getFS() const { return m_fragment; };
-	const GLhandleARB getProgram() const { return m_program; };
+	const GLhandleARB getVS() const { return m_vertex; }
+	const GLhandleARB getFS() const { return m_fragment; }
+	const GLhandleARB getProgram() const { return m_program; }
 
 private:
 	GLint getAttribLocation(const GLcharARB *name);

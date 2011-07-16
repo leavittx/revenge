@@ -13,8 +13,8 @@ public:
 
 	void setPosition(float x, float y, float z);
 	void setSpotDirection(float x, float y, float z);
-	void setPosition(Vector3 &position);
-	void setSpotDirection(Vector3& direction);
+	void setPosition(const Vector3 &position);
+	void setSpotDirection(const Vector3& direction);
 	void setSpotExponent(float exponent);
 
 	void setDiffuse(Color3& color, float a = 1.0f);

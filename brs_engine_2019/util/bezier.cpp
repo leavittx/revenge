@@ -1,4 +1,4 @@
-#include "Bezier.h"
+#include "bezier.h"
 
 
 BezierCurve::BezierCurve()

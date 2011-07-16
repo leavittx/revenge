@@ -62,19 +62,19 @@ void Material::setEmission(float r, float g, float b, float a)
 	m_emission[3] = a;
 }
 
-void Material::setDiffuse(Color3 &color, float a)
+void Material::setDiffuse(const Color3 &color, float a)
 {
 	setDiffuse(color.r, color.g, color.b, a);
 }
-void Material::setAmbient(Color3 &color, float a)
+void Material::setAmbient(const Color3 &color, float a)
 {
 	setAmbient(color.r, color.g, color.b, a);
 }
-void Material::setSpecular(Color3 &color, float a)
+void Material::setSpecular(const Color3 &color, float a)
 {
 	setSpecular(color.r, color.g, color.b, a);
 }
-void Material::setEmission(Color3 &color, float a)
+void Material::setEmission(const Color3 &color, float a)
 {
 	setEmission(color.r, color.g, color.b, a);
 }
