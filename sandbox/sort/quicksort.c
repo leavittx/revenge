@@ -8,14 +8,14 @@
 
 void QuickSort(double *a, int lo, int hi)
 {
-//  lo is the lower index, hi is the upper index
-//  of the region of array a that is to be sorted
+	// lo is the lower index, hi is the upper index
+	// of the region of array a that is to be sorted
     int i = lo, j = hi;
 
     // comparison element x
     double x = a[(lo + hi) / 2];
 
-    //  partition
+    // partition
     do
     {    
         while (a[i] < x)
@@ -33,7 +33,7 @@ void QuickSort(double *a, int lo, int hi)
 
     //  recursion
     if (lo < j)
-	QuickSort(a, lo, j);
+		QuickSort(a, lo, j);
     if (i < hi)
-	QuickSort(a, i, hi);
+		QuickSort(a, i, hi);
 }
