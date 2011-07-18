@@ -9,11 +9,11 @@ public:
     ~BezierCurve();
     void destroy();
 
-    //point = piste, tangent = suunta (sis‰lt‰‰ jo pisteen paikan)
+    //point = piste, tangent = suunta (sis√§lt√§√§ jo pisteen paikan)
     void startCreation();
     void addPoint(Vector3 &point, Vector3 &tangent);
     void endCreation();
-    
+
     Vector3 getValue(float t);
 
     Vector3 *points;
@@ -26,6 +26,3 @@ private:
 
 
 };
-
-
-

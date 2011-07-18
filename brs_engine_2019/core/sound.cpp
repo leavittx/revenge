@@ -2,7 +2,7 @@
 //  Headers
 //--------------------------------------------------------------------------------------------
 
-#if defined(_WIN32)
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -17,7 +17,7 @@
 #include "sound.h"
 #include "../globals.h"
 
-#if defined(_MSC_VER)
+#ifdef _MSC_VER
 #pragma warning ( disable : 4996)
 #endif
 
@@ -109,7 +109,7 @@ bool Sound::init()
     }
 
     //this seems to present only in windows/old version
-#if defined(_WIN32)
+#ifdef _WIN32
     result = fmodSystem->getDriverName(0, name, 256);
     checkError(result);
 
@@ -352,7 +352,7 @@ void Song::release()
 
 void Song::setPosition(unsigned int offset)
 {
-    // Tässä offsetti on millisekunteina
+    // Tss offsetti on millisekunteina
     if( m_channel )
     {
         m_channel->setPosition( offset, FMOD_TIMEUNIT_MS );

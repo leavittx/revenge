@@ -90,7 +90,7 @@ void GroundPlane::draw(float modulation)
                 Vertex& v1 = m_vertices[x + y * m_xres];
                 Vertex& v2 = m_vertices[x + (y + 1) * m_xres];
 
-#if defined(_MSC_VER)
+#ifdef _MSC_VER
                 glVertex3fv((float *)&(v1.position + add));
                 glVertex3fv((float *)&(v2.position + add));
 #else
@@ -420,7 +420,7 @@ void Primitives::dashedLine(Vector3 &v1, Vector3 &v2, float steplength, float sp
     for (int i = 0; i < steps; i++)
     {
         glVertex3fv((float *)&cursor);
-#if defined(_MSC_VER)
+#ifdef _MSC_VER
         glVertex3fv((float *)&(cursor + dir * steplength*spacing));
 #else
         Vector3 tmp = cursor + dir * steplength*spacing;

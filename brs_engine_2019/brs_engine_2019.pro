@@ -21,9 +21,7 @@ HEADERS += \
     util/curve.h \
     util/color4.h \
     util/color3.h \
-    util/catmullrom.h \
     util/billboard.h \
-    util/bezier.h \
     fx/tree.h \
     fx/runko.h \
     core/trigger.h \
@@ -62,14 +60,16 @@ HEADERS += \
     core/DevIL/il.h \
     core/DevIL/il_wrap.h \
     core/DevIL/devil_internal_exports.h \
-    core/DevIL/config.h
+    core/DevIL/config.h \
+    util/bezier.h \
+    util/catmullrom.h \
+    core/GLUS/GL/glus.h
 
 SOURCES += \
     main.cpp \
     util/vector3.cpp \
     util/vbo.cpp \
     util/stringutils.cpp \
-    util/skybox.cpp \
     util/range.cpp \
     util/particlesystem.cpp \
     util/meshfactory.cpp \
@@ -86,7 +86,6 @@ SOURCES += \
     util/curve.cpp \
     util/color4.cpp \
     util/color3.cpp \
-    util/catmullrom.cpp \
     util/billboard.cpp \
     util/bezier.cpp \
     fx/runko.cpp \
@@ -97,7 +96,6 @@ SOURCES += \
     core/system.cpp \
     core/sound.cpp \
     core/shaderhandler.cpp \
-    core/shader.cpp \
     core/scene.cpp \
     core/postprocess.cpp \
     core/parser.cpp \
@@ -112,10 +110,24 @@ SOURCES += \
     core/cubemap.cpp \
     core/config.cpp \
     core/camera.cpp \
-    core/bpm.cpp \
     core/opengl.cpp \
     util/primitives.cpp \
-    fx/tree.cpp
+    fx/tree.cpp \
+    core/shader.cpp \
+    core/bpm.cpp \
+    util/catmullrom.cpp \
+    util/skybox.cpp \
+    core/GLUS/glus_windows.c \
+    core/GLUS/glus_vector.c \
+    core/GLUS/glus_shape.c \
+    core/GLUS/glus_shaderprogram.c \
+    core/GLUS/glus_point.c \
+    core/GLUS/glus_modelview.c \
+    core/GLUS/glus_matrix.c \
+    core/GLUS/glus_math.c \
+    core/GLUS/glus_mac.c \
+    core/GLUS/glus_load.c \
+    core/GLUS/glus_linux.c
 
 OTHER_FILES += \
     data/script.txt \
@@ -155,11 +167,12 @@ QMAKE_CXXFLAGS += \
     -fno-permissive
 
 LIBS += \
+    -L/opt/fmodex/api/lib/ \
     -lGLEW -lGLU -lGL \
-    -lfmodex \
-    -lIL -lILU -lILUT
+    -lIL -lILU -lILUT \
+    -lfmodex
 
 INCLUDEPATH += \
-    /usr/include/c++/4.6.1/
-
-
+    /usr/include/ \
+    /usr/include/c++/4.6.1/ \
+    /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/

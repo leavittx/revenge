@@ -37,7 +37,7 @@ public:
     int getGlasses();
     bool getRandomized();
 
-#if defined(_WIN32)
+#ifdef _WIN32
     static int ConfigProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #endif /* defined(_WIN32) */
 

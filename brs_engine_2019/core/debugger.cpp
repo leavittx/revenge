@@ -18,7 +18,7 @@ void Debugger::setEnabled(bool enabled)
 
 void Debugger::printDate()
 {
-#if defined(_WIN32)
+#ifdef _WIN32
    SYSTEMTIME t;
    GetSystemTime(&t);
    m_debugFile << t.wYear << "-";

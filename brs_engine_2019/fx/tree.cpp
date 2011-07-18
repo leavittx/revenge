@@ -181,7 +181,7 @@ void CircuitElement::draw(float alpha)
 		{
 			glBegin(GL_LINES);
 			glVertex3fv((float *)&m_v1);
-#if defined(_MSC_VER)
+#ifdef _MSC_VER
 			glVertex3fv((float *)&(m_v1 + (m_v2 - m_v1) * fadein));
 #else
                         Vector3 tmp = m_v1 + (m_v2 - m_v1) * fadein;
@@ -2428,7 +2428,7 @@ bool Cloud::isDead()
 
 	if (g_system.getRandomized())
 	{
-#if defined(_WIN32)
+#ifdef _WIN32
 		srand(timeGetTime());
 #else
                 srand(time(NULL));

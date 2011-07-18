@@ -11,12 +11,12 @@
 #include <stdlib.h>
 
 #include "../globals.h"
-#if defined(_WIN32)
+#ifdef _WIN32
 #include "../resources/resource.h"
 #endif
 #include "config.h"
 
-#if defined(_MSC_VER)
+#ifdef _MSC_VER
 #pragma warning (disable : 4996)
 #endif
 
@@ -31,7 +31,7 @@ const int DEV_RESOLUTION_Y = 768;
 
 const int DEFAULT_MIN_X = 640;
 
-#if defined(_WIN32)
+#ifdef _WIN32
 std::vector<DEVMODE> devModes;
 #endif
 
@@ -77,7 +77,7 @@ Config::Config()
     smDesktopWidth = 0;
     smDesktopHeight = 0;
 
-#if defined(_WIN32)
+#ifdef _WIN32
     DEVMODE currentDevMode;
     currentDevMode.dmSize = sizeof(DEVMODE);
     currentDevMode.dmDriverExtra = 0;
@@ -121,7 +121,7 @@ Config::~Config()
 
 bool Config::run()
 {
-#if defined(_WIN32)
+#ifdef _WIN32
     if(DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_SETUPDLG), NULL, (DLGPROC)ConfigProc) == 1)
     {
         return false;
@@ -136,7 +136,7 @@ bool Config::run()
 
 int Config::getScreenX()
 {
-#if defined(_WIN32)
+#ifdef _WIN32
     return devModes[resolution].dmPelsWidth;
 #else
     //todo
@@ -146,7 +146,7 @@ int Config::getScreenX()
 
 int Config::getScreenY()
 {
-    #if defined(_WIN32)
+    #ifdef _WIN32
     return devModes[resolution].dmPelsHeight;
 #else
     //todo
@@ -184,7 +184,7 @@ bool Config::getVsync()
 
 int Config::getFrequency()
 {
-#if defined(_WIN32)
+#ifdef _WIN32
     return devModes[resolution].dmDisplayFrequency;
 #else
     //todo
@@ -221,7 +221,7 @@ int Config::getGlasses()
     return glasses;
 }
 
-#if defined(_WIN32)
+#ifdef _WIN32
 //-------------------------------------------------------
 //	Dialog procedure - handles inputs
 //-------------------------------------------------------

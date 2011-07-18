@@ -19,7 +19,7 @@ void StringUtils::iterateDirectory(string path, vector<string>& filenames, bool 
 {
     filenames.clear();
 
-#if defined(_WIN32)
+#ifdef _WIN32
     //this is a bastardized MSDN example
     WIN32_FIND_DATA ffd;
     HANDLE hFind = INVALID_HANDLE_VALUE;
@@ -133,8 +133,10 @@ bool StringUtils::readFile(string path, vector<string>& buffer, bool lowercase)
             getline(file, line);
             if (lowercase)
             {
+#ifdef _MSC_VER
                 //wtf
-                //transform(line.begin(), line.end(), line.begin(), tolower);
+                transform(line.begin(), line.end(), line.begin(), tolower);
+#endif
             }
             buffer.push_back(line);
         }

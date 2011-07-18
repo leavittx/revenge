@@ -1,5 +1,7 @@
+#ifdef _MSC_VER
 #define WIN32_LEAN_AND_MEAN
-#define VC_LEANMEAN           
+#define VC_LEANMEAN
+#endif
 
 #include "globals.h"
 

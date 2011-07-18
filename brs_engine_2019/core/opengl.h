@@ -30,7 +30,7 @@ public:
     unsigned int getWidth();
     unsigned int getHeight();
 
-#if defined(_WIN32)
+#ifdef _WIN32
     HWND getHandle();
     HINSTANCE getInstance();
     HDC getHDC();
@@ -50,7 +50,7 @@ public:
     void setActive(bool a);
     void setWindowTitle(const string title);
 
-#if defined(_WIN32)
+#ifdef _WIN32
     friend LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #endif /* defined(_WIN32) */
 
@@ -82,7 +82,7 @@ private:
     bool keysPressed[256];
     bool keysDown[256];
 
-#if defined(_WIN32)
+#ifdef _WIN32
     HWND hwnd;
     HINSTANCE hinstance;
     HDC hdc;
