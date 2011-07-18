@@ -49,26 +49,29 @@ void ShaderHandler::loadShaders()
 		g_debug << "    " << vertexFilenames.size() << " vertex and " << fragmentFilenames.size() 
 				<< " fragment shaders" << endl;
 
-#if defined(_MSC_VER)
-		for each (string s in vertexFilenames)
+#ifdef _MSC_VER
+                for each (string s in vertexFilenames) {
 #else
 //#if defined(__GXX_EXPERIMENTAL_CXX0X__)
-                for (string& s: vertexFilenames)
+//                for (string& s: vertexFilenames) {
 //#else
+                for (int i = 0; i < vertexFilenames.size(); i++) {
+                    string& s = vertexFilenames[i];
 //#error
 #endif
-		{
 			cout << "   vertex shader filename: " << s << endl;
 		}
-#if defined(_MSC_VER)
-		for each (string s in fragmentFilenames)
+#ifdef _MSC_VER
+                for each (string s in fragmentFilenames) {
 #else
 //#if defined(__GXX_EXPERIMENTAL_CXX0X__)
-                for (string& s: fragmentFilenames)
+//                for (string& s: fragmentFilenames) {
 //#else
+                for (int i = 0; i < fragmentFilenames.size(); i++) {
+                    string& s = fragmentFilenames[i];
+    //#error
 //#error
 #endif
-		{
 			cout << "   fragment shader filename: " << s << endl;
 		}
 		return;

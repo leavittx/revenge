@@ -2,8 +2,8 @@
 
 CatmullRomCurve::CatmullRomCurve()
 {
-	this->points = 0;
-	this->pcount = 0;
+    this->points = 0;
+    this->pcount = 0;
 }
 
 CatmullRomCurve::~CatmullRomCurve()
@@ -16,7 +16,7 @@ void CatmullRomCurve::destroy()
     this->pcount = 0;
     if (this->points != 0)
     {
-		delete [] this->points;
+        delete [] this->points;
         this->points = 0;
     }
 }
@@ -46,26 +46,26 @@ void CatmullRomCurve::begin()
     this->destroy();
 }
 
-void CatmullRomCurve::addPoint(const Vector3 &point)
+void CatmullRomCurve::addPoint(Vector3 &point)
 {
-   this->insertedPoints.push_back(point);
+    this->insertedPoints.push_back(point);
 }
 
 void CatmullRomCurve::reverse()
 {
-	if (this->pcount <= 0 || !this->points)
-	{
-		return;
-	}
+    if (this->pcount <= 0 || !this->points)
+    {
+        return;
+    }
 
-	//ugly
-	Vector3* temp = new Vector3[this->pcount];
-	for (int i = 0; i < this->pcount; i++)
-	{
-		temp[i] = this->points[this->pcount - i - 1];
-	}
-	delete [] this->points;
-	this->points = temp;
+    //ugly
+    Vector3* temp = new Vector3[this->pcount];
+    for (int i = 0; i < this->pcount; i++)
+    {
+        temp[i] = this->points[this->pcount - i - 1];
+    }
+    delete [] this->points;
+    this->points = temp;
 
 
 }
@@ -125,7 +125,7 @@ void CatmullRomCurve::arcLengthParametrize(int newSplinePoints, int samples)
     {
         while (cumlength < segmentLength)
         {
-            //mennään spliniä eteenpäin
+            //mennÃ¤Ã¤n spliniÃ¤ eteenpÃ¤in
             Vector3 cur = this->getValue(t);
             float d = (cur - prev).length();
             cumlength += d;
@@ -153,14 +153,14 @@ void CatmullRomCurve::arcLengthParametrize(int newSplinePoints, int samples)
 Vector3 CatmullRomCurve::getValue(float pos)
 {
 
-	if (this->points == 0)
-	{
+    if (this->points == 0)
+    {
         return Vector3(0, 0, 0);
-	}
-	if (this->pcount < 4)
-	{
-		return Vector3(0, 0, 0);
-	}
+    }
+    if (this->pcount < 4)
+    {
+        return Vector3(0, 0, 0);
+    }
 
     //t = 0 -> index = 1
     //t = 1.0f -> index = count - 2

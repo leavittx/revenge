@@ -1,6 +1,6 @@
 #include "timer.h"
 
-#if defined(_WIN32)
+#ifdef _WIN32
 #include <mmsystem.h>
 #else
 #include <sys/time.h>
@@ -16,7 +16,7 @@ Timer::~Timer()
 
 void Timer::init()
 {
-#if defined(_WIN32)
+#ifdef _WIN32
     m_initialTime = timeGetTime();
 #else
     static struct timespec initial;
@@ -48,7 +48,7 @@ void Timer::setPaused(bool paused)
 }
 void Timer::update(int audioPosition)
 {
-#if defined(_WIN32)
+#ifdef _WIN32
     int currentTime = timeGetTime();
 #else
     static struct timespec current;

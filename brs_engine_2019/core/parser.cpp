@@ -1,4 +1,4 @@
-#if defined(_MSC_VER)
+#ifdef _MSC_VER
 #pragma warning ( disable : 4786)
 #endif
 
@@ -61,8 +61,10 @@ bool Parser::readFile(string filename)
                 //check that the line is not a single comment or inside a comment block
                 if (!comment && (line[0] != ';' && line[0] != '#'))
                 {
+#ifdef _MSC_VER
                     //convert it into lowercase
-//                    transform(line.begin(), line.end(), line.begin(), tolower);
+                    transform(line.begin(), line.end(), line.begin(), tolower);
+#endif
                     //remove all crap that the programmer might put there by custom
                     StringUtils::removeChar(line, ';');
                     StringUtils::removeChar(line, '\t'); //remove tabs
@@ -1165,7 +1167,9 @@ bool Parser::parse(string filename, Parameters &params, System &system)
                 }
                 else
                 {
-//                    transform(tokens[1].begin(), tokens[1].end(), tokens[1].begin(), tolower);
+#ifdef _MSC_VER
+                    transform(tokens[1].begin(), tokens[1].end(), tokens[1].begin(), tolower);
+#endif
                     m_currentnamespace = tokens[1];
                     parseNamespace(params);
                 }

@@ -7,7 +7,7 @@
 //#include "fmod.h"
 //#include "fmod_errors.h"
 
-#if defined(_WIN32)
+#ifdef _WIN32
 #include "fmod/fmod.hpp"
 #include "fmod/fmod_errors.h"
 #else

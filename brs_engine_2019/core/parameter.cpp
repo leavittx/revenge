@@ -1,4 +1,4 @@
-#if defined(_MSC_VER)
+#ifdef _MSC_VER
 #pragma warning ( disable : 4786)
 #endif
 
@@ -271,8 +271,10 @@ void Parameters::save(string filename)
 }
 void Parameters::useNamespace(string space)
 {
+#ifdef _MSC_VER
     //force lowercase
-//    transform(space.begin(), space.end(), space.begin(), tolower);
+    transform(space.begin(), space.end(), space.begin(), tolower);
+#endif
     m_currentName = space;
 }
 

@@ -122,7 +122,7 @@ bool System::createSystem(Config &cfg)
 bool System::demoRunning()
 {
 	//running if not pressed esc or the song hasn't ended
-#if defined(_WIN32)
+#ifdef _WIN32
 	return !getKeyDown(VK_ESCAPE) && (getTime() < (m_song->getLength() - m_endTime));
 #else
     //todo
@@ -185,7 +185,7 @@ bool System::initOpenGL(Config &cfg)
 void System::handleInput(Demo *demo)
 {
     //fast forward/rewind
-#if defined(_WIN32)
+#ifdef _WIN32
     bool slowdown = GetAsyncKeyState(VK_RSHIFT) || GetAsyncKeyState(VK_LSHIFT);
     const int adjust = slowdown ? 2 : 1000;
 
@@ -209,7 +209,7 @@ void System::handleInput(Demo *demo)
 
 void System::setWindowTitle(const string title)
 {
-#if defined(_WIN32)
+#ifdef _WIN32
 	m_glWindow->setWindowTitle(title);
 #endif
         //todo
@@ -220,7 +220,7 @@ void System::resetViewport()
 }
 void System::swapBuffers()
 {
-#if defined(_WIN32)
+#ifdef _WIN32
 	SwapBuffers(m_glWindow->getHDC());
 #endif
         //todo
