@@ -19,6 +19,8 @@
  * Additional code by Alexandr Palamar
  */
 
+#if 0
+
 #include <X11/X.h>
 
 #include <time.h>
@@ -572,3 +574,5 @@ GLUSboolean GLUSAPIENTRY glusRun(GLUSvoid)
 
 	return GLUS_TRUE; // Exit The Program
 }
+
+#endif

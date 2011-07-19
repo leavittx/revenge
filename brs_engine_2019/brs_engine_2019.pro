@@ -127,7 +127,8 @@ SOURCES += \
     core/GLUS/glus_math.c \
     core/GLUS/glus_mac.c \
     core/GLUS/glus_load.c \
-    core/GLUS/glus_linux.c
+    core/GLUS/glus_linux.c \
+    core/opengl_linux.cpp
 
 OTHER_FILES += \
     data/script.txt \
@@ -154,7 +155,8 @@ OTHER_FILES += \
     data/shaders/lighting_directionaltexture.vs \
     data/shaders/lighting_directionaltexture.fs \
     data/shaders/lighting_directionalflat.vs \
-    data/shaders/lighting_directionalflat.fs
+    data/shaders/lighting_directionalflat.fs \
+    notes.txt
 
 QMAKE_CXXFLAGS += \
     -std=c++0x \
@@ -176,3 +178,5 @@ INCLUDEPATH += \
     /usr/include/ \
     /usr/include/c++/4.6.1/ \
     /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/
+
+

@@ -120,6 +120,7 @@ int main(void) {
 
             g_system.swapBuffers();
 #else
+            glusRun();
 #endif
         }
         demo->stop();

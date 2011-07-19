@@ -19,6 +19,9 @@
  * Additional code by Alexandr Palamar
  */
 
+//todo
+#ifdef _MAC
+
 #include <X11/X.h>
 
 #include <CoreFoundation/CFDate.h>
@@ -576,3 +579,5 @@ GLUSboolean GLUSAPIENTRY glusRun(GLUSvoid)
 
 	return GLUS_TRUE; // Exit The Program
 }
+
+#endif /* _MAC */

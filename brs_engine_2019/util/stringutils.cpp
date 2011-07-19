@@ -1,6 +1,8 @@
-#if !defined(_WIN32)
+#ifndef _WIN32
 #include <dirent.h>
-#endif /* !defined(_WIN32) */
+#include <glob.h>
+#include <libgen.h> // dirname, basename
+#endif /* NOT _WIN32 */
 
 #include "stringutils.h"
 
@@ -40,7 +42,6 @@ void StringUtils::iterateDirectory(string path, vector<string>& filenames, bool 
     }
 
     // List all the files in the directory with some info about them.
-
     do
     {
         if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -55,53 +56,65 @@ void StringUtils::iterateDirectory(string path, vector<string>& filenames, bool 
             transform(filename.begin(), filename.end(), filename.begin(), tolower);
             filenames.push_back(filename);
         }
-    }
-    while (FindNextFile(hFind, &ffd) != 0);
+    } while (FindNextFile(hFind, &ffd) != 0);
 
     FindClose(hFind);
-#else   /* !defined(_WIN32) */
+#else   /* NOT _WIN32 */
+
+    //todo: refactor this code
     struct dirent **namelist;
+    glob_t globbuf;
     int n;
 
-    //find the first file in the directory and append the mask with '*' to get all files
     if (appendWildcard)
     {
-        n = scandir((path+"*").c_str(), &namelist, 0, alphasort);
+        glob(path.c_str(), 0, NULL, &globbuf);
+        n = globbuf.gl_pathc;
+
+        if (n <= 0)
+            return;
+
+        n--;
+
+        do
+        {
+            //todo: make sure it's a file, not dir
+            string filename = string(globbuf.gl_pathv[n]);
+            filenames.push_back(filename);
+        } while (n--);
+
+        globfree(&globbuf);
     }
     else
     {
         n = scandir(path.c_str(), &namelist, 0, alphasort);
-    }
 
-    if (n < 0)
-    {
-        return;
-    }
+        if (n < 0)
+            return;
 
-    // List all the files in the directory with some info about them.
+        n--;
 
-    do
-    {
-        if (namelist[n]->d_type == DT_DIR)
+        // List all the files in the directory with some info about them.
+        do
         {
-            //directory
-        }
-        else if (namelist[n]->d_type == DT_REG)
-        {
-            //file
-            string filename = string(namelist[n]->d_name);
-            //free memory allocated for current file name
-            free(namelist[n]);
-            //convert to lower case
-            //wtf
-            //transform(filename.begin(), filename.end(), filename.begin(), tolower);
-            filenames.push_back(filename);
-        }
-    }
-    while (n--);
+            if (namelist[n]->d_type == DT_DIR)
+            {
+                //directory
+            }
+            else if (namelist[n]->d_type == DT_REG)
+            {
+                //file
+                string filename = string(namelist[n]->d_name);
+                //free memory allocated for current file name
+                free(namelist[n]);
 
-    free(namelist);
-#endif  /* defined(_WIN32) */
+                filenames.push_back(filename);
+            }
+        } while (n--);
+
+        free(namelist);
+    }
+#endif  /* NOT _WIN32 */
 }
 
 //removes all instances of a character

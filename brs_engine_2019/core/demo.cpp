@@ -51,25 +51,29 @@ Demo::Demo(string scriptfile):m_scriptName(scriptfile)
         Parser parser;
         parser.parse(scriptfile, g_params, g_system);
 
-		g_system.initOpenGL(*m_cfg);
+        g_system.initOpenGL(*m_cfg);
 
-//		string filename = "data\\audio\\bitarts_nomoretomorrow.ogg";
-//		string filename = "data\\audio\\bitarts_nomoretomorrow.ogg";
-		string songPath = "data\\audio\\";
-		string songFile = g_system.getSongFilename();
+        //		string filename = "data\\audio\\bitarts_nomoretomorrow.ogg";
+        //		string filename = "data\\audio\\bitarts_nomoretomorrow.ogg";
+#ifdef _WIN32
+        string songPath = "data\\audio\\";
+#else
+        string songPath = "data/audio/";
+#endif
+        string songFile = g_system.getSongFilename();
         g_debug << "loading sound " << songFile << endl;
         m_start = true;
 
-		const int SOUND_LOADING_STEPS = 30; //put a lot in it since it takes long
-		const int SOUND_PRESTEP = 2;
-		g_system.addLoadingScreenSteps(SOUND_LOADING_STEPS);
-		g_system.advanceLoadingScreen(SOUND_PRESTEP);
+        const int SOUND_LOADING_STEPS = 30; //put a lot in it since it takes long
+        const int SOUND_PRESTEP = 2;
+        g_system.addLoadingScreenSteps(SOUND_LOADING_STEPS);
+        g_system.advanceLoadingScreen(SOUND_PRESTEP);
 
-		//draw almost empty loading screen
-		g_system.drawLoadingScreen();
+        //draw almost empty loading screen
+        g_system.drawLoadingScreen();
 
-		g_system.initSound(songPath + songFile);
-		g_system.advanceLoadingScreen(SOUND_LOADING_STEPS-SOUND_PRESTEP);
+        g_system.initSound(songPath + songFile);
+        g_system.advanceLoadingScreen(SOUND_LOADING_STEPS-SOUND_PRESTEP);
     }
     else
     {
@@ -82,19 +86,19 @@ Demo::~Demo()
 {
     g_debug << "demo quitting.." << endl;
     destroy();
-	g_system.kill();
+    g_system.kill();
 }
 
 void Demo::start()
 {
     g_debug << "starting demo now!" << endl;
     m_running = true;
-	g_system.startSong();
+    g_system.startSong();
 }
 
 void Demo::stop()
 {
-	g_system.stopSong();
+    g_system.stopSong();
     g_debug << "demo stopped!" << endl;
 }
 
@@ -119,7 +123,7 @@ void Demo::destroy()
         m_scenes.clear();
 
         //kill audio
-		g_system.freeSound();
+        g_system.freeSound();
     }
 }
 
@@ -132,15 +136,15 @@ void Demo::addScene(string name, Scene *s)
 
 Scene* Demo::getScene(string name)
 {
-	if (m_scenes.find(name) != m_scenes.end())
-	{
-		return m_scenes[name];
-	}
-	else
-	{
-		g_debug << "error! Trying to fetch scene " << name << " but it does not exist\n";
-		return 0;
-	}
+    if (m_scenes.find(name) != m_scenes.end())
+    {
+        return m_scenes[name];
+    }
+    else
+    {
+        g_debug << "error! Trying to fetch scene " << name << " but it does not exist\n";
+        return 0;
+    }
 }
 
 
@@ -157,8 +161,8 @@ void Demo::addSceneToTimeline(string name, int startTime, int endTime, int prior
         entry->m_endTime = endTime;
         entry->m_priority = priority;
         entry->m_name = name;
-		const int FPS = 100;
-		const int MAXITERATIONS = 30;
+        const int FPS = 100;
+        const int MAXITERATIONS = 30;
         entry->m_frametimer = new FrameTimer(1000/FPS, MAXITERATIONS); //
         g_debug << "created a timeline entry for scene \"" << name << "\" at [" << startTime << "," << endTime << "]" << endl;
 
@@ -187,23 +191,23 @@ void Demo::releaseEffects()
     //call init on all effects
     map<string, Scene *>::iterator it;
 
-	for (it = m_scenes.begin(); it != m_scenes.end(); it++)
-	{
-		(*it).second->release();
-	}
+    for (it = m_scenes.begin(); it != m_scenes.end(); it++)
+    {
+        (*it).second->release();
+    }
 }
 
 
 //we need this since STL doesn't know how to sort vectors of pointers 
 bool timelineEntryComparisonFunction(const TimelineEntry *a, const TimelineEntry *b)
 {
-	return a->m_priority < b->m_priority;
+    return a->m_priority < b->m_priority;
 }
 
 void Demo::draw()
 {
     vector<TimelineEntry*>::iterator it;
-	vector<TimelineEntry*> activeEffects;
+    vector<TimelineEntry*> activeEffects;
 
     int time = g_system.getTime();
     for (it = m_timeline.begin(); it < m_timeline.end(); it++)
@@ -212,15 +216,15 @@ void Demo::draw()
 
         if (time >= e->m_startTime && time < e->m_endTime)
         {
-			activeEffects.push_back(e);
+            activeEffects.push_back(e);
         }
     }
-	sort(activeEffects.begin(), activeEffects.end(), timelineEntryComparisonFunction);
-	for (it = activeEffects.begin(); it < activeEffects.end(); it++)
-	{
+    sort(activeEffects.begin(), activeEffects.end(), timelineEntryComparisonFunction);
+    for (it = activeEffects.begin(); it < activeEffects.end(); it++)
+    {
         TimelineEntry *e = *it;
- 		e->m_scene->draw();
-	}
+        e->m_scene->draw();
+    }
 
 }
 
@@ -240,58 +244,58 @@ void Demo::toggleRunning()
 void Demo::update()
 {
 #ifdef _WIN32
-	bool F1 = GetAsyncKeyState(VK_F1) != 0; //reload params & shaders
-	bool F2 = GetAsyncKeyState(VK_F2) != 0; //reload params & shaders & reinit effects
-	bool F3 = GetAsyncKeyState(VK_F3) != 0; //reload resources
-	bool S = GetAsyncKeyState('S') != 0;	//toggle sound
+    bool F1 = GetAsyncKeyState(VK_F1) != 0; //reload params & shaders
+    bool F2 = GetAsyncKeyState(VK_F2) != 0; //reload params & shaders & reinit effects
+    bool F3 = GetAsyncKeyState(VK_F3) != 0; //reload resources
+    bool S = GetAsyncKeyState('S') != 0;	//toggle sound
 
     if (F1 || F2)
     {
         Parser parser;
         parser.parse(m_scriptName, g_params, g_system);
-		g_shaders.freeShaders();
-		g_shaders.loadShaders();
+        g_shaders.freeShaders();
+        g_shaders.loadShaders();
     }
-	if (F2)
-	{
-		releaseEffects();
-		initEffects();
-	}
-	if (F3)
-	{
-	}
+    if (F2)
+    {
+        releaseEffects();
+        initEffects();
+    }
+    if (F3)
+    {
+    }
 
-	if (S)
-	{
-		bool sound = g_system.getSoundEnabled();
-		g_system.setSoundEnabled(!sound);
-	}
+    if (S)
+    {
+        bool sound = g_system.getSoundEnabled();
+        g_system.setSoundEnabled(!sound);
+    }
 
-	static bool returnDown = false;
-	static int returnTime = 0;
-	if (GetAsyncKeyState(VK_RETURN))
-	{
-		if (!returnDown)
-		{
-			//write down time if return was pressed
-			returnDown = true;
-			returnTime = g_system.getTime();
-		}
-	}
-	else
-	{
-		if (returnDown)
-		{
-			//return was raised
-			int returnLength = g_system.getTime() - returnTime;
-			stringstream output;
-			output << returnTime;
-			output << " ";
-			output << returnLength;
-			g_debug + (output.str());//(returnTime + " " + returnLength);
-			returnDown = false;
-		}
-	}
+    static bool returnDown = false;
+    static int returnTime = 0;
+    if (GetAsyncKeyState(VK_RETURN))
+    {
+        if (!returnDown)
+        {
+            //write down time if return was pressed
+            returnDown = true;
+            returnTime = g_system.getTime();
+        }
+    }
+    else
+    {
+        if (returnDown)
+        {
+            //return was raised
+            int returnLength = g_system.getTime() - returnTime;
+            stringstream output;
+            output << returnTime;
+            output << " ";
+            output << returnLength;
+            g_debug + (output.str());//(returnTime + " " + returnLength);
+            returnDown = false;
+        }
+    }
 #endif
 
     if (m_running)

@@ -46,7 +46,7 @@ void CatmullRomCurve::begin()
     this->destroy();
 }
 
-void CatmullRomCurve::addPoint(Vector3 &point)
+void CatmullRomCurve::addPoint(const Vector3 &point)
 {
     this->insertedPoints.push_back(point);
 }

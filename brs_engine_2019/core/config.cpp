@@ -126,6 +126,8 @@ bool Config::run()
     {
         return false;
     }
+#else
+    Config::runFlag = true;
 #endif
 
     if(!getRunFlag())
@@ -140,7 +142,7 @@ int Config::getScreenX()
     return devModes[resolution].dmPelsWidth;
 #else
     //todo
-    return 0;
+    return 800;
 #endif
 }
 
@@ -150,7 +152,7 @@ int Config::getScreenY()
     return devModes[resolution].dmPelsHeight;
 #else
     //todo
-    return 0;
+    return 600;
 #endif
 }
 

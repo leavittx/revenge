@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef _WIN32
+
 #include <windows.h>
 
 #include <GL/gl.h>
@@ -649,3 +651,5 @@ GLUSboolean GLUSAPIENTRY glusRun(GLUSvoid)
 
 	return GLUS_TRUE; // Exit The Program
 }
+
+#endif /* _WIN32 */
