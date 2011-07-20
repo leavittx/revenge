@@ -2503,7 +2503,7 @@ void TreeScene::updatePlants(vector<Plant*> &plants)
 
 void TreeScene::update()
 {
-	g_params.useNamespace("Tree");
+        g_params.useNamespace("tree");
 
 	Vector3 tgt = Vector3(0, 0, 0);
 	for (vector<Tree*>::iterator it = m_trees.begin(); it != m_trees.end(); it++)
@@ -3231,7 +3231,7 @@ void TreeScene::setCam()
 }
 void TreeScene::draw()
 {
-	g_params.useNamespace("Tree");
+        g_params.useNamespace("tree");
 
 	glLoadIdentity();
 	setCam();

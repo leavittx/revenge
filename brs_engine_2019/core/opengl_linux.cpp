@@ -590,7 +590,7 @@ bool GLWindow::createWindow(int w, int h, int b, bool screen, bool onTop, int fs
     fullscreen = screen;
     this->onTop = onTop;
 
-    glusPrepareContext(2, 1, GLUS_FORWARD_COMPATIBLE_BIT);
+    glusPrepareContext(3, 3, GLUS_FORWARD_COMPATIBLE_BIT);
 
     if (!glusCreateWindow(title, width, height, fullscreen))
     {
@@ -603,7 +603,7 @@ bool GLWindow::createWindow(int w, int h, int b, bool screen, bool onTop, int fs
     glewInit();
 
     // Only continue, if OpenGL 3.3 is supported.
-    if (!glewIsSupported("GL_VERSION_2_1"))
+    if (!glewIsSupported("GL_VERSION_3_3"))
     {
         g_debug << "OpenGL 3.3 not supported." << endl;
 

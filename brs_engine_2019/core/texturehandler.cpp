@@ -1,5 +1,8 @@
 #include "texturehandler.h"
+
+#ifndef _WIN32
 #include <libgen.h>
+#endif
 
 TextureHandler::TextureHandler()
 {
@@ -189,7 +192,7 @@ void TextureHandler::loadImages()
     string directory = "data/graphics/";
 #endif
 
-    StringUtils::iterateDirectory(directory, filenames);
+    StringUtils::iterateDirectory(directory, filenames, false);
 
     //add steps, one for uploading and one for loading
     g_system.addLoadingScreenSteps(filenames.size() * 2);

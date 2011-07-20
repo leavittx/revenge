@@ -69,6 +69,12 @@ bool Parser::readFile(string filename)
                     StringUtils::removeChar(line, ';');
                     StringUtils::removeChar(line, '\t'); //remove tabs
 
+                    //on linux reading scripts which were created on windows
+                    //may be incorrect due to CR+LF line break, so remove all CR's
+#ifndef _WIN32
+                    StringUtils::removeChar(line, '\r');
+#endif
+
                     //TODO: check for lines that are only whitespace
                     //push the processed line into the file
                     if (line.size() > 0)

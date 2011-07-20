@@ -551,7 +551,7 @@ void System::loadMeshes()
     string directory = "data/meshes/";
 #endif
 
-    StringUtils::iterateDirectory(directory, filenames);
+    StringUtils::iterateDirectory(directory, filenames, false);
 
     //add steps, one for uploading and one for loading
     addLoadingScreenSteps(filenames.size() * 2);

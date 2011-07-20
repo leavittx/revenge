@@ -508,19 +508,19 @@ material somematerial
 ;;     beat				                                                                        ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-BPM basicbeat0
+bpm basicbeat0
 {
 	bpm = 35
 	offset = 0
 
 }
-BPM basicbeat1
+bpm basicbeat1
 {
 	bpm = 70
 	offset = 0
 }
 
-BPM basicbeat2
+bpm basicbeat2
 {
 	bpm = 140
 	offset = 0
