@@ -188,11 +188,13 @@ void TextureHandler::loadImages()
 
 #ifdef _WIN32
     string directory = "data\\graphics\\";
+
+	StringUtils::iterateDirectory(directory, filenames);
 #else
     string directory = "data/graphics/";
+	StringUtils::iterateDirectory(directory, filenames, false);
 #endif
 
-    StringUtils::iterateDirectory(directory, filenames, false);
 
     //add steps, one for uploading and one for loading
     g_system.addLoadingScreenSteps(filenames.size() * 2);

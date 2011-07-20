@@ -547,11 +547,14 @@ void System::loadMeshes()
 
 #ifdef _WIN32
     string directory = "data\\meshes\\";
+
+	StringUtils::iterateDirectory(directory, filenames);
 #else
     string directory = "data/meshes/";
+
+	StringUtils::iterateDirectory(directory, filenames, false);
 #endif
 
-    StringUtils::iterateDirectory(directory, filenames, false);
 
     //add steps, one for uploading and one for loading
     addLoadingScreenSteps(filenames.size() * 2);

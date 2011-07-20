@@ -91,7 +91,12 @@ void ShaderHandler::loadShaders()
     //load the shaders
     for (int i = 0; i < shaderCount; i++)
     {
+#ifdef _WIN32
         string shadername = vertexFilenames[i].substr(0, vertexFilenames[i].length()-3);
+#else
+        //todo: this is too dirty
+        string shadername = vertexFilenames[i].substr(13, vertexFilenames[i].length()-13-3);
+#endif
         g_debug << "shader #" << i << ": " << shadername << endl;
 
         //read in shader files
