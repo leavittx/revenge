@@ -109,6 +109,7 @@ Config::Config()
     }
 #else
     //todo
+    sound = true;
 #endif
 }
 Config::~Config()
@@ -143,16 +144,18 @@ int Config::getScreenX()
 #else
     //todo
     return 800;
+//      return 1680;
 #endif
 }
 
 int Config::getScreenY()
 {
-    #ifdef _WIN32
+#ifdef _WIN32
     return devModes[resolution].dmPelsHeight;
 #else
     //todo
     return 600;
+//    return 1050;
 #endif
 }
 
@@ -171,6 +174,9 @@ int Config::getFsaa()
 }
 bool Config::getFullscreen()
 {
+#ifndef _WIN32
+//    return true;
+#endif
     return fullscreen;
 }
 

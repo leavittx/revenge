@@ -590,7 +590,7 @@ bool GLWindow::createWindow(int w, int h, int b, bool screen, bool onTop, int fs
     fullscreen = screen;
     this->onTop = onTop;
 
-    glusPrepareContext(3, 3, GLUS_FORWARD_COMPATIBLE_BIT);
+    glusPrepareContext(3, 1, GLUS_BACKWARD_COMPATIBLE_BIT); //GLUS_FORWARD_COMPATIBLE_BIT
 
     if (!glusCreateWindow(title, width, height, fullscreen))
     {

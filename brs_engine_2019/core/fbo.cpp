@@ -64,7 +64,7 @@ void FBOManager::init()
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_depthFBO);
 
     // Bind color buffer
-    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,	GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D, m_depthColTex, 0);
+    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_depthColTex, 0);
     logFBOErrors("init depth FBO - attach color");
 
     GLuint depths[3] = { GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT16 };
@@ -157,11 +157,14 @@ void FBOManager::release()
 
     // Free renderbuffers
     glDeleteRenderbuffersEXT(1, &m_depthRenderBufferTexture2048);
+    glDeleteRenderbuffersEXT(1, &m_depthRenderBufferTexture1024);
     glDeleteRenderbuffersEXT(1, &m_depthRenderBufferTexture512);
     glDeleteRenderbuffersEXT(1, &m_depthRenderBufferTexture256);
     glDeleteRenderbuffersEXT(1, &m_depthRenderBufferTexture128);
     glDeleteRenderbuffersEXT(1, &m_depthRenderBufferTexture64);
     glDeleteRenderbuffersEXT(1, &m_depthRenderBufferTexture32);
+
+    glDeleteRenderbuffersEXT(1, &m_depthFBO);
 }
 
 void FBOManager::bindDepthFBO()
@@ -190,6 +193,10 @@ void FBOManager::bindTextureFBO1024(GLuint textureID)
     glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_frameBufferTexture1024);
     glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D,
                                textureID, 0 );
+
+//    glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, m_depthFBO);
+//    glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24, 1024, 1024);
+
     glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
                                   GL_RENDERBUFFER_EXT, m_depthRenderBufferTexture1024);
     logFBOErrors("bindTextureFBO1024");

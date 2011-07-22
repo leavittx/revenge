@@ -131,6 +131,7 @@ SOURCES += \
     core/opengl_linux.cpp
 
 OTHER_FILES += \
+    notes.txt \
     data/script.txt \
     data/shaders/postprocess_glowcombine.vs \
     data/shaders/postprocess_glowcombine.fs \
@@ -155,8 +156,7 @@ OTHER_FILES += \
     data/shaders/lighting_directionaltexture.vs \
     data/shaders/lighting_directionaltexture.fs \
     data/shaders/lighting_directionalflat.vs \
-    data/shaders/lighting_directionalflat.fs \
-    notes.txt
+    data/shaders/lighting_directionalflat.fs
 
 QMAKE_CXXFLAGS += \
     -std=c++0x \
@@ -167,6 +167,7 @@ QMAKE_CXXFLAGS += \
     -Wno-sign-compare \
     -Wno-unused-variable \
     -fno-permissive
+#    -Os
 
 LIBS += \
     -L/opt/fmodex/api/lib/ \
@@ -178,5 +179,4 @@ INCLUDEPATH += \
     /usr/include/ \
     /usr/include/c++/4.6.1/ \
     /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/
-
-
+#    /usr/lib/gcc/x86_64-pc-linux-gnu/4.6.1/include/g++-v4/
