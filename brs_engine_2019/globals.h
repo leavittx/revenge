@@ -79,6 +79,8 @@ using namespace std;
 #include "core/timer.h"
 #include "core/system.h"
 
+#include "core/keyboard.h"
+
 extern Debugger g_debug;
 extern class Parameters g_params;
 extern class PostProcess g_postprocess;

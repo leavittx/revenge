@@ -19,14 +19,12 @@ PostProcess g_postprocess;
 Demo *g_demo; //bad, mmkay
 
 #ifdef _WIN32
-int APIENTRY WinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPSTR     lpCmdLine,
-                     int       nCmdShow)
-{
-    MSG msg = {0};
+    int APIENTRY WinMain(HINSTANCE hInstance,
+                         HINSTANCE hPrevInstance,
+                         LPSTR     lpCmdLine,
+                         int       nCmdShow) {
 #else
-int main(void) {
+    int main(void) {
 #endif
 
     //first initialize system
@@ -98,30 +96,23 @@ int main(void) {
             //			ss << "time = " << g_system.getTime() << " fps = " << g_system.getFPS();
             //			g_system.setWindowTitle(ss.str());
             g_system.setWindowTitle("Brainstorm :: 2019");
-            demorunning = g_system.demoRunning();
 
-#ifdef _WIN32
-            if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-            {
-                if(msg.message == WM_QUIT)
-                {
-                    demorunning = false;
-                }
-                else
-                {
-                    TranslateMessage(&msg);
-                    DispatchMessage(&msg);
-                }
-            }
+//#ifdef _WIN32
+
+            demorunning =
+                g_system.pollEvents() &&
+                g_system.demoRunning();
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             demo->update();
             demo->draw();
 
             g_system.swapBuffers();
-#else
-            glusRun();
-#endif
+//#else
+
+//            glWindow.glusRun();
+//#endif
         }
         demo->stop();
         g_textures.dumpUnusedImages();
@@ -129,9 +120,9 @@ int main(void) {
 
     delete demo;
 
-#ifdef _WIN32
-    return msg.wParam;
-#else
+//#ifdef _WIN32
+//    return msg.wParam;
+//#else
     return 0;
-#endif
+//#endif
 }

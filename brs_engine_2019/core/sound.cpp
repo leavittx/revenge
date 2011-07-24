@@ -94,7 +94,11 @@ bool Sound::init()
         return false;
     }
 
+#if (FMOD_VERSION >= 0x00043600)
+    result = fmodSystem->getDriverCaps(0, &caps, 0, &speakermode);
+#else
     result = fmodSystem->getDriverCaps(0, &caps, 0, 0, &speakermode);
+#endif
     checkError(result);
 
     result = fmodSystem->setSpeakerMode(speakermode);

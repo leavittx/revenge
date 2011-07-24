@@ -6,6 +6,7 @@
 
 #include <windows.h>
 #include <stdio.h>
+
 #include "opengl.h"
 #include "../globals.h"
 
@@ -29,7 +30,7 @@ GLWindow::GLWindow()
     title = "Brainstorm :: 2019";
     className = "DemoGL";
     onTop = false;
-    fsaa = 0; //todo - 2 ???
+    fsaa = 0; //TODO - 2 ???
 
     //	wglSwapIntervalEXT = NULL;
     //	wglGetSwapIntervalEXT = NULL;
@@ -244,7 +245,6 @@ bool GLWindow::createWindow()
 // width, height, bpp, fullscreen, alwaysontop, fsaa-samples (0,2,4,6,8), freq
 bool GLWindow::createWindow(int w, int h, int b, bool screen, bool onTop, int fsaa, int frequency)
 {
-
     WNDCLASSEX wc;
     DWORD eStyle;
     DWORD style;
@@ -847,7 +847,6 @@ GLSystem::GLSystem()
     fov = 45.0f;
     zNear = 0.1f;
     zFar = 14000.0f;
-
 }
 
 GLSystem::~GLSystem()
@@ -981,22 +980,27 @@ float GLSystem::getZNear()
 {
     return this->zNear;
 }
+
 float GLSystem::getZFar()
 {
     return this->zFar;
 }
+
 float GLSystem::getFov()
 {
     return this->fov;
 }
+
 int GLSystem::getWidth()
 {
     return this->width;
 }
+
 int GLSystem::getHeight()
 {
     return this->height;
 }
+
 int GLSystem::getAspectRatio()
 {
     return this->aspectratio;

@@ -33,7 +33,7 @@ void Debugger::printDate()
    if(t.wSecond < 10)m_debugFile << "0";
    m_debugFile << t.wSecond << "     ";
 #else
-    //todo
+    //TODO
 #endif
 }
 

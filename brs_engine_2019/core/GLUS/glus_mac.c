@@ -19,7 +19,7 @@
  * Additional code by Alexandr Palamar
  */
 
-//todo
+//TODO
 #ifdef _MAC
 
 #include <X11/X.h>

@@ -38,6 +38,9 @@ public:
     GLWindow& getGLWindow();
     GLSystem& getGLSystem();
 
+    //poll window events
+    bool pollEvents();
+
     bool getKeyDown(int i);
     bool getKeyPressed(int i);
     void setWindowTitle(const string title);

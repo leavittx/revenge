@@ -1,22 +1,12 @@
-#ifdef _WIN32
-
 //-------------------------------------------------------
 // Includes
 //-------------------------------------------------------
-
-#include <windows.h>
-#include <commctrl.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "../globals.h"
-#include "../resources/resource.h"
 #include "config.h"
-
-#ifdef _MSC_VER
-#pragma warning (disable : 4996)
-#endif
 
 //-------------------------------------------------------
 //	Globals and static members
@@ -29,7 +19,9 @@ const int DEV_RESOLUTION_Y = 768;
 
 const int DEFAULT_MIN_X = 640;
 
+#ifdef _WIN32
 std::vector<DEVMODE> devModes;
+#endif
 
 int Config::frequency;
 int Config::resolution;
@@ -73,6 +65,7 @@ Config::Config()
     smDesktopWidth = 0;
     smDesktopHeight = 0;
 
+#ifdef _WIN32
     DEVMODE currentDevMode;
     currentDevMode.dmSize = sizeof(DEVMODE);
     currentDevMode.dmDriverExtra = 0;
@@ -102,6 +95,10 @@ Config::Config()
             devModes.push_back(devMode);
         }
     }
+#else
+    //TODO
+    sound = true;
+#endif
 }
 Config::~Config()
 {
@@ -113,10 +110,14 @@ Config::~Config()
 
 bool Config::run()
 {
+#ifdef _WIN32
     if(DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_SETUPDLG), NULL, (DLGPROC)ConfigProc) == 1)
     {
         return false;
     }
+#else
+    Config::runFlag = true;
+#endif
 
     if(!getRunFlag())
         return false;
@@ -126,12 +127,28 @@ bool Config::run()
 
 int Config::getScreenX()
 {
+#ifdef _WIN32
     return devModes[resolution].dmPelsWidth;
+#else
+    //TODO
+//    return 1366;
+    return 1280;
+//    return 800;
+//      return 1680;
+#endif
 }
 
 int Config::getScreenY()
 {
+#ifdef _WIN32
     return devModes[resolution].dmPelsHeight;
+#else
+    //TODO
+//    return 768;
+    return 1024;
+//    return 600;
+//    return 1050;
+#endif
 }
 
 int Config::getBpp()
@@ -143,12 +160,15 @@ int Config::getGamma()
 {
     return gamma;
 }
-int Config::getFsaa() 
+int Config::getFsaa()
 {
     return fsaa;
 }
 bool Config::getFullscreen()
 {
+//#ifndef _WIN32
+    return true;
+//#endif
     return fullscreen;
 }
 
@@ -164,7 +184,12 @@ bool Config::getVsync()
 
 int Config::getFrequency()
 {
+#ifdef _WIN32
     return devModes[resolution].dmDisplayFrequency;
+#else
+    //TODO
+    return 0;
+#endif
 }
 
 bool Config::getAnaglyphic()
@@ -196,12 +221,13 @@ int Config::getGlasses()
     return glasses;
 }
 
+#ifdef _WIN32
 //-------------------------------------------------------
 //	Dialog procedure - handles inputs
 //-------------------------------------------------------
 
 int Config::ConfigProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{	
+{
     switch(uMsg)
     {
     case WM_INITDIALOG:
@@ -461,5 +487,5 @@ int Config::ConfigProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     return 0;
 }
+#endif /* defined(_WIN32) */
 
-#endif /* _WIN32 */

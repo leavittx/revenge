@@ -94,7 +94,7 @@ void ShaderHandler::loadShaders()
 #ifdef _WIN32
         string shadername = vertexFilenames[i].substr(0, vertexFilenames[i].length()-3);
 #else
-        //todo: this is too dirty
+        //TODO: this is too dirty
         string shadername = vertexFilenames[i].substr(13, vertexFilenames[i].length()-13-3);
 #endif
         g_debug << "shader #" << i << ": " << shadername << endl;

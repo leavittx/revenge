@@ -61,7 +61,7 @@ void StringUtils::iterateDirectory(string path, vector<string>& filenames, bool 
     FindClose(hFind);
 #else   /* NOT _WIN32 */
 
-    //todo: refactor this code
+    //TODO: refactor this code
     struct dirent **namelist;
     glob_t globbuf;
     int n;
@@ -78,7 +78,7 @@ void StringUtils::iterateDirectory(string path, vector<string>& filenames, bool 
 
         do
         {
-            //todo: make sure it's a file, not dir
+            //TODO: make sure it's a file, not dir
             string filename = string(globbuf.gl_pathv[n]);
             filenames.push_back(filename);
         } while (n--);

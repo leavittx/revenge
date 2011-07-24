@@ -296,6 +296,8 @@ void Demo::update()
             returnDown = false;
         }
     }
+#else
+    //TODO
 #endif
 
     if (m_running)

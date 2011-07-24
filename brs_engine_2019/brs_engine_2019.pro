@@ -63,7 +63,8 @@ HEADERS += \
     core/DevIL/config.h \
     util/bezier.h \
     util/catmullrom.h \
-    core/GLUS/GL/glus.h
+    core/GLUS/GL/glus.h \
+    core/keyboard.h
 
 SOURCES += \
     main.cpp \
@@ -128,7 +129,8 @@ SOURCES += \
     core/GLUS/glus_mac.c \
     core/GLUS/glus_load.c \
     core/GLUS/glus_linux.c \
-    core/opengl_linux.cpp
+    core/opengl_linux.cpp \
+    core/config_linux.cpp
 
 OTHER_FILES += \
     notes.txt \
@@ -180,3 +182,8 @@ INCLUDEPATH += \
     /usr/include/c++/4.6.1/ \
     /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/
 #    /usr/lib/gcc/x86_64-pc-linux-gnu/4.6.1/include/g++-v4/
+
+
+
+
+

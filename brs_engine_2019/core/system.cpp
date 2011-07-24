@@ -14,6 +14,7 @@ System::System()
     m_soundEnabled = true;
     m_dialogSoundEnabled = true;
 }
+
 System::~System()
 {
     if (m_glWindow)
@@ -84,26 +85,33 @@ void System::kill()
 {
     m_glWindow->kill();
 }
+
 float System::getAspectRatio()
 {
     return m_glSystem->getScreenAspectRatio();
 }
+
 bool System::createWindow(Config &cfg)
 {
     int xres = cfg.getScreenX();
     int yres = cfg.getScreenY();
-    if(!m_glWindow->createWindow(xres, yres, 32, cfg.getFullscreen(), cfg.getOnTop(),
-                                 cfg.getFsaa(), cfg.getFrequency()))
+
+    if (!m_glWindow->createWindow(xres, yres, 32,
+                                  cfg.getFullscreen(), cfg.getOnTop(),
+                                  cfg.getFsaa(), cfg.getFrequency()))
     {
         g_debug << "ERROR! could not create window!\n" << endl;
         return false;
     }
+
     return true;
 }
+
 bool System::getRandomized()
 {
     return m_randomized;
 }
+
 bool System::createSystem(Config &cfg)
 {
     if (!m_glSystem->init(cfg.getScreenX(), cfg.getScreenY(), cfg.getAspectRatio()))
@@ -119,13 +127,36 @@ bool System::createSystem(Config &cfg)
     return true;
 }
 
+bool System::pollEvents()
+{
+#ifdef _WIN32
+    MSG msg = {0};
+
+    if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+    {
+        if (msg.message == WM_QUIT)
+        {
+            return false;
+        }
+        else
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+    }
+    return true;
+#else
+    return m_glWindow->pollEvents();
+#endif
+}
+
 bool System::demoRunning()
 {
     //running if not pressed esc or the song hasn't ended
 #ifdef _WIN32
     return !getKeyDown(VK_ESCAPE) && (getTime() < (m_song->getLength() - m_endTime));
 #else
-    //todo
+    //TODO
     return (getTime() < (m_song->getLength() - m_endTime));
 #endif
 }
@@ -139,14 +170,17 @@ bool System::getKeyDown(int i)
 {
     return m_glWindow->getKeyDown(i);
 }
+
 bool System::getKeyPressed(int i)
 {
     return m_glWindow->getKeyPressed(i);
 }
+
 GLWindow& System::getGLWindow()
 {
     return *m_glWindow;
 }
+
 GLSystem& System::getGLSystem()
 {
     return *m_glSystem;
@@ -205,7 +239,23 @@ void System::handleInput(Demo *demo)
         demo->toggleRunning();
     }
 #else
-    //todo
+    //TODO
+    bool slowdown = getKeyDown(KeyShift);
+    const int adjust = slowdown ? 2 : 1000;
+
+    if (getKeyDown(KeyLeftArrow))
+    {
+        addTime(-adjust);
+    }
+    if (getKeyDown(KeyRightArrow))
+    {
+        addTime(adjust);
+    }
+    //pause/resume
+    if (getKeyPressed(KeySpace))
+    {
+        demo->toggleRunning();
+    }
 #endif
 }
 
@@ -214,19 +264,21 @@ void System::setWindowTitle(const string title)
 #ifdef _WIN32
     m_glWindow->setWindowTitle(title);
 #endif
-    //todo
+    //TODO
 }
+
 void System::resetViewport()
 {
     glViewport(0, 0, m_glWindow->getWidth(), m_glWindow->getHeight());
 }
+
 void System::swapBuffers()
 {
 #ifdef _WIN32
     SwapBuffers(m_glWindow->getHDC());
 #else
-    //todo
-//    glXSwapBuffers(g_Display, g_Window); // Swap Buffers (Double Buffering)
+    glXSwapBuffers(m_glWindow->getDisplay(),
+                   m_glWindow->getWindow());
 #endif
 }
 
@@ -278,6 +330,7 @@ void System::updateFPS()
     }
 
 }
+
 float System::getFPS()
 {
     return m_FPS;
@@ -301,6 +354,7 @@ float radiusmod(float a, float t)
 {
     return 0.7f + 0.3f * sinf(a * 5 - t * 9);
 }
+
 void System::drawLoadingScreen()
 {
     if (m_loadingScreenSteps > 0)
@@ -360,6 +414,7 @@ void System::setSongFilename(string filename)
 {
     m_songFile = filename;
 }
+
 string System::getSongFilename()
 {
     return m_songFile;
@@ -374,10 +429,12 @@ void System::setSoundEnabled(bool enabled)
         m_audio->setVolume(m_song, 1.0f); //actual toggle is done through volume settings
     }
 }
+
 bool System::getSoundEnabled()
 {
     return m_soundEnabled && m_dialogSoundEnabled;
 }
+
 int System::getAudioPosition()
 {
     return m_song->getPosition();
@@ -419,6 +476,7 @@ void System::stopSong()
     m_song->stop();
     m_timer->stop();
 }
+
 void System::pauseSong(bool pause)
 {
     m_song->setPaused(pause);
@@ -436,6 +494,7 @@ void System::getWaveData(float *array, int size)
     m_song->getWaveData(array, size);
     array[size-1] = 0; //linux fix
 }
+
 void System::getSpectrum(float *array, int size)
 {
     m_song->getSpectrum(array, size);
@@ -454,7 +513,6 @@ float System::getSpectrumSum(int start, int end)
         sum += fft[i];
     }
     return sum;
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -481,10 +539,12 @@ void System::updateSync()
         beat->update();
     }
 }
+
 void System::addBeat(string name, BPM *bpm)
 {
     m_beats[name] = bpm;
 }
+
 BPM &System::beat(string name)
 {
     return *m_beats[name];
@@ -494,6 +554,7 @@ void System::addTriggers(string name, TriggerSystem *triggers)
 {
     m_triggers[name] = triggers;
 }
+
 TriggerSystem& System::triggers(string name)
 {
     if (m_triggers.find(name) == m_triggers.end())
@@ -502,10 +563,12 @@ TriggerSystem& System::triggers(string name)
     }
     return *m_triggers[name];
 }
+
 void System::addEvent(string name, Event *e)
 {
     m_events[name] = e;
 }
+
 Event& System::event(string name)
 {
     if (m_events.find(name) == m_events.end())
@@ -523,6 +586,7 @@ void System::addCamera(string name, Camera *c)
 {
     m_cameras[name] = c;
 }
+
 Camera& System::camera(string name)
 {
     if (m_cameras.find(name) == m_cameras.end())
@@ -600,10 +664,12 @@ void System::addMesh(string name, Mesh *mesh)
 {
     m_meshes[name] = mesh;
 }
+
 void System::addMaterial(string name, Material *material)
 {
     m_materials[name] = material;
 }
+
 Mesh& System::mesh(string name)
 {
     if (m_meshes.find(name) == m_meshes.end())
@@ -612,6 +678,7 @@ Mesh& System::mesh(string name)
     }
     return *m_meshes[name];
 }
+
 Material& System::material(string name)
 {
     if (m_materials.find(name) == m_materials.end())

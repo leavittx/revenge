@@ -1,17 +1,23 @@
 #include "opengl.h"
 #include "../globals.h"
 
-#include <X11/X.h>
-
 #include <time.h>
-
-#include <GL/gl.h>
-#include <GL/glx.h>
 
 #include <stdio.h>
 #include <string.h>
 
-//#include "GL/glus.h"
+#include <GL/gl.h>
+#include <GL/glx.h>
+
+#include <X11/X.h>
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xos.h>
+#include <X11/Xatom.h>
+#include <X11/keysym.h>
+
+int translateKey(unsigned int vk, bool* spKey);
 
 #ifndef GLX_CONTEXT_DEBUG_BIT_ARB
 #define GLX_CONTEXT_DEBUG_BIT_ARB 0x0001
@@ -33,33 +39,11 @@ typedef GLXContext (* PFNGLXCREATECONTEXTATTRIBSARBPROCTEMP)(Display* dpy, GLXFB
 
 static GLUSuint g_major = 1;
 static GLUSuint g_minor = 0;
-static GLUSint g_flags = 0;
+static GLUSint  g_flags = 0;
 
-static GLUSboolean g_fullscreen = GL_FALSE;
-static GLUSboolean g_active = GL_FALSE;
-static GLUSboolean g_initdone = GL_FALSE;
-
-static GLUSuint g_width = 640;
-static GLUSuint g_height = 480;
-
-static Display* g_Display = None;
-static Window g_Window = 0;
-static GLXContext g_Context = None;
 static Atom g_DeleteMessage;
 static Atom g_StateMessage;
 static Atom g_FullscreenMessage;
-
-//static GLUSboolean (*glusInit)(GLUSvoid) = None;
-//static GLUSvoid (*glusReshape)(GLUSuint width, GLUSuint height) = None;
-//static GLUSboolean (*glusUpdate)(GLUSfloat time) = None;
-//static GLUSvoid (*glusTerminate)(GLUSvoid) = None;
-
-//static GLUSvoid (*glusKey)(GLUSboolean pressed, GLUSuint key) = NULL;
-//static GLUSvoid (*glusMouse)(GLUSboolean pressed, GLUSuint button, GLUSuint xPos, GLUSuint yPos) = NULL;
-//static GLUSvoid (*glusMouseWheel)(GLUSuint buttons, GLUSint ticks, GLUSuint xPos, GLUSuint yPos) = NULL;
-//static GLUSvoid
-//(*glusMouseMove)(GLUSuint buttons, GLUSuint xPos, GLUSuint yPos) = NULL;
-
 
 GLUSvoid GLUSAPIENTRY glusPrepareContext(GLUSuint major, GLUSuint minor, GLUSint flags)
 {
@@ -107,9 +91,9 @@ GLUSfloat glusGetElapsedTime(GLUSvoid)
     return currentTime - lastTime;
 }
 
-GLUSvoid GLUSAPIENTRY glusDestroyWindow(GLUSvoid)
+void GLWindow::glusDestroyWindow()
 {
-    if (g_fullscreen && g_Display && g_Window) // Are We In Fullscreen Mode?
+    if (fullscreen && g_Display && g_Window) // Are We In Fullscreen Mode?
     {
         XEvent xev;
 
@@ -150,11 +134,9 @@ GLUSvoid GLUSAPIENTRY glusDestroyWindow(GLUSvoid)
 
         g_Display = None;
     }
-
-    g_initdone = GL_FALSE;
 }
 
-GLUSboolean GLUSAPIENTRY glusCreateWindow(const char* title, GLUSuint width, GLUSuint height, GLUSboolean fullscreen)
+bool GLWindow::glusCreateWindow()
 {
     Window RootWindow = 0;
     XVisualInfo* VisualInfo = None;
@@ -163,15 +145,19 @@ GLUSboolean GLUSAPIENTRY glusCreateWindow(const char* title, GLUSuint width, GLU
     GLUSint fbcCount = 0;
     GLXFBConfig* fbc = None;
 
-    GLUSint
-            visualAttribList[] =
-    { GLX_X_RENDERABLE, True, GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT, GLX_RENDER_TYPE, GLX_RGBA_BIT, GLX_X_VISUAL_TYPE, GLX_TRUE_COLOR, GLX_RED_SIZE, 8, GLX_GREEN_SIZE, 8, GLX_BLUE_SIZE, 8, GLX_ALPHA_SIZE, 8, GLX_DEPTH_SIZE, 16, GLX_STENCIL_SIZE, 8, GLX_DOUBLEBUFFER, True, None };
+    GLUSint visualAttribList[] = {
+        GLX_X_RENDERABLE, True, GLX_DRAWABLE_TYPE,
+        GLX_WINDOW_BIT, GLX_RENDER_TYPE, GLX_RGBA_BIT,
+        GLX_X_VISUAL_TYPE, GLX_TRUE_COLOR,
+        GLX_RED_SIZE, 8, GLX_GREEN_SIZE, 8, GLX_BLUE_SIZE, 8,
+        GLX_ALPHA_SIZE, 8, GLX_DEPTH_SIZE, 16, GLX_STENCIL_SIZE, 8,
+        GLX_DOUBLEBUFFER, True, None };
 
     g_Display = XOpenDisplay(None);
 
     if (g_Display == None)
     {
-        return GLUS_FALSE;
+        return false;
     }
 
     RootWindow = DefaultRootWindow(g_Display);
@@ -180,7 +166,7 @@ GLUSboolean GLUSAPIENTRY glusCreateWindow(const char* title, GLUSuint width, GLU
     {
         glusDestroyWindow();
 
-        return GLUS_FALSE;
+        return false;
     }
 
     VisualInfo = glXGetVisualFromFBConfig(g_Display, fbc[0]);
@@ -191,7 +177,7 @@ GLUSboolean GLUSAPIENTRY glusCreateWindow(const char* title, GLUSuint width, GLU
 
         glusDestroyWindow();
 
-        return GLUS_FALSE;
+        return false;
     }
 
     CurrentColorMap = XCreateColormap(g_Display, RootWindow, VisualInfo->visual, AllocNone);
@@ -199,8 +185,12 @@ GLUSboolean GLUSAPIENTRY glusCreateWindow(const char* title, GLUSuint width, GLU
     CurrentSetWindowAttibutes.colormap = CurrentColorMap;
     CurrentSetWindowAttibutes.event_mask = KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask | StructureNotifyMask;
 
-    g_Window
-            = XCreateWindow(g_Display, RootWindow, 0, 0, width, height, 0, VisualInfo->depth, InputOutput, VisualInfo->visual, CWColormap | CWEventMask, &CurrentSetWindowAttibutes);
+    g_Window = XCreateWindow(g_Display, RootWindow,
+                             0, 0, width, height,
+                             0, VisualInfo->depth,
+                             InputOutput, VisualInfo->visual,
+                             CWColormap | CWEventMask,
+                             &CurrentSetWindowAttibutes);
 
     if (g_Window == 0)
     {
@@ -208,7 +198,7 @@ GLUSboolean GLUSAPIENTRY glusCreateWindow(const char* title, GLUSuint width, GLU
 
         glusDestroyWindow();
 
-        return GLUS_FALSE;
+        return false;
     }
 
     g_DeleteMessage = XInternAtom(g_Display, "WM_DELETE_WINDOW", False);
@@ -245,8 +235,6 @@ GLUSboolean GLUSAPIENTRY glusCreateWindow(const char* title, GLUSuint width, GLU
             }
         }
 
-        //
-
         g_StateMessage = XInternAtom(g_Display, "_NET_WM_STATE", False);
         g_FullscreenMessage = XInternAtom(g_Display, "_NET_WM_STATE_FULLSCREEN", False);
 
@@ -260,8 +248,6 @@ GLUSboolean GLUSAPIENTRY glusCreateWindow(const char* title, GLUSuint width, GLU
         xev.xclient.data.l[1] = g_FullscreenMessage;
 
         XSendEvent(g_Display, RootWindow, False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
-
-        g_fullscreen = fullscreen;
     }
 
     g_Context = glXCreateContext(g_Display, VisualInfo, None, GLUS_TRUE);
@@ -310,7 +296,7 @@ GLUSboolean GLUSAPIENTRY glusCreateWindow(const char* title, GLUSuint width, GLU
 
             glusDestroyWindow();
 
-            return GLUS_FALSE; // Return FALSE
+            return false;
         }
         XFree(fbc);
 
@@ -320,7 +306,7 @@ GLUSboolean GLUSAPIENTRY glusCreateWindow(const char* title, GLUSuint width, GLU
 
             glusDestroyWindow();
 
-            return GLUS_FALSE; // Return FALSE
+            return false;
         }
 
         glXDestroyContext(g_Display, g_Context);
@@ -331,219 +317,107 @@ GLUSboolean GLUSAPIENTRY glusCreateWindow(const char* title, GLUSuint width, GLU
         {
             glusDestroyWindow();
 
-            return GLUS_TRUE;
+            return false;
         }
     }
 
-    g_width = width;
-    g_height = height;
-
-    return GLUS_TRUE; // Success
+    return true;
 }
 
-GLUSboolean GLUSAPIENTRY glusRun(GLUSvoid)
+bool GLWindow::pollEvents(void)
 {
-    //MSG		msg;									// Windows Message Structure
     XEvent msg;
+    bool spKey; //TODO: remove or handle
 
-    GLUSboolean done = GLUS_FALSE; // Bool Variable To Exit Loop
-
-    GLUSuint mouseButtons = 0;
-
-    GLUSint mouseX, mouseY, mousePrevX, mousePrevY, dummy;
-
-    // Init Engine
-//    if (glusInit)
-//    {
-//        if (!glusInit())
-//        {
-//            glusDestroyWindow(); // Destroy The Window
-
-//            return GLUS_FALSE; // Exit The Program
-//        }
-//    }
-    // http://www.opengl.org/documentation/specs/man_pages/hardcopy/GL/html/gl/clearcolor.html
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-    // http://www.opengl.org/documentation/specs/man_pages/hardcopy/GL/html/gl/cleardepth.html
-    glClearDepth(1.0f);
-
-
-
-    g_initdone = GLUS_TRUE;
-
-    // Do the first reshape
-//    if (glusReshape)
-//    {
-//        glusReshape(g_width, g_height);
-//    }
-    // http://www.opengl.org/documentation/specs/man_pages/hardcopy/GL/html/gl/viewport.html
-    glViewport(0, 0, g_width, g_height);
-
-
-
-    XQueryPointer(g_Display, g_Window, (Window *) &dummy, (Window *) &dummy, (GLUSint*) &dummy, (GLUSint*) &dummy, &mousePrevX, &mousePrevY, (GLUSuint*) &dummy);
-
-    while (!done) // Loop That Runs While done=FALSE
+    if (XPending(g_Display))
     {
-        if (XPending(g_Display))
+        XNextEvent(g_Display, &msg);
+
+        for (int i = 0; i < 256; i++)
         {
-            XNextEvent(g_Display, &msg);
-
-            if (msg.type == KeyPress)
-            {
-                if (msg.xkey.keycode == 0x09) // Have We Received the Esc Key
-                {
-                    // do nothing
-                }
-                else
-                {
-//                    if (glusKey && g_initdone)
-//                    {
-//                        char c;
-
-//                        if (XLookupString(&msg.xkey, &c, 1, 0, 0) > 0)
-//                        {
-//                            glusKey(GLUS_TRUE, c);
-//                        }
-//                    }
-                }
-            }
-            else if (msg.type == KeyRelease)
-            {
-                if (msg.xkey.keycode == 0x09) // Have We Received the Esc Key
-                {
-                    done = GLUS_TRUE; // If So done=TRUE
-                }
-                else
-                {
-//                    if (glusKey && g_initdone)
-//                    {
-//                        char c;
-
-//                        if (XLookupString(&msg.xkey, &c, 1, 0, 0) > 0)
-//                        {
-//                            glusKey(GLUS_FALSE, c);
-//                        }
-//                    }
-                }
-            }
-            else if (msg.type == ButtonPress)
-            {
-//                if (glusMouse && g_initdone)
-//                {
-//                    if (msg.xbutton.button <= 3)
-//                    {
-//                        mouseButtons |= 1 << (msg.xbutton.button - 1);
-
-//                        glusMouse(GLUS_TRUE, msg.xbutton.button, msg.xbutton.x, msg.xbutton.y);
-//                    }
-//                    else if (msg.xbutton.button == 4)
-//                    {
-//                        glusMouseWheel(mouseButtons, 1, msg.xbutton.x, msg.xbutton.y);
-//                    }
-//                    else if (msg.xbutton.button == 5)
-//                    {
-//                        glusMouseWheel(mouseButtons, -1, msg.xbutton.x, msg.xbutton.y);
-//                    }
-//                }
-            }
-            else if (msg.type == ButtonRelease)
-            {
-//                if (glusMouse && g_initdone)
-//                {
-//                    if (msg.xbutton.button <= 3)
-//                    {
-//                        mouseButtons ^= 1 << (msg.xbutton.button - 1);
-
-//                        glusMouse(GLUS_FALSE, msg.xbutton.button, msg.xbutton.x, msg.xbutton.y);
-//                    }
-//                }
-            }
-            else if (msg.type == ClientMessage)
-            {
-                if (msg.xclient.data.l[0] == g_DeleteMessage) // Have We Received a Delete Message
-                {
-                    done = GLUS_TRUE; // If So done=TRUE
-                }
-            }
-            else if (msg.type == ConfigureNotify)
-            {
-                g_width = msg.xconfigure.width;
-                g_height = msg.xconfigure.height;
-
-                if (/*glusReshape && */g_initdone)
-                {
-//                    glusReshape(g_width, g_height);
-                    // http://www.opengl.org/documentation/specs/man_pages/hardcopy/GL/html/gl/viewport.html
-                    glViewport(0, 0, g_width, g_height);
-                }
-            }
-            else if (msg.type == MapNotify)
-            {
-                g_active = GLUS_TRUE;
-            }
-            else if (msg.type == UnmapNotify)
-            {
-                g_active = GLUS_FALSE;
-            }
+            keysPressed[i] = false;
         }
 
-        // Draw The Scene.
-        if (g_active && !done) // Program Active?
+        if (msg.type == KeyPress)
         {
-//            if (glusUpdate)
-//            {
-                if (/*glusMouseMove*/0 && g_initdone)
-                {
-                    XQueryPointer(g_Display, g_Window, (Window *) &dummy, (Window *) &dummy, (GLUSint*) &dummy, (GLUSint*) &dummy, &mouseX, &mouseY, (GLUSuint*) &dummy);
+            // Have We Received the Esc Key
+            if (msg.xkey.keycode == 0x09)
+            {
+                // do nothing
+            }
+            else
+            {
+//                char c;
 
-                    if (mouseX != mousePrevX || mouseY != mousePrevY && (mouseX >= 0 && mouseX <= g_width && mouseY >= 0 && mouseY <= g_height))
-                    {
-                        mousePrevX = mouseX;
-                        mousePrevY = mouseY;
+//                if (XLookupString(&msg.xkey, &c, 1, 0, 0) > 0)
+//                {
+//                    do smth...
+//                }
 
-//                        glusMouseMove(mouseButtons, mouseX, mouseY);
-                    }
-                }
+                keysPressed[translateKey(
+                            XLookupKeysym(&msg.xkey, 0), &spKey)]
+                            = true;
+                keysDown[translateKey(
+                            XLookupKeysym(&msg.xkey, 0), &spKey)]
+                            = true;
+            }
+        }
+        else if (msg.type == KeyRelease)
+        {
+            // Have We Received the Esc Key
+            if (msg.xkey.keycode == 0x09)
+            {
+                return false;
+            }
+            else
+            {
+//                char c;
+//                if (XLookupString(&msg.xkey, &c, 1, 0, 0) > 0)
+//                {
+//                    do smth...
+//                }
+                keysDown[translateKey(
+                            XLookupKeysym(&msg.xkey, 0), &spKey)]
+                            = false;
+            }
+        }
+        else if (msg.type == ClientMessage)
+        {
+            // Have We Received a Delete Message
+            if ((unsigned)msg.xclient.data.l[0] == g_DeleteMessage)
+            {
+                return false;
+            }
+        }
+        else if (msg.type == ConfigureNotify)
+        {
+            width = msg.xconfigure.width;
+            height = msg.xconfigure.height;
 
-                //update the system (sync etc)
-                g_system.update();
 
-//                done = !glusUpdate(glusGetElapsedTime());
-                // http://www.opengl.org/documentation/specs/man_pages/hardcopy/GL/html/gl/clear.html
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glViewport(0, 0, width, height);
 
-                g_demo->update();
-                g_demo->draw();
-
-//                g_system.swapBuffers();
-                glXSwapBuffers(g_Display, g_Window); // Swap Buffers (Double Buffering)
-//            }
-
-//            if (!done)
-//            {
-//                glXSwapBuffers(g_Display, g_Window); // Swap Buffers (Double Buffering)
-//            }
+            //do reshape here (not needed)
+        }
+        else if (msg.type == MapNotify)
+        {
+            active = true;
+        }
+        else if (msg.type == UnmapNotify)
+        {
+            active = false;
         }
     }
 
-    // Terminate Game
-//    if (glusTerminate)
-//    {
-//        glusTerminate();
-//    }
-
-    // Shutdown
-    glusDestroyWindow(); // Destroy The Window
-
-    return GLUS_TRUE; // Exit The Program
+    return true;
 }
-
-
 
 GLWindow::GLWindow()
 {
+    g_Display = None;
+    g_Window = 0;
+    g_Context = None;
+
     // Default setup
     width = 640;
     height = 480;
@@ -555,10 +429,7 @@ GLWindow::GLWindow()
     title = "Brainstorm :: 2019";
     className = "DemoGL";
     onTop = false;
-    fsaa = 0; //todo - 2 ???
-
-    //	wglSwapIntervalEXT = NULL;
-    //	wglGetSwapIntervalEXT = NULL;
+    fsaa = 0; //TODO - 2 ???
 
     verticalSyncFlag = false;
     verticalSync = 0;
@@ -575,7 +446,7 @@ GLWindow::~GLWindow()
     kill();
 }
 
-//todo
+//TODO
 bool GLWindow::createWindow()
 {
     return true;
@@ -590,9 +461,9 @@ bool GLWindow::createWindow(int w, int h, int b, bool screen, bool onTop, int fs
     fullscreen = screen;
     this->onTop = onTop;
 
-    glusPrepareContext(3, 1, GLUS_BACKWARD_COMPATIBLE_BIT); //GLUS_FORWARD_COMPATIBLE_BIT
+    glusPrepareContext(2, 1, GLUS_BACKWARD_COMPATIBLE_BIT); //GLUS_FORWARD_COMPATIBLE_BIT
 
-    if (!glusCreateWindow(title, width, height, fullscreen))
+    if (!glusCreateWindow())
     {
         g_debug << "Could not create window!" << endl;
         return false;
@@ -640,6 +511,16 @@ unsigned int GLWindow::getWidth()
 unsigned int GLWindow::getHeight()
 {
     return height;
+}
+
+Display* GLWindow::getDisplay()
+{
+    return g_Display;
+}
+
+Window GLWindow::getWindow()
+{
+    return g_Window;
 }
 
 // Setterit
@@ -824,6 +705,7 @@ float GLSystem::getScreenAspectRatio()
 {
     return screenaspectratio;
 }
+
 void GLSystem::resize(int w, int h)
 {
 
@@ -897,23 +779,76 @@ float GLSystem::getZNear()
 {
     return this->zNear;
 }
+
 float GLSystem::getZFar()
 {
     return this->zFar;
 }
+
 float GLSystem::getFov()
 {
     return this->fov;
 }
+
 int GLSystem::getWidth()
 {
     return this->width;
 }
+
 int GLSystem::getHeight()
 {
     return this->height;
 }
+
 int GLSystem::getAspectRatio()
 {
     return this->aspectratio;
+}
+
+int translateKey(unsigned int vk, bool* spKey)
+{
+    *spKey = true; //special key
+
+    switch (vk)
+    {
+    case XK_Tab:                    return KeyTab; break;
+    case XK_Return:                 return KeyEnter; break;
+    case XK_space: *spKey = false;  return KeySpace; break;
+    case XK_Menu:                   return KeyAlt; break;
+    case XK_Shift_L:
+    case XK_Shift_R:                return KeyShift; break;
+    case XK_Control_L:
+    case XK_Control_R:              return KeyCtrl; break;
+    case XK_Caps_Lock:              return KeyCapsLock; break;
+    case XK_Up:                     return KeyUpArrow; break;
+    case XK_Down:                   return KeyDownArrow; break;
+    case XK_Left:                   return KeyLeftArrow; break;
+    case XK_Right:                  return KeyRightArrow; break;
+    case XK_BackSpace:              return KeyBackspace; break;
+    case XK_F1:                     return KeyF1; break;
+    case XK_F2:                     return KeyF2; break;
+    case XK_F3:                     return KeyF3; break;
+    case XK_F4:                     return KeyF4; break;
+    case XK_F5:                     return KeyF5; break;
+    case XK_F6:                     return KeyF6; break;
+    case XK_F7:                     return KeyF7; break;
+    case XK_F8:                     return KeyF8; break;
+    case XK_F9:                     return KeyF9; break;
+    case XK_F10:                    return KeyF10; break;
+    case XK_F11:                    return KeyF11; break;
+    case XK_F12:                    return KeyF12; break;
+    case XK_F13:                    return KeyF13; break;
+    case XK_F14:                    return KeyF14; break;
+    case XK_F15:                    return KeyF15; break;
+    case XK_F16:                    return KeyF16; break;
+    case XK_Prior:                  return KeyPageUp; break;
+    case XK_Next:                   return KeyPageDown; break;
+    case XK_Home:                   return KeyHome; break;
+    case XK_End:                    return KeyEnd; break;
+    case XK_Insert:                 return KeyInsert; break;
+    case XK_Delete:                 return KeyDelete; break;
+    case XK_Escape:                 return KeyEsc; break;
+    case 0xFE03:                    return 0; break; // ALT GR
+    default: *spKey = false;        return vk; break;
+    }
 }
