@@ -173,6 +173,7 @@ QMAKE_CXXFLAGS += \
 
 LIBS += \
     -L/opt/fmodex/api/lib/ \
+    -lXrandr \
     -lGLEW -lGLU -lGL \
     -lIL -lILU -lILUT \
     -lfmodex

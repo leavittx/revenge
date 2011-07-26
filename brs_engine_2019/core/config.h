@@ -7,7 +7,7 @@
 #include <windows.h>
 #endif
 
-/*
+/**
     Config class used for the demo settings. Includes the startup dialog.
 */
 
@@ -41,9 +41,22 @@ public:
     static int ConfigProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #endif /* defined(_WIN32) */
 
+    //TODO: common display settings structure and variables for all platforms
+
     static int resolution, bpp, gamma, fsaa, aspectratio, glasses, frequency;
     static bool fullscreen, sound, vsync, runFlag, anaglyphic, alwaysOnTop, nv7, randomized;
     static int smDesktopWidth, smDesktopHeight;
+
+    /**
+            Holds Display Settings
+    */
+    struct Settings
+    {
+            int Width;
+            int Height;
+            int RefreshRate;
+            int BitsPerPixel;
+    };
 
 private:
 

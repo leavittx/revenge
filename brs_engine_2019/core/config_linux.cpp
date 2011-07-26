@@ -5,6 +5,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <string>
+#include <iostream>
+
+#include <X11/extensions/Xrandr.h>
+#include <X11/extensions/Xrender.h>
+
 #include "../globals.h"
 #include "config.h"
 
@@ -19,9 +25,7 @@ const int DEV_RESOLUTION_Y = 768;
 
 const int DEFAULT_MIN_X = 640;
 
-#ifdef _WIN32
-std::vector<DEVMODE> devModes;
-#endif
+std::vector<Config::Settings> settings;
 
 int Config::frequency;
 int Config::resolution;
@@ -40,6 +44,24 @@ bool Config::nv7;
 bool Config::randomized;
 int Config::smDesktopHeight;
 int Config::smDesktopWidth;
+
+
+
+string exec(char* cmd)
+{
+    FILE* pipe = popen(cmd, "r");
+    if (!pipe) return "ERROR";
+    char buffer[128];
+    string result = "";
+    while (!feof(pipe))
+    {
+        if (fgets(buffer, 128, pipe) != NULL)
+                result += buffer;
+    }
+    pclose(pipe);
+    return result;
+}
+
 
 //-------------------------------------------------------
 //	Constructors and Destructor
@@ -65,41 +87,37 @@ Config::Config()
     smDesktopWidth = 0;
     smDesktopHeight = 0;
 
-#ifdef _WIN32
-    DEVMODE currentDevMode;
-    currentDevMode.dmSize = sizeof(DEVMODE);
-    currentDevMode.dmDriverExtra = 0;
-    EnumDisplaySettingsEx(NULL, ENUM_CURRENT_SETTINGS, &currentDevMode, 0);
+    XRRScreenConfiguration* screenInfo;
+    SizeID currentSize;
+    Rotation currentRotation;
+    short currentRate;
 
-    smDesktopWidth  = currentDevMode.dmPelsWidth;
-    smDesktopHeight = currentDevMode.dmPelsHeight;
+    int sizesCount;
+    XRRScreenSize* sizes;
 
-    int  nModeExist;
-    DEVMODE devMode;
-    int lastW=0, lastH=0;
-    for (int i=0; ;i++)
+    Display* display = XOpenDisplay(0);
+
+    screenInfo = XRRGetScreenInfo(display, DefaultRootWindow(display));
+    sizes = XRRConfigSizes(screenInfo, &sizesCount);
+    currentSize = XRRConfigCurrentConfiguration(screenInfo, &currentRotation);
+    currentRate = XRRConfigCurrentRate(screenInfo);
+
+    for (int i = 0; i < sizesCount; i++)
     {
-        ZeroMemory(&devMode, sizeof(DEVMODE));
-        devMode.dmSize = sizeof(DEVMODE);
-        nModeExist = EnumDisplaySettings(NULL, i, &devMode);
-
-
-        if (nModeExist != 1)
-        {
-            break;
-        }
-        else if(devMode.dmBitsPerPel >= 32
-                && devMode.dmPelsWidth >= DEFAULT_MIN_X)
-            //&& devMode.dmPelsWidth <= DEFAULT_MAX_X)
-        {
-            devModes.push_back(devMode);
-        }
+            Settings current;
+            current.Width = sizes[i].width;
+            current.Height = sizes[i].height;
+            current.RefreshRate = currentRate; // TODO
+            current.BitsPerPixel = 32; // TODO
+            settings.push_back(current);
+//            sizeIDs[j] = i;
+            //rateIDs[j] = r;
+            //bppIDs[j] = b;
     }
-#else
-    //TODO
-    sound = true;
-#endif
+
+    XCloseDisplay(display);
 }
+
 Config::~Config()
 {
 }
@@ -110,16 +128,84 @@ Config::~Config()
 
 bool Config::run()
 {
-#ifdef _WIN32
-    if(DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_SETUPDLG), NULL, (DLGPROC)ConfigProc) == 1)
-    {
-        return false;
-    }
-#else
-    Config::runFlag = true;
-#endif
+    //TODO: check if zenity avaliable on system
+    ofstream configScript;
+    configScript.open("demo_config.sh");
+    configScript <<
+        "#!/bin/bash"                                               << endl <<
+        "if"                                                        << endl <<
+        "zenity \\"                                                 << endl <<
+        "   --display=:0.0 \\"                                      << endl <<
+//        "   --hide-header \\"                                       << endl <<
+        "   --hide-column=1 \\"                                     << endl <<
+        "   --width="  << 80                        << " \\"        << endl <<
+        "   --height=" << 128 + 24 * settings.size() << " \\"       << endl <<
+        "   --list \\"                                              << endl <<
+        "   --title=\"BMT :: Demo\" \\"                             << endl <<
+        "   --text=\"Screen Resolution\" \\"                        << endl <<
+//        "   --column=ID --column=Resolution \\"                     << endl;
+        "   --column=ID --column=Width --column=Height \\"          << endl;
 
-    if(!getRunFlag())
+    for (int i = 0; i < settings.size(); i++)
+    {
+        configScript << "   "                       <<
+                        i                  << " "   <<
+                        settings[i].Width  << " "   <<
+                        settings[i].Height << " \\" << endl;
+    }
+
+    configScript <<
+        "; then "                                                   << endl <<
+        "   echo DEMO_START"                                        << endl <<
+        "   if"                                                     << endl <<
+        "   zenity \\"                                              << endl <<
+        "       --display=:0.0 \\"                                  << endl <<
+        "       --question --text=\"Run Mode\" \\"                  << endl <<
+        "       --ok-label=Fullscreen --cancel-label=Windowed \\"   << endl <<
+        "   ; then "                                                << endl <<
+        "       echo DEMO_FULLSCREEN_ENABLE"                        << endl <<
+        "   fi"                                                     << endl <<
+        "   if"                                                     << endl <<
+        "   zenity \\"                                              << endl <<
+        "       --display=:0.0 \\"                                  << endl <<
+        "       --question --text=\"Enable Sound?\" \\"             << endl <<
+        "       --ok-label=Yes! --cancel-label=No \\"               << endl <<
+        "   ; then "                                                << endl <<
+        "       echo DEMO_SOUND_ENABLE"                             << endl <<
+        "   fi"                                                     << endl <<
+        "else"                                                      << endl <<
+        "   echo DEMO_EXIT"                                         << endl <<
+        "fi"                                                        << endl;
+
+    string configOutput = exec("/bin/bash ./demo_config.sh");
+
+    resolution = atoi(configOutput.c_str());
+
+    if (configOutput.find("DEMO_EXIT") == configOutput.npos)
+    {
+        //when user doesn't select any resolution from list,
+        //zenity prints no id, so this will be first
+        if (configOutput.find("DEMO_START") == 0)
+            resolution = 0;
+        Config::runFlag = true;
+    }
+    else
+    {
+        Config::runFlag = false;
+    }
+
+
+    if (configOutput.find("DEMO_FULLSCREEN_ENABLE") == configOutput.npos)
+        fullscreen = false;
+    else
+        fullscreen = true;
+
+    if (configOutput.find("DEMO_SOUND_ENABLE") == configOutput.npos)
+         sound = false;
+    else
+        sound = true;
+
+    if (!getRunFlag())
         return false;
 
     return true;
@@ -127,28 +213,12 @@ bool Config::run()
 
 int Config::getScreenX()
 {
-#ifdef _WIN32
-    return devModes[resolution].dmPelsWidth;
-#else
-    //TODO
-//    return 1366;
-    return 1280;
-//    return 800;
-//      return 1680;
-#endif
+    return settings[resolution].Width;
 }
 
 int Config::getScreenY()
 {
-#ifdef _WIN32
-    return devModes[resolution].dmPelsHeight;
-#else
-    //TODO
-//    return 768;
-    return 1024;
-//    return 600;
-//    return 1050;
-#endif
+    return settings[resolution].Height;
 }
 
 int Config::getBpp()
@@ -166,9 +236,6 @@ int Config::getFsaa()
 }
 bool Config::getFullscreen()
 {
-//#ifndef _WIN32
-    return true;
-//#endif
     return fullscreen;
 }
 
@@ -196,10 +263,12 @@ bool Config::getAnaglyphic()
 {
     return anaglyphic;
 }
+
 bool Config::getOnTop()
 {
     return alwaysOnTop;
 }
+
 bool Config::getRandomized()
 {
     return randomized;
@@ -220,272 +289,3 @@ int Config::getGlasses()
 {
     return glasses;
 }
-
-#ifdef _WIN32
-//-------------------------------------------------------
-//	Dialog procedure - handles inputs
-//-------------------------------------------------------
-
-int Config::ConfigProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    switch(uMsg)
-    {
-    case WM_INITDIALOG:
-    {
-        InitCommonControls();
-
-        RECT rect, dlgRect;
-        HWND dlg;
-
-        // Center the dialog box
-        dlg = GetDesktopWindow();
-        if(dlg)
-        {
-            GetWindowRect(dlg, &rect);
-            GetWindowRect(hwnd, &dlgRect);
-            SetWindowPos(hwnd, HWND_TOPMOST, (rect.right/2) - ((dlgRect.right - dlgRect.left) / 2), (rect.bottom/2) - ((dlgRect.bottom - dlgRect.top) / 2), 0, 0, SWP_NOSIZE);
-        }
-
-        HWND hwndList;
-
-        hwndList = GetDlgItem(hwnd, IDC_ASPECTRATIO);
-        SendMessage(hwndList,CB_ADDSTRING,0,(LPARAM)(LPCSTR)"4:3");
-        SendMessage(hwndList,CB_ADDSTRING,1,(LPARAM)(LPCSTR)"16:10");
-        SendMessage(hwndList,CB_ADDSTRING,2,(LPARAM)(LPCSTR)"16:9");
-        SendMessage(hwndList,CB_SETCURSEL,0,0);
-        aspectratio = 0;
-
-        /*
-   hwndList = GetDlgItem(hwnd, IDC_GLASSES);
-   SendMessage(hwndList,CB_ADDSTRING,0,(LPARAM)(LPCSTR)"No 3D [not recommended]");
-   SendMessage(hwndList,CB_ADDSTRING,1,(LPARAM)(LPCSTR)"Red   +  Cyan");
-   SendMessage(hwndList,CB_ADDSTRING,2,(LPARAM)(LPCSTR)"Red   +  Blue");
-   SendMessage(hwndList,CB_ADDSTRING,3,(LPARAM)(LPCSTR)"Red   +  Green");
-   SendMessage(hwndList,CB_SETCURSEL,1,0); // LAST INDEX MUST BE ZERO
-   glasses = 1;
-   */
-
-        // -- resolution
-
-        hwndList = GetDlgItem(hwnd, IDC_RESOLUTION);
-
-        std::vector<DEVMODE>::iterator it;
-        int i=0, z=0, d=0;
-        //for (it=devModes.begin(); it!=devModes.end(); it++)
-        it=devModes.begin();
-        while(it!=devModes.end())
-        {
-            char buf[100];
-            sprintf(buf, "%dx%d 32 bpp %d hz", (*it).dmPelsWidth,  (*it).dmPelsHeight, (*it).dmDisplayFrequency);
-            z = SendMessage(hwndList, CB_ADDSTRING, i, (LPARAM)(LPCSTR)buf);
-
-            if (RELEASE_BUILD)
-            {
-                if((*it).dmPelsWidth==smDesktopWidth  && (*it).dmPelsHeight==smDesktopHeight)
-                    d = z;
-            }
-            else
-            {
-                if((*it).dmPelsWidth==DEV_RESOLUTION_X && (*it).dmPelsHeight==DEV_RESOLUTION_Y)
-                    d = z;
-            }
-
-            it++;
-            i++;
-        }
-
-
-        SendMessage(hwndList, CB_SETCURSEL, d, 0);
-        resolution = d;
-        bpp = 32;
-
-        /*
-   hwndList = GetDlgItem(hwnd, IDC_FSAA);
-   SendMessage(hwndList,CB_ADDSTRING,0,(LPARAM)(LPCSTR)"0");
-   SendMessage(hwndList,CB_ADDSTRING,2,(LPARAM)(LPCSTR)"2");
-   SendMessage(hwndList,CB_ADDSTRING,4,(LPARAM)(LPCSTR)"4");
-   SendMessage(hwndList,CB_ADDSTRING,6,(LPARAM)(LPCSTR)"6");
-   SendMessage(hwndList,CB_SETCURSEL,1,0); // LAST INDEX MUST BE ZERO
-   */
-        fsaa = 4;
-
-
-
-        // Initialize values
-        /*
-   //SendDlgItemMessage(hwnd, IDC_FSAA, WM_SETTEXT, 0, (LPARAM)"No FSAA");
-
-   SendMessage(GetDlgItem(hwnd, IDC_FSAA), CB_ADDSTRING, 0, (LPARAM)"No FSAA");
-   SendMessage(GetDlgItem(hwnd, IDC_FSAA), CB_ADDSTRING, 0, (LPARAM)"FSAA 2");
-   SendMessage(GetDlgItem(hwnd, IDC_FSAA), CB_ADDSTRING, 0, (LPARAM)"FSAA 4");
-   SendMessage(GetDlgItem(hwnd, IDC_FSAA), CB_ADDSTRING, 0, (LPARAM)"FSAA 6");
-   SendDlgItemMessage(hwnd, IDC_FSAA, CB_SETCURSEL, 1, 0);
-
-   lResult = SendMessage(// returns LRESULT in lResult
-      (HWND) hWndControl,// handle to destination control
-      (UINT) WM_SETFONT,// message ID
-      (WPARAM) wParam,// = (WPARAM) () wParam;
-      (LPARAM) lParam// = (LPARAM) () lParam;
-   );
-   */
-
-        // initialize nvidia box 7xxx box
-        /*
-   char *rs = (char *) glGetString(GL_RENDERER);
-   MessageBox(0,0,rs,0);
-   if(strstr(rs, "GeForce 7") != NULL)
-   {
-    //SendDlgItemMessage(hwnd, IDC_NVIDIA7, BM_SETCHECK, wParam, 0);
-   }
-   */
-
-        // Show the dialog
-        ShowWindow(hwnd, SW_SHOW);
-        SetActiveWindow(hwnd);
-        SetForegroundWindow(hwnd);
-        SetFocus(hwnd);
-
-        // Set icon
-        SendMessage(hwnd,WM_SETICON,ICON_BIG,(LPARAM)LoadIcon(GetModuleHandle(NULL),MAKEINTRESOURCE(IDI_ICON1)));
-
-        // Check default values
-        if (RELEASE_BUILD)
-        {
-            SendDlgItemMessage(hwnd, IDC_FULLSCREEN, BM_SETCHECK, wParam, 0);
-        }
-        //SendDlgItemMessage(hwnd, IDC_RANDOMIZE, BM_SETCHECK, wParam, 0);
-        SendDlgItemMessage(hwnd, IDC_SOUND, BM_SETCHECK, wParam, 0);
-
-        // Set ONTOP to disabled or enabled at startup
-        if(IsDlgButtonChecked(hwnd, IDC_FULLSCREEN)==BST_CHECKED)
-            EnableWindow(GetDlgItem(hwnd, IDC_ONTOP), FALSE);
-        else
-            EnableWindow(GetDlgItem(hwnd, IDC_ONTOP), TRUE);
-
-    } break;
-
-    case WM_COMMAND:
-    {
-        if(IsDlgButtonChecked(hwnd, IDC_FULLSCREEN)==BST_CHECKED)
-            EnableWindow(GetDlgItem(hwnd, IDC_ONTOP), FALSE);
-        else
-            EnableWindow(GetDlgItem(hwnd, IDC_ONTOP), TRUE);
-
-
-        switch(LOWORD(wParam))
-        {
-
-        /*
-    case IDC_ASPECTRATIO:
-
-     if(HIWORD(wParam) == CBN_SELCHANGE)
-      aspectratio = SendMessage(GetDlgItem(hwnd, IDC_ASPECTRATIO), CB_GETCURSEL, 0, 0);
-     break;
-
-
-    case IDC_GLASSES:
-     if(HIWORD(wParam) == CBN_SELCHANGE)
-      glasses = SendMessage(GetDlgItem(hwnd, IDC_GLASSES), CB_GETCURSEL, 0, 0);
-     break;
-
-    case IDC_RESOLUTION:
-
-     if(HIWORD(wParam) == CBN_SELCHANGE)
-     {
-      resolution = SendMessage(GetDlgItem(hwnd, IDC_RESOLUTION), CB_GETCURSEL, 0, 0);
-
-     }
-     break;
-
-    case IDC_FSAA:
-
-     if(HIWORD(wParam) == CBN_SELCHANGE)
-     {
-      fsaa = SendMessage(GetDlgItem(hwnd, IDC_FSAA), CB_GETCURSEL, 0, 0);
-     }
-
-     break;
-    */
-        case IDOK:
-        {
-            resolution = SendMessage(GetDlgItem(hwnd, IDC_RESOLUTION), CB_GETCURSEL, 0, 0);
-            aspectratio = SendMessage(GetDlgItem(hwnd, IDC_ASPECTRATIO), CB_GETCURSEL, 0, 0);
-
-            if(SendDlgItemMessage(hwnd, IDC_FULLSCREEN, BM_GETSTATE, 0, 0) == BST_CHECKED)
-            {
-                fullscreen = true;
-            }
-
-            if(SendDlgItemMessage(hwnd, IDC_SOUND, BM_GETSTATE, 0, 0) == BST_CHECKED)
-            {
-                sound = true;
-            }
-            else
-            {
-                sound = false;
-            }
-
-            if (SendDlgItemMessage(hwnd, IDC_RANDOMIZE, BM_GETSTATE, 0, 0) == BST_CHECKED)
-            {
-                randomized = true;
-            }
-            else
-            {
-                randomized = false;
-            }
-            /*
-
-     if(SendDlgItemMessage(hwnd, IDC_VSYNC, BM_GETSTATE, 0, 0) == BST_CHECKED)
-     {
-      vsync = true;
-     }
-                    if(SendDlgItemMessage(hwnd, IDC_ANAGLYPHIC, BM_GETSTATE, 0, 0) == BST_CHECKED)
-     {
-      anaglyphic = true;
-     }
-*/
-
-            if(SendDlgItemMessage(hwnd, IDC_ONTOP, BM_GETSTATE, 0, 0) == BST_CHECKED)
-            {
-                alwaysOnTop = true;
-            }
-            /*
-     if(SendDlgItemMessage(hwnd, IDC_NVIDIA7, BM_GETSTATE, 0, 0) == BST_CHECKED)
-     {
-      nv7 = true;
-     }
-*/
-            //gamma = 0.4f;//SendDlgItemMessage(hwnd, IDC_GAMMA, TBM_GETPOS, 0, 0);
-
-            Config::runFlag = true;
-            EndDialog(hwnd, 0);
-        } break;
-
-        case IDCANCEL:
-        {
-            Config::runFlag = false;
-            SendMessage(hwnd, WM_CLOSE, 0, 0);
-        } break;
-
-        } break;
-
-    } break;
-
-    case WM_DESTROY:
-    {
-        SendMessage(hwnd, WM_CLOSE, 0, 0);
-    } break;
-
-    case WM_CLOSE:
-    {
-        EndDialog(hwnd, 0);
-    }
-        break;
-    }
-
-
-
-    return 0;
-}
-#endif /* defined(_WIN32) */
-
