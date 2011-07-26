@@ -66,7 +66,6 @@ public:
     friend LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #else
     bool pollEvents();
-//    GLUSboolean GLUSAPIENTRY glusRun(GLUSvoid);
 #endif
 
     bool getKeyDown(int i);
@@ -108,15 +107,6 @@ private:
                       PIXELFORMATDESCRIPTOR p,
                       int requestedmultisamples);
 #else
-
-
-//    static GLUSboolean g_fullscreen = GL_FALSE;
-//    static GLUSboolean g_active = GL_FALSE;
-//    static GLUSboolean g_initdone = GL_FALSE;
-
-//    static GLUSuint g_width = 640;
-//    static GLUSuint g_height = 480;
-
     Display* g_Display;
     Window g_Window;
     GLXContext g_Context;

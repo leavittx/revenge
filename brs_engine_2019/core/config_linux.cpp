@@ -46,7 +46,7 @@ int Config::smDesktopHeight;
 int Config::smDesktopWidth;
 
 
-
+//TODO: place this in some common place
 string exec(char* cmd)
 {
     FILE* pipe = popen(cmd, "r");
@@ -141,7 +141,10 @@ bool Config::run()
 //        "   --hide-header \\"                                       << endl <<
         "   --hide-column=1 \\"                                     << endl <<
         "   --width="  << 80                        << " \\"        << endl <<
-        "   --height=" << 128 + 24 * settings.size() << " \\"       << endl <<
+        //TODO: figure out the way how to determine
+        //      actual zenity list entry height
+        //      (24 or 27 or whatever pixels)
+        "   --height=" << 128 + 27 * settings.size() << " \\"       << endl <<
         "   --list \\"                                              << endl <<
         "   --text=\"Screen Resolution\" \\"                        << endl <<
 //        "   --column=ID --column=Resolution \\"                     << endl;
@@ -183,6 +186,9 @@ bool Config::run()
         "fi"                                                        << endl;
 
     string configOutput = exec("/bin/bash ./demo_config.sh");
+
+    //TODO: uncomment this for release version
+//    exec("/bin/rm ./demo_config.sh");
 
     resolution = atoi(configOutput.c_str());
 

@@ -297,7 +297,33 @@ void Demo::update()
         }
     }
 #else
-    //TODO
+    //TODO: that all doesn't work at all :(
+    bool F1 = g_system.getKeyDown(KeyF1) != 0; //reload params & shaders
+    bool F2 = g_system.getKeyDown(KeyF2) != 0; //reload params & shaders & reinit effects
+    bool F3 = g_system.getKeyDown(KeyF3) != 0; //reload resources
+    bool S = g_system.getKeyDown(KeyS) != 0;	//toggle sound
+
+    if (F1 || F2)
+    {
+        Parser parser;
+        parser.parse(m_scriptName, g_params, g_system);
+        g_shaders.freeShaders();
+        g_shaders.loadShaders();
+    }
+    if (F2)
+    {
+        releaseEffects();
+        initEffects();
+    }
+    if (F3)
+    {
+    }
+
+    if (S)
+    {
+        bool sound = g_system.getSoundEnabled();
+        g_system.setSoundEnabled(!sound);
+    }
 #endif
 
     if (m_running)

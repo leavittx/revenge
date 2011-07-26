@@ -156,8 +156,7 @@ bool System::demoRunning()
 #ifdef _WIN32
     return !getKeyDown(VK_ESCAPE) && (getTime() < (m_song->getLength() - m_endTime));
 #else
-    //TODO
-    return (getTime() < (m_song->getLength() - m_endTime));
+    return !getKeyDown(KeyEsc) && (getTime() < (m_song->getLength() - m_endTime));
 #endif
 }
 
@@ -423,6 +422,7 @@ void System::setSoundEnabled(bool enabled)
 
     if (m_audio)
     {
+        m_audio->setEnabled(m_soundEnabled);
         m_audio->setVolume(m_song, 1.0f); //actual toggle is done through volume settings
     }
 }

@@ -17,6 +17,7 @@
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 
+//TODO: add translateKey on all platforms (look into frontend)
 int translateKey(unsigned int vk, bool* spKey);
 
 #ifndef GLX_CONTEXT_DEBUG_BIT_ARB
@@ -45,6 +46,7 @@ static Atom g_DeleteMessage;
 static Atom g_StateMessage;
 static Atom g_FullscreenMessage;
 
+//TODO: clean up glus specific code
 GLUSvoid GLUSAPIENTRY glusPrepareContext(GLUSuint major, GLUSuint minor, GLUSint flags)
 {
     g_major = major >= 1 ? major : 0;
@@ -93,7 +95,8 @@ GLUSfloat glusGetElapsedTime(GLUSvoid)
 
 void GLWindow::glusDestroyWindow()
 {
-    if (fullscreen && g_Display && g_Window) // Are We In Fullscreen Mode?
+    // Are We In Fullscreen Mode?
+    if (fullscreen && g_Display && g_Window)
     {
         XEvent xev;
 
@@ -333,20 +336,19 @@ bool GLWindow::pollEvents(void)
     {
         XNextEvent(g_Display, &msg);
 
-        for (int i = 0; i < 256; i++)
-        {
-            keysPressed[i] = false;
-        }
-
         if (msg.type == KeyPress)
         {
-            // Have We Received the Esc Key
-            if (msg.xkey.keycode == 0x09)
+            for (int i = 0; i < 256; i++)
             {
-                // do nothing
+                keysPressed[i] = false;
             }
-            else
-            {
+            // Have We Received the Esc Key
+//            if (msg.xkey.keycode == 0x09)
+//            {
+                // do nothing
+//            }
+//            else
+//            {
 //                char c;
 
 //                if (XLookupString(&msg.xkey, &c, 1, 0, 0) > 0)
@@ -354,32 +356,32 @@ bool GLWindow::pollEvents(void)
 //                    do smth...
 //                }
 
-                keysPressed[translateKey(
-                            XLookupKeysym(&msg.xkey, 0), &spKey)]
-                            = true;
-                keysDown[translateKey(
-                            XLookupKeysym(&msg.xkey, 0), &spKey)]
-                            = true;
-            }
+            keysPressed[translateKey(
+                        XLookupKeysym(&msg.xkey, 0), &spKey)]
+                        = true;
+            keysDown[translateKey(
+                        XLookupKeysym(&msg.xkey, 0), &spKey)]
+                        = true;
+//            }
         }
         else if (msg.type == KeyRelease)
         {
             // Have We Received the Esc Key
-            if (msg.xkey.keycode == 0x09)
-            {
-                return false;
-            }
-            else
-            {
+//            if (msg.xkey.keycode == 0x09)
+//            {
+//                return false;
+//            }
+//            else
+//            {
 //                char c;
 //                if (XLookupString(&msg.xkey, &c, 1, 0, 0) > 0)
 //                {
 //                    do smth...
 //                }
-                keysDown[translateKey(
-                            XLookupKeysym(&msg.xkey, 0), &spKey)]
-                            = false;
-            }
+            keysDown[translateKey(
+                        XLookupKeysym(&msg.xkey, 0), &spKey)]
+                        = false;
+//            }
         }
         else if (msg.type == ClientMessage)
         {
@@ -393,7 +395,6 @@ bool GLWindow::pollEvents(void)
         {
             width = msg.xconfigure.width;
             height = msg.xconfigure.height;
-
 
             glViewport(0, 0, width, height);
 
@@ -599,24 +600,9 @@ void GLWindow::setPerspective3D(void)
     glPopMatrix();
 }
 
+//TODO
 bool GLWindow::extensionExist(const char *extension)
 {
-    // try to find extension from wgl/gl extensions lists
-    /*
- PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB = 0;
-  wglGetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC)wglGetProcAddress("wglGetExtensionsStringARB");
-  if(wglGetExtensionsStringARB)
-  {
- const char *winsys_extensions = wglGetExtensionsStringARB(wglGetCurrentDC());
- if (winsys_extensions && (strstr(winsys_extensions,extension)))
-   return true;
-  }
-  const char *glExtensions = (const char*)glGetString(GL_EXTENSIONS);
-  if (!glExtensions)
- return false;
-
-  return (strstr(glExtensions,extension) != NULL);
-*/
     return true;
 }
 
@@ -850,6 +836,8 @@ int translateKey(unsigned int vk, bool* spKey)
     case XK_Delete:                 return KeyDelete; break;
     case XK_Escape:                 return KeyEsc; break;
     case 0xFE03:                    return 0; break; // ALT GR
+    case XK_s:
+    case XK_S:                      return KeyS; //for sound toggle
     default: *spKey = false;        return vk; break;
     }
 }

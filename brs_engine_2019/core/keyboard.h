@@ -37,4 +37,5 @@ enum Key
     KeyEnd			= 0x09C,
     KeyInsert                   = 0x09D,
     KeyDelete                   = 0x09E,
+    KeyS                        = 0x09F
 };
