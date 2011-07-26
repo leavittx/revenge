@@ -136,12 +136,13 @@ bool Config::run()
         "if"                                                        << endl <<
         "zenity \\"                                                 << endl <<
         "   --display=:0.0 \\"                                      << endl <<
+        "   --window-icon=data/icon.bmp \\"                         << endl <<
+        "   --title=\"BMT :: Demo\" \\"                             << endl <<
 //        "   --hide-header \\"                                       << endl <<
         "   --hide-column=1 \\"                                     << endl <<
         "   --width="  << 80                        << " \\"        << endl <<
         "   --height=" << 128 + 24 * settings.size() << " \\"       << endl <<
         "   --list \\"                                              << endl <<
-        "   --title=\"BMT :: Demo\" \\"                             << endl <<
         "   --text=\"Screen Resolution\" \\"                        << endl <<
 //        "   --column=ID --column=Resolution \\"                     << endl;
         "   --column=ID --column=Width --column=Height \\"          << endl;
@@ -160,6 +161,8 @@ bool Config::run()
         "   if"                                                     << endl <<
         "   zenity \\"                                              << endl <<
         "       --display=:0.0 \\"                                  << endl <<
+        "       --window-icon=data/icon.bmp \\"                     << endl <<
+        "       --title=\"BMT :: Demo\" \\"                         << endl <<
         "       --question --text=\"Run Mode\" \\"                  << endl <<
         "       --ok-label=Fullscreen --cancel-label=Windowed \\"   << endl <<
         "   ; then "                                                << endl <<
@@ -168,6 +171,8 @@ bool Config::run()
         "   if"                                                     << endl <<
         "   zenity \\"                                              << endl <<
         "       --display=:0.0 \\"                                  << endl <<
+        "       --window-icon=data/icon.bmp \\"                     << endl <<
+        "       --title=\"BMT :: Demo\" \\"                         << endl <<
         "       --question --text=\"Enable Sound?\" \\"             << endl <<
         "       --ok-label=Yes! --cancel-label=No \\"               << endl <<
         "   ; then "                                                << endl <<
