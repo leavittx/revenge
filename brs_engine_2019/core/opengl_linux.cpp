@@ -624,6 +624,7 @@ bool GLWindow::getKeyDown(int i)
 {
     return keysDown[i];
 }
+
 bool GLWindow::getKeyPressed(int i)
 {
     return keysPressed[i];
@@ -631,9 +632,10 @@ bool GLWindow::getKeyPressed(int i)
 
 void GLWindow::setWindowTitle(const string title)
 {
-    //    HWND handle = this->getHandle();
-    //    SetWindowText(handle, title.c_str());
+    XStoreName(g_Display, g_Window, title.c_str());
+    XFlush(g_Display);
 }
+
 
 
 GLSystem::GLSystem()
@@ -649,7 +651,6 @@ GLSystem::GLSystem()
 
 GLSystem::~GLSystem()
 {
-
 }
 
 void GLSystem::setNormalPerspective()

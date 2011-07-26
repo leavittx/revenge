@@ -261,10 +261,7 @@ void System::handleInput(Demo *demo)
 
 void System::setWindowTitle(const string title)
 {
-#ifdef _WIN32
     m_glWindow->setWindowTitle(title);
-#endif
-    //TODO
 }
 
 void System::resetViewport()

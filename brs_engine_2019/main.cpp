@@ -49,7 +49,7 @@ Demo *g_demo; //bad, mmkay
 
         demo->addScene("treescene", new TreeScene());
 
-        /*
+/*
   demo->addScene("start", new Start());
   demo->addScene("underground", new Underground());
   demo->addScene("freefall", new Freefall());
@@ -92,12 +92,10 @@ Demo *g_demo; //bad, mmkay
             //update the system (sync etc)
             g_system.update();
 
-            //			stringstream ss;
-            //			ss << "time = " << g_system.getTime() << " fps = " << g_system.getFPS();
-            //			g_system.setWindowTitle(ss.str());
-            g_system.setWindowTitle("Brainstorm :: 2019");
-
-//#ifdef _WIN32
+            stringstream ss;
+            ss << "time = " << g_system.getTime() << " fps = " << g_system.getFPS();
+            g_system.setWindowTitle(ss.str());
+//            g_system.setWindowTitle("Brainstorm :: 2019");
 
             demorunning =
                 g_system.pollEvents() &&
@@ -109,10 +107,6 @@ Demo *g_demo; //bad, mmkay
             demo->draw();
 
             g_system.swapBuffers();
-//#else
-
-//            glWindow.glusRun();
-//#endif
         }
         demo->stop();
         g_textures.dumpUnusedImages();
