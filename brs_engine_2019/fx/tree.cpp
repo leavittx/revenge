@@ -796,25 +796,25 @@ void Tree::drawRegular(float alpha, bool glow)
 
 	if (glow)
 	{
-		g_textures.bindTexture("magellan1.png", GL_TEXTURE0_ARB);
+                g_textures.bindTexture("magellan1.png", GL_TEXTURE0_ARB);
 		renderFireParticles(m_particlesFire1);
-		g_textures.bindTexture("magellan1.png", GL_TEXTURE0_ARB);
+                g_textures.bindTexture("magellan1.png", GL_TEXTURE0_ARB);
 		renderFireParticles(m_particlesFire2);
-		g_textures.bindTexture("magellan6.png", GL_TEXTURE0_ARB);
+                g_textures.bindTexture("magellan6.png", GL_TEXTURE0_ARB);
 		renderFireParticles(m_particlesFire3);
-		g_textures.bindTexture("magellan4.png", GL_TEXTURE0_ARB);
+                g_textures.bindTexture("magellan4.png", GL_TEXTURE0_ARB);
 		renderFireParticles(m_particlesFire4);
 	}
 	if (!glow)
 	{
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		g_textures.bindTexture("smoke1.png", GL_TEXTURE0_ARB);
+                g_textures.bindTexture("smoke1.png", GL_TEXTURE0_ARB);
 		renderSmokeParticles(m_particlesSmoke1);
-		g_textures.bindTexture("smoke2.png", GL_TEXTURE0_ARB);
+                g_textures.bindTexture("smoke2.png", GL_TEXTURE0_ARB);
 		renderSmokeParticles(m_particlesSmoke2);
-		g_textures.bindTexture("smoke3.png", GL_TEXTURE0_ARB);
+                g_textures.bindTexture("smoke3.png", GL_TEXTURE0_ARB);
 		renderSmokeParticles(m_particlesSmoke3);
-		g_textures.bindTexture("smoke4.png", GL_TEXTURE0_ARB);
+                g_textures.bindTexture("smoke4.png", GL_TEXTURE0_ARB);
 		renderSmokeParticles(m_particlesSmoke4);
 	}
 
@@ -1662,7 +1662,7 @@ void Plant::draw(float alpha)
 		glVertex3fv((float *)&g1);
 		glEnd();
 
-		g_textures.bindTexture(m_textureName, GL_TEXTURE0_ARB);
+                g_textures.bindTexture(m_textureName, GL_TEXTURE0_ARB);
 
 		glBegin(GL_QUADS);
 		m_color2.useModulated(m_fade * f);
@@ -1732,7 +1732,7 @@ void Plant::draw(float alpha)
 				glEnd();
 				glDisable(GL_DEPTH_TEST);
 				glDepthMask(0);
-				g_textures.bindTexture(m_symbolNames[i], GL_TEXTURE0_ARB);
+                                g_textures.bindTexture(m_symbolNames[i], GL_TEXTURE0_ARB);
 				m_color.useWithAlpha(alphavalue);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 				glBegin(GL_QUADS);
@@ -1764,7 +1764,7 @@ void Plant::draw(float alpha)
 				v2 = m_position + offset + Vector3( m_radius, -m_radius, 0.0f) * rot;
 				v3 = m_position + offset + Vector3( m_radius,  m_radius, 0.0f) * rot;
 				v4 = m_position + offset + Vector3(-m_radius,  m_radius, 0.0f) * rot;
-				g_textures.bindTexture(m_symbolNames[i], GL_TEXTURE0_ARB);
+                                g_textures.bindTexture(m_symbolNames[i], GL_TEXTURE0_ARB);
 
 				m_color.useWithAlpha(alphavalue);
 				glBegin(GL_QUADS);
@@ -2210,7 +2210,7 @@ void Cloud::draw(float alpha, bool useTransparency)
 			else
 			{
 				glEnable(GL_TEXTURE_2D);
-				g_textures.bindTexture(m_textureNames[0], GL_TEXTURE0_ARB);
+                                g_textures.bindTexture(m_textureNames[0], GL_TEXTURE0_ARB);
 				m_glowColor.useWithAlpha(alpha * fade);
 
 				glBegin(GL_QUADS);
@@ -2961,7 +2961,7 @@ void TreeScene::drawBackground()
 			glDisable(GL_DEPTH_TEST);
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-			g_textures.bindTexture(kanjicheckertexture1, GL_TEXTURE0_ARB);
+                        g_textures.bindTexture(kanjicheckertexture1, GL_TEXTURE0_ARB);
 
 			glBegin(GL_QUADS);
 			for (int y = 0; y < ysteps; y++)

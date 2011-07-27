@@ -50,31 +50,57 @@ void TextureHandler::addImage(string name, Image *image)
 }
 void TextureHandler::bindTexture(string name, int texunit)
 {
-//    glDisable(GL_COLOR_MATERIAL);
-//    glDisable(GL_LIGHTING);
-////    glDisable(GL_BLEND);
-//    glDisable(GL_DEPTH_TEST);
-//    glDisable(GL_ALPHA_TEST);
-//    glDisable(GL_STENCIL_TEST);
-//    glColor3f(1,1,1);
+    glDisable(GL_COLOR_MATERIAL);
+    glDisable(GL_LIGHTING);
+//    glDisable(GL_BLEND);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_ALPHA_TEST);
+    glDisable(GL_STENCIL_TEST);
+    glColor3f(1,1,1);
 
-//    int width = 512, height = 512;
-//    unsigned int textureID;
-//    static unsigned int *data = new unsigned int[width*height];
-//    for (int i = 0; i < width*height; i++)
-//    {
-//           data[i] = (rand()%255) + ((rand()%255) << 8) + ((rand()%255) << 16) + (0xFF << 24);
-//    }
-//    glGenTextures(1, &textureID);
-//    glBindTexture(GL_TEXTURE_2D, textureID);
+    if (name == "0.png")
+    {
+        int width = 512, height = 512;
+        static unsigned int textureID;
+        static unsigned int *data = new unsigned int[width*height];
 
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA,
-//                GL_UNSIGNED_BYTE, data);
-//    return;
+        if (data[0] != 4278418111)
+        {
+            for (int i = 0; i < width*height; i++)
+            {
+                unsigned int val = (rand()%255) + ((rand()%255) << 8) + ((rand()%255) << 16) + (0xFF << 24);
+                data[i] = val;
+
+            }
+            data[0] = 4278418111;
+
+            glGenTextures(1, &textureID);
+
+//            glBindTexture(GL_TEXTURE_2D, textureID);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+            //        glGenTextures(1, &textureID);
+
+//                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            //        glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+                    glActiveTexture(textureID);
+                    glEnable(GL_TEXTURE_2D);
+
+                    glBindTexture(GL_TEXTURE_2D, textureID);
+        }
+
+
+        return;
+    }
 
     int texunitoffset = texunit - GL_TEXTURE0_ARB;
     if (texunitoffset < 0 || texunitoffset > MAX_TEXTURES)

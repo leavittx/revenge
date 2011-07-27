@@ -48,19 +48,6 @@ HEADERS += \
     core/config.h \
     core/camera.h \
     core/bpm.h \
-    core/fmod/fmod.hpp \
-    core/fmod/fmod.h \
-    core/fmod/fmod_output.h \
-    core/fmod/fmod_errors.h \
-    core/fmod/fmod_dsp.h \
-    core/fmod/fmod_codec.h \
-    core/DevIL/ilut.h \
-    core/DevIL/ilu.h \
-    core/DevIL/ilu_region.h \
-    core/DevIL/il.h \
-    core/DevIL/il_wrap.h \
-    core/DevIL/devil_internal_exports.h \
-    core/DevIL/config.h \
     util/bezier.h \
     util/catmullrom.h \
     core/GLUS/GL/glus.h \
@@ -118,17 +105,6 @@ SOURCES += \
     core/bpm.cpp \
     util/catmullrom.cpp \
     util/skybox.cpp \
-    core/GLUS/glus_windows.c \
-    core/GLUS/glus_vector.c \
-    core/GLUS/glus_shape.c \
-    core/GLUS/glus_shaderprogram.c \
-    core/GLUS/glus_point.c \
-    core/GLUS/glus_modelview.c \
-    core/GLUS/glus_matrix.c \
-    core/GLUS/glus_math.c \
-    core/GLUS/glus_mac.c \
-    core/GLUS/glus_load.c \
-    core/GLUS/glus_linux.c \
     core/opengl_linux.cpp \
     core/config_linux.cpp
 

@@ -1,9 +1,16 @@
 #include <string.h>
 
 #include "imagefactory.h"
+
+#ifdef _WIN32
 #include "DevIL/il.h"
 #include "DevIL/ilu.h"
 #include "DevIL/ilut.h"
+#else
+#include <IL/il.h>
+#include <IL/ilu.h>
+#include <IL/ilut.h>
+#endif
 
 Image* ImageFactory::createEmpty(int width, int height)
 {

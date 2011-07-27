@@ -29,9 +29,8 @@ public:
     bool createWindow(int w, int h, int b, bool screen, bool onTop, int fsaa, int frequency);
 
 #ifndef _WIN32
-    //TODO: handle this properly (remove)
-    bool glusCreateWindow();
-    void glusDestroyWindow();
+    bool createGLXWindow();
+    void destroyGLXWindow();
 #endif
 
     bool getFullscreen();
@@ -65,16 +64,16 @@ public:
 #ifdef _WIN32
     friend LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #else
+    int  translateKey(unsigned int vk, bool* spKey);
     bool pollEvents();
 #endif
 
     bool getKeyDown(int i);
     bool getKeyPressed(int i);
 
-    bool	leftMouse;
-    bool	rightMouse;
-    float	mouseX, mouseY;
-
+    bool    leftMouse;
+    bool    rightMouse;
+    float   mouseX, mouseY;
 
 private:
 
@@ -83,15 +82,15 @@ private:
 
     unsigned int bpp, zbpp, sbpp;		// Bit Depths for buffers
     unsigned int width, height;			// Window width and height
-    bool fullscreen;					// Fullscreen flag
-    char *title;						// Window name
-    char *className;					// Class name for registeration
+    bool fullscreen;                        	// Fullscreen flag
+    char *title;                                // Window name
+    char *className;                            // Class name for registeration
 
-    int  fsaa;							// Fullscreenalias multisamples
-    bool onTop;							// Always-on-top
+    int  fsaa;                      		// Fullscreenalias multisamples
+    bool onTop;             			// Always-on-top
     bool active;
-    bool verticalSyncFlag;				// Flag for Vertical retrace
-    int  verticalSync;					// Holds the value of vertical retrace (on/off)
+    bool verticalSyncFlag;                      // Flag for Vertical retrace
+    int  verticalSync;				// Holds the value of vertical retrace (on/off)
 
     bool keysPressed[256];
     bool keysDown[256];
@@ -102,14 +101,13 @@ private:
     HDC hdc;
     HGLRC hrc;
 
-    int fetchFSAAMode(HDC hdc,
-                      int suggestedFormat,
-                      PIXELFORMATDESCRIPTOR p,
-                      int requestedmultisamples);
+    int fetchFSAAMode(HDC hdc, int suggestedFormat, PIXELFORMATDESCRIPTOR p, int requestedmultisamples);
 #else
     Display* g_Display;
     Window g_Window;
     GLXContext g_Context;
+
+    void prepareGLXContext(unsigned int major, unsigned int minor, int flags);
 #endif
 
     bool extensionExist(const char *extension);
@@ -128,7 +126,7 @@ public:
     GLSystem();
     ~GLSystem();
 
-    bool init(int w, int h, int aspectratio=0);
+    bool init(int w, int h, int aspectratio = 0);
     void resize(int w, int h);
     void resetViewport();
     void setNormalPerspective();

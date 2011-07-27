@@ -55,7 +55,7 @@ void glUtil::fullscreenQuad(Color4& color)
 
 void glUtil::fullscreenQuad(string name)
 {
-	g_textures.bindTexture(name, GL_TEXTURE0_ARB);
+        g_textures.bindTexture(name, GL_TEXTURE0_ARB);
 	g_system.setOrthoMode(1, 1);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0, 0);

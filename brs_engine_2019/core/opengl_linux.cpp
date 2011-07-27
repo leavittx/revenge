@@ -17,9 +17,6 @@
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 
-//TODO: add translateKey on all platforms (look into frontend)
-int translateKey(unsigned int vk, bool* spKey);
-
 #ifndef GLX_CONTEXT_DEBUG_BIT_ARB
 #define GLX_CONTEXT_DEBUG_BIT_ARB 0x0001
 #endif
@@ -38,117 +35,69 @@ int translateKey(unsigned int vk, bool* spKey);
 
 typedef GLXContext (* PFNGLXCREATECONTEXTATTRIBSARBPROCTEMP)(Display* dpy, GLXFBConfig config, GLXContext share_context, Bool direct, const int *attrib_list);
 
-static GLUSuint g_major = 1;
-static GLUSuint g_minor = 0;
-static GLUSint  g_flags = 0;
+static unsigned int g_major = 1;
+static unsigned int g_minor = 0;
+static int          g_flags = 0;
 
 static Atom g_DeleteMessage;
 static Atom g_StateMessage;
 static Atom g_FullscreenMessage;
 
-//TODO: clean up glus specific code
-GLUSvoid GLUSAPIENTRY glusPrepareContext(GLUSuint major, GLUSuint minor, GLUSint flags)
+/**
+  OpenGL window class
+  */
+
+GLWindow::GLWindow()
+{
+    g_Display = None;
+    g_Window = 0;
+    g_Context = None;
+
+    // Default setup
+    width = 640;
+    height = 480;
+    bpp = 32;
+    zbpp = 16;
+    sbpp = 8;
+    fullscreen = false;
+    active = true;
+    title = "Brainstorm :: 2019";
+    className = "DemoGL";
+    onTop = false;
+    fsaa = 0; //TODO - 2 ???
+
+    verticalSyncFlag = false;
+    verticalSync = 0;
+
+    for (int i = 0; i < 256; i++)
+    {
+        keysDown[i] = false;
+        keysPressed[i] = false;
+    }
+}
+
+GLWindow::~GLWindow()
+{
+    kill();
+}
+
+void GLWindow::prepareGLXContext(unsigned int major, unsigned int minor, int flags)
 {
     g_major = major >= 1 ? major : 0;
     g_minor = minor;
     g_flags = flags;
 }
 
-GLUSfloat glusGetElapsedTime(GLUSvoid)
-{
-    static GLUSboolean init = GLUS_FALSE;
-    static GLUSfloat lastTime;
-    static GLUSfloat currentTime;
-
-    static struct timespec initial;
-
-    GLUSfloat measuredTime;
-
-    struct timespec now;
-
-    if (!init)
-    {
-        clock_gettime(CLOCK_REALTIME, &initial);
-    }
-
-    clock_gettime(CLOCK_REALTIME, &now);
-
-    measuredTime = (GLUSfloat) (now.tv_sec - initial.tv_sec) + (GLUSfloat) now.tv_nsec / 1000000000.0f;
-
-    if (!init)
-    {
-        lastTime = measuredTime;
-
-        currentTime = measuredTime;
-
-        init = GLUS_TRUE;
-    }
-    else
-    {
-        lastTime = currentTime;
-
-        currentTime = measuredTime;
-    }
-
-    return currentTime - lastTime;
-}
-
-void GLWindow::glusDestroyWindow()
-{
-    // Are We In Fullscreen Mode?
-    if (fullscreen && g_Display && g_Window)
-    {
-        XEvent xev;
-
-        memset(&xev, 0, sizeof(xev));
-
-        XUndefineCursor(g_Display, g_Window);
-
-        xev.xclient.type = ClientMessage;
-        xev.xclient.window = g_Window;
-        xev.xclient.message_type = g_StateMessage;
-        xev.xclient.format = 32;
-        xev.xclient.data.l[0] = 0;
-        xev.xclient.data.l[1] = g_FullscreenMessage;
-
-        XSendEvent(g_Display, DefaultRootWindow(g_Display), False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
-    }
-
-    if (g_Display)
-    {
-        glXMakeCurrent(g_Display, None, None);
-    }
-
-    if (g_Display && g_Context)
-    {
-        glXDestroyContext(g_Display, g_Context);
-
-        g_Context = None;
-    }
-
-    if (g_Display && g_Window)
-    {
-        XDestroyWindow(g_Display, g_Window);
-    }
-
-    if (g_Display)
-    {
-        XCloseDisplay(g_Display);
-
-        g_Display = None;
-    }
-}
-
-bool GLWindow::glusCreateWindow()
+bool GLWindow::createGLXWindow()
 {
     Window RootWindow = 0;
     XVisualInfo* VisualInfo = None;
     Colormap CurrentColorMap = 0;
     XSetWindowAttributes CurrentSetWindowAttibutes;
-    GLUSint fbcCount = 0;
+    int fbcCount = 0;
     GLXFBConfig* fbc = None;
 
-    GLUSint visualAttribList[] = {
+    int visualAttribList[] = {
         GLX_X_RENDERABLE, True, GLX_DRAWABLE_TYPE,
         GLX_WINDOW_BIT, GLX_RENDER_TYPE, GLX_RGBA_BIT,
         GLX_X_VISUAL_TYPE, GLX_TRUE_COLOR,
@@ -167,8 +116,7 @@ bool GLWindow::glusCreateWindow()
 
     if (!(fbc = glXChooseFBConfig(g_Display, DefaultScreen(g_Display), visualAttribList, &fbcCount)))
     {
-        glusDestroyWindow();
-
+        destroyGLXWindow();
         return false;
     }
 
@@ -177,9 +125,7 @@ bool GLWindow::glusCreateWindow()
     if (VisualInfo == None)
     {
         XFree(fbc);
-
-        glusDestroyWindow();
-
+        destroyGLXWindow();
         return false;
     }
 
@@ -188,19 +134,12 @@ bool GLWindow::glusCreateWindow()
     CurrentSetWindowAttibutes.colormap = CurrentColorMap;
     CurrentSetWindowAttibutes.event_mask = KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask | StructureNotifyMask;
 
-    g_Window = XCreateWindow(g_Display, RootWindow,
-                             0, 0, width, height,
-                             0, VisualInfo->depth,
-                             InputOutput, VisualInfo->visual,
-                             CWColormap | CWEventMask,
-                             &CurrentSetWindowAttibutes);
+    g_Window = XCreateWindow(g_Display, RootWindow, 0, 0, width, height, 0, VisualInfo->depth, InputOutput, VisualInfo->visual, CWColormap | CWEventMask, &CurrentSetWindowAttibutes);
 
     if (g_Window == 0)
     {
         XFree(fbc);
-
-        glusDestroyWindow();
-
+        destroyGLXWindow();
         return false;
     }
 
@@ -253,24 +192,20 @@ bool GLWindow::glusCreateWindow()
         XSendEvent(g_Display, RootWindow, False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
     }
 
-    g_Context = glXCreateContext(g_Display, VisualInfo, None, GLUS_TRUE);
+    g_Context = glXCreateContext(g_Display, VisualInfo, None, true);
 
     if (g_Context == None)
     {
         XFree(fbc);
-
-        glusDestroyWindow();
-
-        return GLUS_TRUE;
+        destroyGLXWindow();
+        return false;
     }
 
     if (!glXMakeCurrent(g_Display, g_Window, g_Context))
     {
         XFree(fbc);
-
-        glusDestroyWindow();
-
-        return GLUS_TRUE;
+        destroyGLXWindow();
+        return false;
     }
 
     if (g_major >= 3)
@@ -278,7 +213,7 @@ bool GLWindow::glusCreateWindow()
         GLXContext Context = None;
         PFNGLXCREATECONTEXTATTRIBSARBPROCTEMP glXCreateContextAttribsARBTemp = None;
 
-        GLUSint attribList[] = { GLX_CONTEXT_MAJOR_VERSION_ARB, 1, GLX_CONTEXT_MINOR_VERSION_ARB, 0, GLX_CONTEXT_FLAGS_ARB, 0, 0 };
+        int attribList[] = { GLX_CONTEXT_MAJOR_VERSION_ARB, 1, GLX_CONTEXT_MINOR_VERSION_ARB, 0, GLX_CONTEXT_FLAGS_ARB, 0, 0 };
 
         attribList[1] = g_major;
         attribList[3] = g_minor;
@@ -287,28 +222,23 @@ bool GLWindow::glusCreateWindow()
         if (!(glXCreateContextAttribsARBTemp = (PFNGLXCREATECONTEXTATTRIBSARBPROCTEMP) glXGetProcAddress((const GLUSubyte *) "glXCreateContextAttribsARB")))
         {
             XFree(fbc);
-
-            glusDestroyWindow();
-
-            return GLUS_FALSE; // Return FALSE
+            destroyGLXWindow();
+            return false;
         }
 
         if (!(Context = glXCreateContextAttribsARBTemp(g_Display, fbc[0], 0, True, attribList)))
         {
             XFree(fbc);
-
-            glusDestroyWindow();
-
+            destroyGLXWindow();
             return false;
         }
+
         XFree(fbc);
 
         if (!glXMakeCurrent(g_Display, None, None))
         {
             glXDestroyContext(g_Display, Context);
-
-            glusDestroyWindow();
-
+            destroyGLXWindow();
             return false;
         }
 
@@ -318,13 +248,107 @@ bool GLWindow::glusCreateWindow()
 
         if (!glXMakeCurrent(g_Display, g_Window, g_Context))
         {
-            glusDestroyWindow();
-
+            destroyGLXWindow();
             return false;
         }
     }
 
     return true;
+}
+
+void GLWindow::destroyGLXWindow()
+{
+    // Are We In Fullscreen Mode?
+    if (fullscreen && g_Display && g_Window)
+    {
+        XEvent xev;
+
+        memset(&xev, 0, sizeof(xev));
+
+        XUndefineCursor(g_Display, g_Window);
+
+        xev.xclient.type = ClientMessage;
+        xev.xclient.window = g_Window;
+        xev.xclient.message_type = g_StateMessage;
+        xev.xclient.format = 32;
+        xev.xclient.data.l[0] = 0;
+        xev.xclient.data.l[1] = g_FullscreenMessage;
+
+        XSendEvent(g_Display, DefaultRootWindow(g_Display), False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
+    }
+
+    if (g_Display)
+    {
+        glXMakeCurrent(g_Display, None, None);
+    }
+
+    if (g_Display && g_Context)
+    {
+        glXDestroyContext(g_Display, g_Context);
+        g_Context = None;
+    }
+
+    if (g_Display && g_Window)
+    {
+        XDestroyWindow(g_Display, g_Window);
+    }
+
+    if (g_Display)
+    {
+        XCloseDisplay(g_Display);
+        g_Display = None;
+    }
+}
+
+//TODO: add translateKey on all platforms (look into frontend)
+int GLWindow::translateKey(unsigned int vk, bool* spKey)
+{
+    *spKey = true; //special key
+
+    switch (vk)
+    {
+    case XK_Tab:                    return KeyTab; break;
+    case XK_Return:                 return KeyEnter; break;
+    case XK_space: *spKey = false;  return KeySpace; break;
+    case XK_Menu:                   return KeyAlt; break;
+    case XK_Shift_L:
+    case XK_Shift_R:                return KeyShift; break;
+    case XK_Control_L:
+    case XK_Control_R:              return KeyCtrl; break;
+    case XK_Caps_Lock:              return KeyCapsLock; break;
+    case XK_Up:                     return KeyUpArrow; break;
+    case XK_Down:                   return KeyDownArrow; break;
+    case XK_Left:                   return KeyLeftArrow; break;
+    case XK_Right:                  return KeyRightArrow; break;
+    case XK_BackSpace:              return KeyBackspace; break;
+    case XK_F1:                     return KeyF1; break;
+    case XK_F2:                     return KeyF2; break;
+    case XK_F3:                     return KeyF3; break;
+    case XK_F4:                     return KeyF4; break;
+    case XK_F5:                     return KeyF5; break;
+    case XK_F6:                     return KeyF6; break;
+    case XK_F7:                     return KeyF7; break;
+    case XK_F8:                     return KeyF8; break;
+    case XK_F9:                     return KeyF9; break;
+    case XK_F10:                    return KeyF10; break;
+    case XK_F11:                    return KeyF11; break;
+    case XK_F12:                    return KeyF12; break;
+    case XK_F13:                    return KeyF13; break;
+    case XK_F14:                    return KeyF14; break;
+    case XK_F15:                    return KeyF15; break;
+    case XK_F16:                    return KeyF16; break;
+    case XK_Prior:                  return KeyPageUp; break;
+    case XK_Next:                   return KeyPageDown; break;
+    case XK_Home:                   return KeyHome; break;
+    case XK_End:                    return KeyEnd; break;
+    case XK_Insert:                 return KeyInsert; break;
+    case XK_Delete:                 return KeyDelete; break;
+    case XK_Escape:                 return KeyEsc; break;
+    case 0xFE03:                    return 0; break; // ALT GR
+    case XK_s:
+    case XK_S:                      return KeyS; //for sound toggle
+    default: *spKey = false;        return vk; break;
+    }
 }
 
 bool GLWindow::pollEvents(void)
@@ -356,12 +380,8 @@ bool GLWindow::pollEvents(void)
 //                    do smth...
 //                }
 
-            keysPressed[translateKey(
-                        XLookupKeysym(&msg.xkey, 0), &spKey)]
-                        = true;
-            keysDown[translateKey(
-                        XLookupKeysym(&msg.xkey, 0), &spKey)]
-                        = true;
+            keysPressed[translateKey(XLookupKeysym(&msg.xkey, 0), &spKey)] = true;
+            keysDown[translateKey(XLookupKeysym(&msg.xkey, 0), &spKey)] = true;
 //            }
         }
         else if (msg.type == KeyRelease)
@@ -378,9 +398,7 @@ bool GLWindow::pollEvents(void)
 //                {
 //                    do smth...
 //                }
-            keysDown[translateKey(
-                        XLookupKeysym(&msg.xkey, 0), &spKey)]
-                        = false;
+            keysDown[translateKey(XLookupKeysym(&msg.xkey, 0), &spKey)] = false;
 //            }
         }
         else if (msg.type == ClientMessage)
@@ -413,40 +431,6 @@ bool GLWindow::pollEvents(void)
     return true;
 }
 
-GLWindow::GLWindow()
-{
-    g_Display = None;
-    g_Window = 0;
-    g_Context = None;
-
-    // Default setup
-    width = 640;
-    height = 480;
-    bpp = 32;
-    zbpp = 16;
-    sbpp = 8;
-    fullscreen = false;
-    active = true;
-    title = "Brainstorm :: 2019";
-    className = "DemoGL";
-    onTop = false;
-    fsaa = 0; //TODO - 2 ???
-
-    verticalSyncFlag = false;
-    verticalSync = 0;
-
-    for (int i = 0; i < 256; i++)
-    {
-        keysDown[i] = false;
-        keysPressed[i] = false;
-    }
-}
-
-GLWindow::~GLWindow()
-{
-    kill();
-}
-
 //TODO
 bool GLWindow::createWindow()
 {
@@ -462,9 +446,9 @@ bool GLWindow::createWindow(int w, int h, int b, bool screen, bool onTop, int fs
     fullscreen = screen;
     this->onTop = onTop;
 
-    glusPrepareContext(2, 1, GLUS_BACKWARD_COMPATIBLE_BIT); //GLUS_FORWARD_COMPATIBLE_BIT
+    prepareGLXContext(2, 1, GLUS_BACKWARD_COMPATIBLE_BIT); //GLUS_FORWARD_COMPATIBLE_BIT
 
-    if (!glusCreateWindow())
+    if (!createGLXWindow())
     {
         g_debug << "Could not create window!" << endl;
         return false;
@@ -479,7 +463,7 @@ bool GLWindow::createWindow(int w, int h, int b, bool screen, bool onTop, int fs
     {
         g_debug << "OpenGL 3.3 not supported." << endl;
 
-        glusDestroyWindow();
+        destroyGLXWindow();
         return false;
     }
 
@@ -488,7 +472,7 @@ bool GLWindow::createWindow(int w, int h, int b, bool screen, bool onTop, int fs
 
 bool GLWindow::kill()
 {
-    glusDestroyWindow();
+    destroyGLXWindow();
 
     return true;
 }
@@ -608,12 +592,16 @@ bool GLWindow::extensionExist(const char *extension)
 
 bool GLWindow::getKeyDown(int i)
 {
-    return keysDown[i];
+    bool ret = keysDown[i];
+    keysDown[i] = false;
+    return ret;
 }
 
 bool GLWindow::getKeyPressed(int i)
 {
-    return keysPressed[i];
+    bool ret = keysPressed[i];
+    keysPressed[i] = false;
+    return ret;
 }
 
 void GLWindow::setWindowTitle(const string title)
@@ -622,7 +610,9 @@ void GLWindow::setWindowTitle(const string title)
     XFlush(g_Display);
 }
 
-
+/**
+  OpenGL system class
+  */
 
 GLSystem::GLSystem()
 {
@@ -790,54 +780,4 @@ int GLSystem::getHeight()
 int GLSystem::getAspectRatio()
 {
     return this->aspectratio;
-}
-
-int translateKey(unsigned int vk, bool* spKey)
-{
-    *spKey = true; //special key
-
-    switch (vk)
-    {
-    case XK_Tab:                    return KeyTab; break;
-    case XK_Return:                 return KeyEnter; break;
-    case XK_space: *spKey = false;  return KeySpace; break;
-    case XK_Menu:                   return KeyAlt; break;
-    case XK_Shift_L:
-    case XK_Shift_R:                return KeyShift; break;
-    case XK_Control_L:
-    case XK_Control_R:              return KeyCtrl; break;
-    case XK_Caps_Lock:              return KeyCapsLock; break;
-    case XK_Up:                     return KeyUpArrow; break;
-    case XK_Down:                   return KeyDownArrow; break;
-    case XK_Left:                   return KeyLeftArrow; break;
-    case XK_Right:                  return KeyRightArrow; break;
-    case XK_BackSpace:              return KeyBackspace; break;
-    case XK_F1:                     return KeyF1; break;
-    case XK_F2:                     return KeyF2; break;
-    case XK_F3:                     return KeyF3; break;
-    case XK_F4:                     return KeyF4; break;
-    case XK_F5:                     return KeyF5; break;
-    case XK_F6:                     return KeyF6; break;
-    case XK_F7:                     return KeyF7; break;
-    case XK_F8:                     return KeyF8; break;
-    case XK_F9:                     return KeyF9; break;
-    case XK_F10:                    return KeyF10; break;
-    case XK_F11:                    return KeyF11; break;
-    case XK_F12:                    return KeyF12; break;
-    case XK_F13:                    return KeyF13; break;
-    case XK_F14:                    return KeyF14; break;
-    case XK_F15:                    return KeyF15; break;
-    case XK_F16:                    return KeyF16; break;
-    case XK_Prior:                  return KeyPageUp; break;
-    case XK_Next:                   return KeyPageDown; break;
-    case XK_Home:                   return KeyHome; break;
-    case XK_End:                    return KeyEnd; break;
-    case XK_Insert:                 return KeyInsert; break;
-    case XK_Delete:                 return KeyDelete; break;
-    case XK_Escape:                 return KeyEsc; break;
-    case 0xFE03:                    return 0; break; // ALT GR
-    case XK_s:
-    case XK_S:                      return KeyS; //for sound toggle
-    default: *spKey = false;        return vk; break;
-    }
 }

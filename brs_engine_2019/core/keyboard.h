@@ -1,5 +1,7 @@
 #pragma once
 
+//TODO: Keyboard class
+
 enum Key
 {
     KeyTab			= '\t',

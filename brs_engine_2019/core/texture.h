@@ -28,7 +28,7 @@ public:
     Texture();
     ~Texture();
 
-    GLuint getID() { return m_ID; };
+    GLuint getID() { return m_ID; }
     void upload(Image &sourceimage, TextureParameters &params);
     void bind(int texunit = 0);
     bool hasBeenUsed();
