@@ -137,7 +137,7 @@ Matrix Matrix::rotation(const Vector3 &v)
 
 Matrix& Matrix::scale(float x, float y, float z)
 {
-    Matrix m;
+  static Matrix m;
 
 	m.data[0][0]=x;
 	m.data[0][1]=0;
