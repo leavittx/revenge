@@ -17,6 +17,8 @@
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 
+#include <X11/XKBlib.h>
+
 #ifndef GLX_CONTEXT_DEBUG_BIT_ARB
 #define GLX_CONTEXT_DEBUG_BIT_ARB 0x0001
 #endif
@@ -35,13 +37,9 @@
 
 typedef GLXContext (* PFNGLXCREATECONTEXTATTRIBSARBPROCTEMP)(Display* dpy, GLXFBConfig config, GLXContext share_context, Bool direct, const int *attrib_list);
 
-static unsigned int g_major = 1;
-static unsigned int g_minor = 0;
-static int          g_flags = 0;
-
-static Atom g_DeleteMessage;
-static Atom g_StateMessage;
-static Atom g_FullscreenMessage;
+#define _NET_WM_STATE_REMOVE  0
+#define _NET_WM_STATE_ADD     1
+#define _NET_WM_STATE_TOGGLE  2
 
 /**
   OpenGL window class
@@ -68,6 +66,8 @@ GLWindow::GLWindow()
 
     verticalSyncFlag = false;
     verticalSync = 0;
+
+    allowResize = false;
 
     for (int i = 0; i < 256; i++)
     {
@@ -132,9 +132,16 @@ bool GLWindow::createGLXWindow()
     CurrentColorMap = XCreateColormap(g_Display, RootWindow, VisualInfo->visual, AllocNone);
 
     CurrentSetWindowAttibutes.colormap = CurrentColorMap;
-    CurrentSetWindowAttibutes.event_mask = KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask | StructureNotifyMask;
+    CurrentSetWindowAttibutes.event_mask =
+            KeyPressMask |
+            KeyReleaseMask |
+            ButtonPressMask |
+            ButtonReleaseMask |
+            StructureNotifyMask;
 
-    g_Window = XCreateWindow(g_Display, RootWindow, 0, 0, width, height, 0, VisualInfo->depth, InputOutput, VisualInfo->visual, CWColormap | CWEventMask, &CurrentSetWindowAttibutes);
+    g_Window = XCreateWindow(g_Display, RootWindow, 0, 0, width, height, 0,
+                             VisualInfo->depth, InputOutput, VisualInfo->visual,
+                             CWColormap | CWEventMask, &CurrentSetWindowAttibutes);
 
     if (g_Window == 0)
     {
@@ -143,7 +150,14 @@ bool GLWindow::createGLXWindow()
         return false;
     }
 
+    // Turn off resizing if needed
+    setResizeMode();
+
+    // Retrieve some useful atoms
     g_DeleteMessage = XInternAtom(g_Display, "WM_DELETE_WINDOW", False);
+    g_StateMessage = XInternAtom(g_Display, "_NET_WM_STATE", False);
+    g_FullscreenMessage = XInternAtom(g_Display, "_NET_WM_STATE_FULLSCREEN", False);
+
     XSetWMProtocols(g_Display, g_Window, &g_DeleteMessage, 1);
 
     XMapWindow(g_Display, g_Window);
@@ -177,8 +191,8 @@ bool GLWindow::createGLXWindow()
             }
         }
 
-        g_StateMessage = XInternAtom(g_Display, "_NET_WM_STATE", False);
-        g_FullscreenMessage = XInternAtom(g_Display, "_NET_WM_STATE_FULLSCREEN", False);
+//        g_StateMessage = XInternAtom(g_Display, "_NET_WM_STATE", False);
+//        g_FullscreenMessage = XInternAtom(g_Display, "_NET_WM_STATE_FULLSCREEN", False);
 
         memset(&xev, 0, sizeof(xev));
 
@@ -253,7 +267,62 @@ bool GLWindow::createGLXWindow()
         }
     }
 
+    // Make auto repeat keys detectable
+    Bool supports_detectable_autorepeat;
+    XkbSetDetectableAutoRepeat(g_Display, 1, &supports_detectable_autorepeat);
+
     return true;
+}
+
+void GLWindow::setResizeMode()
+{
+    // ClanLib x11_window.cpp line 739
+    bool resize_enabled = allowResize || fullscreen; // Fs needs resizable window
+    int minimum_size_w, minimum_size_h, maximum_size_w, maximum_size_h; //TODO: Size class
+
+    if (resize_enabled)
+    {
+        minimum_size_w = minimum_size_h = 32;
+        maximum_size_w = maximum_size_h = 0;	// No maximum size by default
+    }
+    else
+    {
+        minimum_size_w = maximum_size_w = width;
+        minimum_size_h = maximum_size_h = height;
+    }
+
+    XSizeHints *size_hints;
+
+    size_hints = XAllocSizeHints();
+    if (size_hints == NULL)
+    {
+        g_debug << "Cannot allocate X11 XSizeHints structure" << endl;
+    }
+
+    int win_x = 0;
+    int win_y = 0;
+    int win_width = width;
+    int win_height = height;
+
+    size_hints->x = win_x;
+    size_hints->y = win_y;
+    size_hints->width       = win_width;
+    size_hints->height      = win_height;
+    size_hints->base_width  = win_width;
+    size_hints->base_height = win_height;
+    size_hints->min_width   = minimum_size_w;
+    size_hints->min_height  = minimum_size_h;
+    size_hints->max_width   = maximum_size_w;
+    size_hints->max_height  = maximum_size_h;
+    size_hints->flags       = PSize|PBaseSize|PPosition|PMinSize;
+
+    if (!resize_enabled)
+    {
+            size_hints->flags |= PMaxSize;
+    }
+    XSetWMNormalHints(g_Display, g_Window, size_hints);
+
+    XFree(size_hints);
 }
 
 void GLWindow::destroyGLXWindow()
@@ -477,6 +546,46 @@ bool GLWindow::kill()
     return true;
 }
 
+bool GLWindow::modifyState(bool add, Atom atom1, Atom atom2)
+{
+        // change _NET_WM_STATE property, see: http://standards.freedesktop.org/wm-spec/wm-spec-latest.html
+        if (g_StateMessage != None)
+        {
+                XEvent xev;
+                memset(&xev, 0, sizeof(xev));
+                xev.xclient.type = ClientMessage;
+                xev.xclient.window = g_Window;
+                xev.xclient.message_type = g_StateMessage;
+                xev.xclient.format = 32;
+                xev.xclient.data.l[0] = add ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
+                xev.xclient.data.l[1] = atom1;
+                xev.xclient.data.l[2] = atom2;
+                return XSendEvent(g_Display, DefaultRootWindow(g_Display), False, SubstructureRedirectMask | SubstructureNotifyMask, &xev) != 0;
+        }
+
+        return false;
+}
+
+bool GLWindow::toggleState(Atom atom1, Atom atom2)
+{
+        // change _NET_WM_STATE property, see: http://standards.freedesktop.org/wm-spec/wm-spec-latest.html
+        if (g_StateMessage != None)
+        {
+                XEvent xev;
+                memset(&xev, 0, sizeof(xev));
+                xev.xclient.type = ClientMessage;
+                xev.xclient.window = g_Window;
+                xev.xclient.message_type = g_StateMessage;
+                xev.xclient.format = 32;
+                xev.xclient.data.l[0] = _NET_WM_STATE_TOGGLE;
+                xev.xclient.data.l[1] = atom1;
+                xev.xclient.data.l[2] = atom2;
+                return XSendEvent(g_Display, DefaultRootWindow(g_Display), False, SubstructureRedirectMask | SubstructureNotifyMask, &xev) != 0;
+        }
+
+        return false;
+}
+
 bool GLWindow::getFullscreen()
 {
     return fullscreen;
@@ -536,7 +645,14 @@ void GLWindow::setSbpp(unsigned int s)
 
 void GLWindow::setFullscreen(bool f)
 {
-    fullscreen = f;
+//    fullscreen = f;
+    fullscreen = modifyState(f, g_FullscreenMessage);
+}
+
+void GLWindow::toggleFullscreen()
+{
+    fullscreen = toggleState(g_FullscreenMessage);
+    setResizeMode();
 }
 
 void GLWindow::setActive(bool a)

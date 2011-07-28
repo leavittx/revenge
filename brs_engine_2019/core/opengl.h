@@ -66,6 +66,7 @@ public:
 #else
     int  translateKey(unsigned int vk, bool* spKey);
     bool pollEvents();
+    void toggleFullscreen();
 #endif
 
     bool getKeyDown(int i);
@@ -92,6 +93,8 @@ private:
     bool verticalSyncFlag;                      // Flag for Vertical retrace
     int  verticalSync;				// Holds the value of vertical retrace (on/off)
 
+    bool allowResize;                           // Un/resizable
+
     bool keysPressed[256];
     bool keysDown[256];
 
@@ -107,7 +110,18 @@ private:
     Window g_Window;
     GLXContext g_Context;
 
+    unsigned int g_major;// = 1;
+    unsigned int g_minor;// = 0;
+    int          g_flags;// = 0;
+
+    Atom g_DeleteMessage;
+    Atom g_StateMessage;
+    Atom g_FullscreenMessage;
+
     void prepareGLXContext(unsigned int major, unsigned int minor, int flags);
+    void setResizeMode();
+    bool modifyState(bool add, Atom atom1, Atom atom2 = None);
+    bool toggleState(Atom atom1, Atom atom2 = None);
 #endif
 
     bool extensionExist(const char *extension);

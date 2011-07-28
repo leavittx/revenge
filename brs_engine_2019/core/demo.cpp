@@ -298,10 +298,11 @@ void Demo::update()
     }
 #else
     //TODO: that all doesn't work at all :(
-    bool F1 = g_system.getKeyDown(KeyF1) != 0; //reload params & shaders
-    bool F2 = g_system.getKeyDown(KeyF2) != 0; //reload params & shaders & reinit effects
-    bool F3 = g_system.getKeyDown(KeyF3) != 0; //reload resources
+    bool F1 = g_system.getKeyDown(KeyF1) != 0;  //reload params & shaders
+    bool F2 = g_system.getKeyDown(KeyF2) != 0;  //reload params & shaders & reinit effects
+    bool F3 = g_system.getKeyDown(KeyF3) != 0;  //reload resources
     bool S = g_system.getKeyDown(KeyS) != 0;	//toggle sound
+    bool F11 = g_system.getKeyDown(KeyF11) != 0; //reload fullscreen
 
     if (F1 || F2)
     {
@@ -323,6 +324,13 @@ void Demo::update()
     {
         bool sound = g_system.getSoundEnabled();
         g_system.setSoundEnabled(!sound);
+    }
+
+    if (F11)
+    {
+        //Segmentation fault on glxSwapBuffers() call
+//        GLWindow glWindow = g_system.getGLWindow();
+//        glWindow.toggleFullscreen();
     }
 #endif
 
