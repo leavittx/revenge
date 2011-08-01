@@ -1,9 +1,9 @@
 /*
-	Note: this whole thing started out from a simple test (that's why it's called Tree.cpp). That's also why the code looks
-	like this and yes, it needs serious refactoring but it's a demo made in a few weeks that changed direction during the
-	development so what do you expect? :)
+ Note: this whole thing started out from a simple test (that's why it's called Tree.cpp). That's also why the code looks
+ like this and yes, it needs serious refactoring but it's a demo made in a few weeks that changed direction during the
+ development so what do you expect? :)
 
-	Also, a bit more dynamic randomization stuff added to this in the last minute. Yay..
+ Also, a bit more dynamic randomization stuff added to this in the last minute. Yay..
 */
 
 #include <algorithm>
@@ -123,10 +123,10 @@ void Waypoint::draw()
 	glBegin(GL_POINTS);
 	glColor4f(1, 1, 1, m_timer);
 	glVertex3fv((float *)&m_position);
-//	glColor4f(1, 0, 0, m_timer);
-//	glVertex3fv((float *)&m_startpos);
-//	glColor4f(0, 0, 1, m_timer);
-//	glVertex3fv((float *)&m_endpos);
+	//	glColor4f(1, 0, 0, m_timer);
+	//	glVertex3fv((float *)&m_startpos);
+	//	glColor4f(0, 0, 1, m_timer);
+	//	glVertex3fv((float *)&m_endpos);
 	glEnd();
 
 }
@@ -154,42 +154,42 @@ void CircuitElement::draw(float alpha)
 
 	if (m_dying)
 	{
-//		glColor4f(1, 0, 0, ca);
+		//		glColor4f(1, 0, 0, ca);
 	}
 
 	switch(m_type)
 	{
-		case TYPE_NONE:
-			break;
-		case TYPE_CIRCLE:
+	case TYPE_NONE:
+		break;
+	case TYPE_CIRCLE:
+	{
+		const int count = 30;
+
+		glBegin(GL_LINE_STRIP);
+		for (int i = 0; i < count; i++)
 		{
-			const int count = 30;
+			float t = i / (float)(count - 1);
+			float a = t * 2 * 3.141592f * fadein;
+			Vector3 p = m_position + Vector3(sinf(a), cosf(a), 0.0f) * m_size;
+			glVertex3fv((float *)&p);
+		}
+		glEnd();
 
-			glBegin(GL_LINE_STRIP);
-			for (int i = 0; i < count; i++)
-			{
-				float t = i / (float)(count - 1);
-				float a = t * 2 * 3.141592f * fadein;
-				Vector3 p = m_position + Vector3(sinf(a), cosf(a), 0.0f) * m_size;
-				glVertex3fv((float *)&p);
-			}
-			glEnd();
+	} break;
 
-		} break;
-
-		case TYPE_LINE:
-		{
-			glBegin(GL_LINES);
-			glVertex3fv((float *)&m_v1);
+	case TYPE_LINE:
+	{
+		glBegin(GL_LINES);
+		glVertex3fv((float *)&m_v1);
 #ifdef _MSC_VER
-			glVertex3fv((float *)&(m_v1 + (m_v2 - m_v1) * fadein));
+		glVertex3fv((float *)&(m_v1 + (m_v2 - m_v1) * fadein));
 #else
-                        Vector3 tmp = m_v1 + (m_v2 - m_v1) * fadein;
-                        glVertex3fv((float *)&(tmp));
+		Vector3 tmp = m_v1 + (m_v2 - m_v1) * fadein;
+		glVertex3fv((float *)&(tmp));
 #endif
-			glEnd();
+		glEnd();
 
-		} break;
+	} break;
 	}
 }
 void CircuitElement::init(Vector3 position, CircuitElement *parent)
@@ -213,53 +213,53 @@ void CircuitElement::init(Vector3 position, CircuitElement *parent)
 	m_startTimer = m_timer;
 	switch(m_type)
 	{
-		case TYPE_CIRCLE:
+	case TYPE_CIRCLE:
+	{
+		m_size = g_params.getRange("circuitcirclesize").getRandomValue();
+		if (parent == 0)
 		{
-			m_size = g_params.getRange("circuitcirclesize").getRandomValue();
-			if (parent == 0)
-			{
-				float d = g_params.getRange("circuitrange").getRandomValue();
-				float a = Math::randFloat() * 2 * 3.141592f;
-				m_position = position + Vector3(sinf(a), cosf(a), 0.0f) * d;
-			}
-			else
-			{
-				//pallo tulee tikun päähän
-				Vector3 parentdir = (parent->m_v2 - parent->m_v1).normalize();
-				m_position = parent->m_v2 + parentdir * m_size * 0.5f;
-			}
-
-		} break;
-
-		case TYPE_LINE:
+			float d = g_params.getRange("circuitrange").getRandomValue();
+			float a = Math::randFloat() * 2 * 3.141592f;
+			m_position = position + Vector3(sinf(a), cosf(a), 0.0f) * d;
+		}
+		else
 		{
-			if (parent == 0)
+			//pallo tulee tikun päähän
+			Vector3 parentdir = (parent->m_v2 - parent->m_v1).normalize();
+			m_position = parent->m_v2 + parentdir * m_size * 0.5f;
+		}
+
+	} break;
+
+	case TYPE_LINE:
+	{
+		if (parent == 0)
+		{
+			float d = g_params.getRange("circuitrange").getRandomValue();
+			float a = Math::randFloat() * 2 * 3.141592f;
+			m_position = position + Vector3(sinf(a), cosf(a), 0.0f) * d;
+
+			float l = g_params.getRange("circuitlinelength").getRandomValue();
+
+			Matrix r = Matrix::rotation(0, 0, Math::randFloat()*2*3.141592f);
+			m_v1 = m_position + Vector3(-l, 0, 0) * r;
+			m_v2 = m_position + Vector3( l, 0, 0) * r;
+		}
+		else
+		{
+			if (parent->m_type == TYPE_CIRCLE)
 			{
-				float d = g_params.getRange("circuitrange").getRandomValue();
 				float a = Math::randFloat() * 2 * 3.141592f;
-				m_position = position + Vector3(sinf(a), cosf(a), 0.0f) * d;
+				Vector3 dir = (parent->m_position - position).normalize();//Vector3(sinf(a), cosf(a), 0.0f); //unit
+
+				dir *= Matrix::rotation(0, 0, Math::randBetween(-0.1f, 0.1f));
 
 				float l = g_params.getRange("circuitlinelength").getRandomValue();
-
-				Matrix r = Matrix::rotation(0, 0, Math::randFloat()*2*3.141592f);
-				m_v1 = m_position + Vector3(-l, 0, 0) * r;
-				m_v2 = m_position + Vector3( l, 0, 0) * r;
+				m_v1 = parent->m_position + dir * parent->m_size * 0.5f;
+				m_v2 = m_v1 + dir * l;
 			}
-			else
-			{
-				if (parent->m_type == TYPE_CIRCLE)
-				{
-					float a = Math::randFloat() * 2 * 3.141592f;
-					Vector3 dir = (parent->m_position - position).normalize();//Vector3(sinf(a), cosf(a), 0.0f); //unit
-
-					dir *= Matrix::rotation(0, 0, Math::randBetween(-0.1f, 0.1f));
-
-					float l = g_params.getRange("circuitlinelength").getRandomValue();
-					m_v1 = parent->m_position + dir * parent->m_size * 0.5f;
-					m_v2 = m_v1 + dir * l;
-				}
-			}
-		} break;
+		}
+	} break;
 	}
 	m_life = m_timer / m_startTimer;
 	m_spawnTimer = g_params.getRange("circuitspawntime").getRandomValue();
@@ -351,8 +351,8 @@ void FadeParticle::update()
 
 void Tree::addFireParticle(const Vector3& position)
 {
-//	if (g_system.event("firegoesout").hasPassed())
-//		return;
+	//	if (g_system.event("firegoesout").hasPassed())
+	//		return;
 
 	float r = Math::randFloat();
 	if (r < g_system.event("emitparticles").getValue())
@@ -370,10 +370,10 @@ void Tree::addFireParticle(const Vector3& position)
 		p->m_speed.z = g_params.getRange("particlerise").getRandomValue();
 		switch(rand()%4)
 		{
-			case 0: m_particlesFire1.push_back(p); break;
-			case 1: m_particlesFire2.push_back(p); break;
-			case 2: m_particlesFire3.push_back(p); break;
-			case 3: m_particlesFire4.push_back(p); break;
+		case 0: m_particlesFire1.push_back(p); break;
+		case 1: m_particlesFire2.push_back(p); break;
+		case 2: m_particlesFire3.push_back(p); break;
+		case 3: m_particlesFire4.push_back(p); break;
 		}
 	}
 }
@@ -392,18 +392,18 @@ void Tree::addSmokeParticle(const Vector3& position, const Vector3& speed)
 	s->m_speed = speed;
 	s->m_orientation = rand()%4;
 
-//	Matrix rot = Matrix::rotation(0, 0, Math::randFloat()*2*3.141592f);
-//	s->m_v1 = Vector3(-s->m_size, -s->m_size, 0) * rot;
-//	s->m_v2 = Vector3( s->m_size, -s->m_size, 0) * rot;
-//	s->m_v3 = Vector3( s->m_size,  s->m_size, 0) * rot;
-//	s->m_v4 = Vector3(-s->m_size,  s->m_size, 0) * rot;
+	//	Matrix rot = Matrix::rotation(0, 0, Math::randFloat()*2*3.141592f);
+	//	s->m_v1 = Vector3(-s->m_size, -s->m_size, 0) * rot;
+	//	s->m_v2 = Vector3( s->m_size, -s->m_size, 0) * rot;
+	//	s->m_v3 = Vector3( s->m_size,  s->m_size, 0) * rot;
+	//	s->m_v4 = Vector3(-s->m_size,  s->m_size, 0) * rot;
 
 	switch(rand()%4)
 	{
-		case 0: m_particlesSmoke1.push_back(s); break;
-		case 1: m_particlesSmoke2.push_back(s); break;
-		case 2: m_particlesSmoke3.push_back(s); break;
-		case 3: m_particlesSmoke4.push_back(s); break;
+	case 0: m_particlesSmoke1.push_back(s); break;
+	case 1: m_particlesSmoke2.push_back(s); break;
+	case 2: m_particlesSmoke3.push_back(s); break;
+	case 3: m_particlesSmoke4.push_back(s); break;
 	}
 }
 
@@ -592,15 +592,15 @@ void Tree::update()
 		{
 			Vector3 camerapos = m_curveGrow->getValue(m_pos);
 			t->update(camerapos);
-/*
-			if ((t->m_position - ).length() > diedistance)
-			{
-				t->m_dying = true;
-			}
+			/*
+   if ((t->m_position - ).length() > diedistance)
+   {
+	t->m_dying = true;
+   }
 */
 			if (beat && !t->m_dying && !circuitfull)//t->m_spawnTimer < 0.0f && !t->m_dying)
 			{
-//				t->m_spawnTimer = g_params.getRange("circuitspawntime").getRandomValue();
+				//				t->m_spawnTimer = g_params.getRange("circuitspawntime").getRandomValue();
 				int add = 1;//(Math::randFloat() < doubleprobability) ? 2 : 1;
 				for (int i = 0; i < add; i++)
 				{
@@ -685,9 +685,9 @@ void Tree::renderSmokeParticles(vector<FadeParticle*>& particles)
 		float size = p->m_size;
 		Vector3& v = p->m_position;
 
-//		Matrix rot = Matrix::rotation(0, 0, (p->m_timer / p->m_startTimer)*10);
-//		Vector3 xr2 = xr * rot;
-//		Vector3 yr2 = yr * rot;
+		//		Matrix rot = Matrix::rotation(0, 0, (p->m_timer / p->m_startTimer)*10);
+		//		Vector3 xr2 = xr * rot;
+		//		Vector3 yr2 = yr * rot;
 
 		Vector3 v1 = v - xr * size - yr * size;// + p->m_v1;
 		Vector3 v2 = v + xr * size - yr * size;// + p->m_v2;
@@ -696,50 +696,50 @@ void Tree::renderSmokeParticles(vector<FadeParticle*>& particles)
 
 		switch(p->m_orientation)
 		{
-			case 0:
-			{
-				glTexCoord2f(0, 0);
-				glVertex3fv((float *)&v1);
-				glTexCoord2f(1, 0);
-				glVertex3fv((float *)&v2);
-				glTexCoord2f(1, 1);
-				glVertex3fv((float *)&v3);
-				glTexCoord2f(0, 1);
-				glVertex3fv((float *)&v4);
-			} break;
-			case 1:
-			{
-				glTexCoord2f(0, 0);
-				glVertex3fv((float *)&v2);
-				glTexCoord2f(1, 0);
-				glVertex3fv((float *)&v3);
-				glTexCoord2f(1, 1);
-				glVertex3fv((float *)&v4);
-				glTexCoord2f(0, 1);
-				glVertex3fv((float *)&v1);
-			} break;
-			case 2:
-			{
-				glTexCoord2f(0, 0);
-				glVertex3fv((float *)&v3);
-				glTexCoord2f(1, 0);
-				glVertex3fv((float *)&v4);
-				glTexCoord2f(1, 1);
-				glVertex3fv((float *)&v1);
-				glTexCoord2f(0, 1);
-				glVertex3fv((float *)&v2);
-			} break;
-			case 3:
-			{
-				glTexCoord2f(0, 0);
-				glVertex3fv((float *)&v4);
-				glTexCoord2f(1, 0);
-				glVertex3fv((float *)&v1);
-				glTexCoord2f(1, 1);
-				glVertex3fv((float *)&v2);
-				glTexCoord2f(0, 1);
-				glVertex3fv((float *)&v3);
-			} break;
+		case 0:
+		{
+			glTexCoord2f(0, 0);
+			glVertex3fv((float *)&v1);
+			glTexCoord2f(1, 0);
+			glVertex3fv((float *)&v2);
+			glTexCoord2f(1, 1);
+			glVertex3fv((float *)&v3);
+			glTexCoord2f(0, 1);
+			glVertex3fv((float *)&v4);
+		} break;
+		case 1:
+		{
+			glTexCoord2f(0, 0);
+			glVertex3fv((float *)&v2);
+			glTexCoord2f(1, 0);
+			glVertex3fv((float *)&v3);
+			glTexCoord2f(1, 1);
+			glVertex3fv((float *)&v4);
+			glTexCoord2f(0, 1);
+			glVertex3fv((float *)&v1);
+		} break;
+		case 2:
+		{
+			glTexCoord2f(0, 0);
+			glVertex3fv((float *)&v3);
+			glTexCoord2f(1, 0);
+			glVertex3fv((float *)&v4);
+			glTexCoord2f(1, 1);
+			glVertex3fv((float *)&v1);
+			glTexCoord2f(0, 1);
+			glVertex3fv((float *)&v2);
+		} break;
+		case 3:
+		{
+			glTexCoord2f(0, 0);
+			glVertex3fv((float *)&v4);
+			glTexCoord2f(1, 0);
+			glVertex3fv((float *)&v1);
+			glTexCoord2f(1, 1);
+			glVertex3fv((float *)&v2);
+			glTexCoord2f(0, 1);
+			glVertex3fv((float *)&v3);
+		} break;
 
 		}
 	}
@@ -779,11 +779,11 @@ void Tree::renderFireParticles(vector<FadeParticle*>& particles)
 }
 void Tree::drawRegular(float alpha, bool glow)
 {
-//	if (alpha < 0.000001f)
-//		return;
+	//	if (alpha < 0.000001f)
+	//		return;
 
-//	if (m_particlesFire.size() == 0 && m_particlesSmoke.size() == 0)
-//		return;
+	//	if (m_particlesFire.size() == 0 && m_particlesSmoke.size() == 0)
+	//		return;
 
 	Vector3 xr, yr, zr;
 	glUtil::antiRotate(xr, yr, zr);
@@ -796,91 +796,91 @@ void Tree::drawRegular(float alpha, bool glow)
 
 	if (glow)
 	{
-                g_textures.bindTexture("magellan1.png", GL_TEXTURE0_ARB);
+		g_textures.bindTexture("magellan1.png", GL_TEXTURE0_ARB);
 		renderFireParticles(m_particlesFire1);
-                g_textures.bindTexture("magellan1.png", GL_TEXTURE0_ARB);
+		g_textures.bindTexture("magellan1.png", GL_TEXTURE0_ARB);
 		renderFireParticles(m_particlesFire2);
-                g_textures.bindTexture("magellan6.png", GL_TEXTURE0_ARB);
+		g_textures.bindTexture("magellan6.png", GL_TEXTURE0_ARB);
 		renderFireParticles(m_particlesFire3);
-                g_textures.bindTexture("magellan4.png", GL_TEXTURE0_ARB);
+		g_textures.bindTexture("magellan4.png", GL_TEXTURE0_ARB);
 		renderFireParticles(m_particlesFire4);
 	}
 	if (!glow)
 	{
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                g_textures.bindTexture("smoke1.png", GL_TEXTURE0_ARB);
+		g_textures.bindTexture("smoke1.png", GL_TEXTURE0_ARB);
 		renderSmokeParticles(m_particlesSmoke1);
-                g_textures.bindTexture("smoke2.png", GL_TEXTURE0_ARB);
+		g_textures.bindTexture("smoke2.png", GL_TEXTURE0_ARB);
 		renderSmokeParticles(m_particlesSmoke2);
-                g_textures.bindTexture("smoke3.png", GL_TEXTURE0_ARB);
+		g_textures.bindTexture("smoke3.png", GL_TEXTURE0_ARB);
 		renderSmokeParticles(m_particlesSmoke3);
-                g_textures.bindTexture("smoke4.png", GL_TEXTURE0_ARB);
+		g_textures.bindTexture("smoke4.png", GL_TEXTURE0_ARB);
 		renderSmokeParticles(m_particlesSmoke4);
 	}
 
-/*
-	for (float t = 0.0f; t < alpha; t+= 0.1f)
-	{
-		const float size = 0.56f;
-		glColor4f(1,1,1,alpha * (0.5f + 0.5f * sinf(t * 20)));
-		Vector3 v = m_curve->getValue(t);
+	/*
+ for (float t = 0.0f; t < alpha; t+= 0.1f)
+ {
+  const float size = 0.56f;
+  glColor4f(1,1,1,alpha * (0.5f + 0.5f * sinf(t * 20)));
+  Vector3 v = m_curve->getValue(t);
 
-		Vector3 v1 = v - xr * size - yr * size;
-		Vector3 v2 = v + xr * size - yr * size;
-		Vector3 v3 = v + xr * size + yr * size;
-		Vector3 v4 = v - xr * size + yr * size;
+  Vector3 v1 = v - xr * size - yr * size;
+  Vector3 v2 = v + xr * size - yr * size;
+  Vector3 v3 = v + xr * size + yr * size;
+  Vector3 v4 = v - xr * size + yr * size;
 
-		glTexCoord2f(0, 0);
-		glVertex3fv((float *)&v1);
-		glTexCoord2f(1, 0);
-		glVertex3fv((float *)&v2);
-		glTexCoord2f(1, 1);
-		glVertex3fv((float *)&v3);
-		glTexCoord2f(0, 1);
-		glVertex3fv((float *)&v4);
-	}
+  glTexCoord2f(0, 0);
+  glVertex3fv((float *)&v1);
+  glTexCoord2f(1, 0);
+  glVertex3fv((float *)&v2);
+  glTexCoord2f(1, 1);
+  glVertex3fv((float *)&v3);
+  glTexCoord2f(0, 1);
+  glVertex3fv((float *)&v4);
+ }
 
 */
 
 	glDisable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(1);
-/*
+	/*
 
 
-	glEnable(GL_BLEND);
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_TEXTURE_2D);
-	glColor4f(1,1,1,1);
+ glEnable(GL_BLEND);
+ glDisable(GL_DEPTH_TEST);
+ glDisable(GL_TEXTURE_2D);
+ glColor4f(1,1,1,1);
 
-	glLineWidth(2.0f);
-	glEnable(GL_LINE_SMOOTH);
+ glLineWidth(2.0f);
+ glEnable(GL_LINE_SMOOTH);
 
-	const float STEP_SIZE = 0.00001f + g_system.event("treequantfadein").getValue() * g_params.getFloat("treequantvalue");
+ const float STEP_SIZE = 0.00001f + g_system.event("treequantfadein").getValue() * g_params.getFloat("treequantvalue");
 
-	glBegin(GL_LINE_STRIP);
-	for (float t = 0.0f; t < alpha; t += 0.005f)
-	{
-		glColor4f(1,1,1,alpha * (0.5f + 0.5f * sinf(t * 20)));
-		Vector3 v = m_curve->getValue(t);
+ glBegin(GL_LINE_STRIP);
+ for (float t = 0.0f; t < alpha; t += 0.005f)
+ {
+  glColor4f(1,1,1,alpha * (0.5f + 0.5f * sinf(t * 20)));
+  Vector3 v = m_curve->getValue(t);
 
-		v.x = v.x - fmodf(v.x, STEP_SIZE);
-		v.y = v.y - fmodf(v.y, STEP_SIZE);
-		v.z = v.z - fmodf(v.z, STEP_SIZE);
-		glVertex3fv((float *)&v);
-	}
-	glEnd();
-	if (alpha > 0.99f)
-	{
-		glBegin(GL_LINES);
-		for (float t = 0.0f; t < m_pos; t += 0.01f)
-		{
-			float norm_t = 1 - t / m_pos;
-			glColor4f(1,1,1,norm_t*alpha);
-			glVertex3fv((float *)&m_curveGrow->getValue(t));
-		}
-		glEnd();
-	}
+  v.x = v.x - fmodf(v.x, STEP_SIZE);
+  v.y = v.y - fmodf(v.y, STEP_SIZE);
+  v.z = v.z - fmodf(v.z, STEP_SIZE);
+  glVertex3fv((float *)&v);
+ }
+ glEnd();
+ if (alpha > 0.99f)
+ {
+  glBegin(GL_LINES);
+  for (float t = 0.0f; t < m_pos; t += 0.01f)
+  {
+   float norm_t = 1 - t / m_pos;
+   glColor4f(1,1,1,norm_t*alpha);
+   glVertex3fv((float *)&m_curveGrow->getValue(t));
+  }
+  glEnd();
+ }
 */
 }
 void Tree::drawAnimals(float alpha, bool glow)
@@ -938,7 +938,7 @@ void Animal::draw(float alpha)
 	if (m_type == TYPE_STRAIGHT)
 	{
 		glBegin(GL_LINES);
-//		glColor4fv((float *)&m_color);
+		//		glColor4fv((float *)&m_color);
 		m_color.setModulation(alpha);
 		m_color.use();
 		glVertex3fv((float *)&m_v1);
@@ -1130,36 +1130,36 @@ hahaevilgotohere:
 		goto hahaevilgotohere;
 	}
 
-/*
-	if (g_system.event("flowerfadeout").hasPassed())
-	{
-		type = TYPE_SYMBOL;
-	}
+	/*
+ if (g_system.event("flowerfadeout").hasPassed())
+ {
+  type = TYPE_SYMBOL;
+ }
 
-	if (Math::randFloat() < 0.3f)
-	{
-		type = TYPE_DASHED;
-		if (g_system.event("upplantfadein").hasPassed())
-		{
-			//if (Math::randFloat() < 0.3f)
-			{
-				type = TYPE_DASHED_UP;
-			}
-		}
-	}
-	else if (Math::randFloat() < 0.5f)
-	{
-		type = TYPE_SYMBOL;
+ if (Math::randFloat() < 0.3f)
+ {
+  type = TYPE_DASHED;
+  if (g_system.event("upplantfadein").hasPassed())
+  {
+   //if (Math::randFloat() < 0.3f)
+   {
+	type = TYPE_DASHED_UP;
+   }
+  }
+ }
+ else if (Math::randFloat() < 0.5f)
+ {
+  type = TYPE_SYMBOL;
 
-	}
+ }
 
-	if (g_system.event("equplantfadein").hasPassed())
-	{
-		if (Math::randFloat() < 0.25f)
-		{
-			type = TYPE_EQU;
-		}
-	}
+ if (g_system.event("equplantfadein").hasPassed())
+ {
+  if (Math::randFloat() < 0.25f)
+  {
+   type = TYPE_EQU;
+  }
+ }
 */
 	return type;
 }
@@ -1189,10 +1189,10 @@ string getTextureName(TextureType type)
 		int index = rand()%4;
 		switch(index)
 		{
-			case 0: return "2.png";
-			case 1: return "0.png";
-			case 2: return "1.png";
-			case 3: return "9.png";
+		case 0: return "2.png";
+		case 1: return "0.png";
+		case 2: return "1.png";
+		case 3: return "9.png";
 		}
 	}
 	else if (type == TYPE_KATAGANA)
@@ -1375,17 +1375,17 @@ void Plant::init(const Vector3 &position, PlantType type)
 		if (m_type == TYPE_DASHED)
 		{
 			m_position = position;
-                        //wtf
+			//wtf
 			//m_position2 = position + (Vector3(0, 1, 0) * Matrix::rotation(0, 0, (rand()%4)*0.50f * 3.141592f)) * m_radius;
-                        m_position2 = m_position + (Vector3(0, 1, 0) * Matrix::rotation(0, 0, (rand()%4)*0.50f * 3.141592f)) * m_radius;
+			m_position2 = m_position + (Vector3(0, 1, 0) * Matrix::rotation(0, 0, (rand()%4)*0.50f * 3.141592f)) * m_radius;
 		}
 		else
 		{
 			//up
 			m_position = position;
-                        //wtf
+			//wtf
 			//m_position2 = position + Vector3(0, 0, 1) * m_radius;
-                        m_position2 = m_position + Vector3(0, 0, 1) * m_radius;
+			m_position2 = m_position + Vector3(0, 0, 1) * m_radius;
 		}
 	}
 	else if (m_type == TYPE_EQU)
@@ -1455,7 +1455,7 @@ void Plant::update()
 	{
 		m_v1 = m_position;
 		m_v2 = m_position + (m_position2 - m_position) * (1.0f - m_life);
-//		g_particleTree->addFireParticle(m_v2);
+		//		g_particleTree->addFireParticle(m_v2);
 	}
 
 	if (m_type == TYPE_SYMBOL)
@@ -1662,7 +1662,7 @@ void Plant::draw(float alpha)
 		glVertex3fv((float *)&g1);
 		glEnd();
 
-                g_textures.bindTexture(m_textureName, GL_TEXTURE0_ARB);
+		g_textures.bindTexture(m_textureName, GL_TEXTURE0_ARB);
 
 		glBegin(GL_QUADS);
 		m_color2.useModulated(m_fade * f);
@@ -1732,7 +1732,7 @@ void Plant::draw(float alpha)
 				glEnd();
 				glDisable(GL_DEPTH_TEST);
 				glDepthMask(0);
-                                g_textures.bindTexture(m_symbolNames[i], GL_TEXTURE0_ARB);
+				g_textures.bindTexture(m_symbolNames[i], GL_TEXTURE0_ARB);
 				m_color.useWithAlpha(alphavalue);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 				glBegin(GL_QUADS);
@@ -1764,7 +1764,7 @@ void Plant::draw(float alpha)
 				v2 = m_position + offset + Vector3( m_radius, -m_radius, 0.0f) * rot;
 				v3 = m_position + offset + Vector3( m_radius,  m_radius, 0.0f) * rot;
 				v4 = m_position + offset + Vector3(-m_radius,  m_radius, 0.0f) * rot;
-                                g_textures.bindTexture(m_symbolNames[i], GL_TEXTURE0_ARB);
+				g_textures.bindTexture(m_symbolNames[i], GL_TEXTURE0_ARB);
 
 				m_color.useWithAlpha(alphavalue);
 				glBegin(GL_QUADS);
@@ -1795,8 +1795,8 @@ void Plant::draw(float alpha)
 	{
 		float a = sinf(m_life*3.141592f);
 
-//		Color3 tqwer = Color3(1,1,1);
-//		tqwer.useWithAlpha(a * m_fade * alpha);
+		//		Color3 tqwer = Color3(1,1,1);
+		//		tqwer.useWithAlpha(a * m_fade * alpha);
 		m_color.useWithAlpha(a * m_fade * alpha);
 
 		const int steps = 50;
@@ -1814,21 +1814,21 @@ void Plant::draw(float alpha)
 			}
 			glEnd();
 		}
-/*
-		Color3 tqwer = Color3(1,1,1);
-		tqwer.useWithAlpha(a * m_fade * alpha);
-		glBegin(GL_LINE_STRIP);
-		float grow = min(m_life * 3, 1.0f);
-		for (float t = 0.0f; t < grow; t += 0.02f)
-		{
-			int index = (int)(t * 511);
-			float s = m_spectrum[index];
-			Vector3 d = Math::randVectSphere()*m_spectrum[index];
-			d.z = 0.0f;
-			Vector3 p = m_curve->getValue(t) + d;
-			glVertex3fv((float *)&p);
-		}
-		glEnd();
+		/*
+  Color3 tqwer = Color3(1,1,1);
+  tqwer.useWithAlpha(a * m_fade * alpha);
+  glBegin(GL_LINE_STRIP);
+  float grow = min(m_life * 3, 1.0f);
+  for (float t = 0.0f; t < grow; t += 0.02f)
+  {
+   int index = (int)(t * 511);
+   float s = m_spectrum[index];
+   Vector3 d = Math::randVectSphere()*m_spectrum[index];
+   d.z = 0.0f;
+   Vector3 p = m_curve->getValue(t) + d;
+   glVertex3fv((float *)&p);
+  }
+  glEnd();
 */
 		if (m_beat > 0.0f)
 		{
@@ -2172,12 +2172,29 @@ void Cloud::draw(float alpha, bool useTransparency)
 		glColor4f(0, 0, 0, alpha * fade);
 	}
 
-//	glBegin(GL_QUADS);
+	//	glBegin(GL_QUADS);
 
 
 	switch(m_type)
 	{
-		case TYPE_DARK:
+	case TYPE_DARK:
+	{
+		glBegin(GL_QUADS);
+		for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
+		{
+			Quad *q = *it;
+			glVertex3fv((float *)&q->v1);
+			glVertex3fv((float *)&q->v2);
+			glVertex3fv((float *)&q->v3);
+			glVertex3fv((float *)&q->v4);
+		}
+		glEnd();
+
+	} break;
+
+	case TYPE_SYMBOL:
+	{
+		if (useTransparency)
 		{
 			glBegin(GL_QUADS);
 			for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
@@ -2189,67 +2206,50 @@ void Cloud::draw(float alpha, bool useTransparency)
 				glVertex3fv((float *)&q->v4);
 			}
 			glEnd();
-
-		} break;
-
-		case TYPE_SYMBOL:
+		}
+		else
 		{
-			if (useTransparency)
-			{
-				glBegin(GL_QUADS);
-				for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
-				{
-					Quad *q = *it;
-					glVertex3fv((float *)&q->v1);
-					glVertex3fv((float *)&q->v2);
-					glVertex3fv((float *)&q->v3);
-					glVertex3fv((float *)&q->v4);
-				}
-				glEnd();
-			}
-			else
-			{
-				glEnable(GL_TEXTURE_2D);
-                                g_textures.bindTexture(m_textureNames[0], GL_TEXTURE0_ARB);
-				m_glowColor.useWithAlpha(alpha * fade);
+			glEnable(GL_TEXTURE_2D);
+			g_textures.bindTexture(m_textureNames[0], GL_TEXTURE0_ARB);
+			m_glowColor.useWithAlpha(alpha * fade);
 
-				glBegin(GL_QUADS);
-				for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
-				{
-					Quad *q = *it;
-					glTexCoord2f(0, 0);
-					glVertex3fv((float *)&q->v1);
-					glTexCoord2f(1, 0);
-					glVertex3fv((float *)&q->v2);
-					glTexCoord2f(1, 1);
-					glVertex3fv((float *)&q->v3);
-					glTexCoord2f(0, 1);
-					glVertex3fv((float *)&q->v4);
-				}
-				glEnd();
-			}
-
-		} break;
-
-		case TYPE_ROUND:
-		{
+			glBegin(GL_QUADS);
 			for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
 			{
 				Quad *q = *it;
-				Vector3 v = q->v1 + q->v2 +	q->v3 + q->v4;
-
-				v *= 1 / 4.0f;
-
-				glBegin(GL_TRIANGLE_FAN);
-				float r = m_size * fade;
-				for (float y = 0.0f; y < 2*3.141592f; y += roundcloudadd)
-				{
-					glVertex3f(v.x + sinf(y) * r, v.y + cosf(y) * r, v.z);
-				}
-				glEnd();
+				glTexCoord2f(0, 0);
+				glVertex3fv((float *)&q->v1);
+				glTexCoord2f(1, 0);
+				glVertex3fv((float *)&q->v2);
+				glTexCoord2f(1, 1);
+				glVertex3fv((float *)&q->v3);
+				glTexCoord2f(0, 1);
+				glVertex3fv((float *)&q->v4);
 			}
+			glEnd();
+		}
 
-		} break;
+	} break;
+
+	case TYPE_ROUND:
+	{
+		for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
+		{
+			Quad *q = *it;
+			Vector3 v = q->v1 + q->v2 +	q->v3 + q->v4;
+
+			v *= 1 / 4.0f;
+
+			glBegin(GL_TRIANGLE_FAN);
+			float r = m_size * fade;
+			for (float y = 0.0f; y < 2*3.141592f; y += roundcloudadd)
+			{
+				glVertex3f(v.x + sinf(y) * r, v.y + cosf(y) * r, v.z);
+			}
+			glEnd();
+		}
+
+	} break;
 
 	}
 }
@@ -2265,50 +2265,50 @@ void Cloud::drawShadow(float alpha)
 
 	switch(m_type)
 	{
-		case TYPE_DARK:
-		case TYPE_SYMBOL:
+	case TYPE_DARK:
+	case TYPE_SYMBOL:
+	{
+		glBegin(GL_QUADS);
+		for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
 		{
-			glBegin(GL_QUADS);
-			for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
+			Quad *q = *it;
+			Vector3 v1 = q->v1;
+			Vector3 v2 = q->v2;
+			Vector3 v3 = q->v3;
+			Vector3 v4 = q->v4;
+
+			v1.z = 0.0f;
+			v2.z = 0.0f;
+			v3.z = 0.0f;
+			v4.z = 0.0f;
+
+			glVertex3fv((float *)&v1);
+			glVertex3fv((float *)&v2);
+			glVertex3fv((float *)&v3);
+			glVertex3fv((float *)&v4);
+		}
+		glEnd();
+
+	} break;
+
+	case TYPE_ROUND:
+	{
+		for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
+		{
+			Quad *q = *it;
+			Vector3 v = q->v1 + q->v2 +	q->v3 + q->v4;
+
+			v *= 1 / 4.0f;
+
+			glBegin(GL_TRIANGLE_FAN);
+			float r = m_size * fade;
+			for (float y = 0.0f; y < 2*3.141592f; y += roundcloudadd)
 			{
-				Quad *q = *it;
-				Vector3 v1 = q->v1;
-				Vector3 v2 = q->v2;
-				Vector3 v3 = q->v3;
-				Vector3 v4 = q->v4;
-
-				v1.z = 0.0f;
-				v2.z = 0.0f;
-				v3.z = 0.0f;
-				v4.z = 0.0f;
-
-				glVertex3fv((float *)&v1);
-				glVertex3fv((float *)&v2);
-				glVertex3fv((float *)&v3);
-				glVertex3fv((float *)&v4);
+				glVertex3f(v.x + sinf(y) * r, v.y + cosf(y) * r, 0.0f);
 			}
 			glEnd();
-
-		} break;
-
-		case TYPE_ROUND:
-		{
-			for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
-			{
-				Quad *q = *it;
-				Vector3 v = q->v1 + q->v2 +	q->v3 + q->v4;
-
-				v *= 1 / 4.0f;
-
-				glBegin(GL_TRIANGLE_FAN);
-				float r = m_size * fade;
-				for (float y = 0.0f; y < 2*3.141592f; y += roundcloudadd)
-				{
-					glVertex3f(v.x + sinf(y) * r, v.y + cosf(y) * r, 0.0f);
-				}
-				glEnd();
-			}
-		} break;
+		}
+	} break;
 	}
 }
 void Cloud::drawGlow(float alpha)
@@ -2325,52 +2325,52 @@ void Cloud::drawGlow(float alpha)
 
 	switch(m_type)
 	{
-		case TYPE_DARK:
+	case TYPE_DARK:
+	{
+		for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
 		{
-			for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
-			{
-				Quad *q = *it;
-				glBegin(GL_LINE_LOOP);
-				glVertex3fv((float *)&q->v1);
-				glVertex3fv((float *)&q->v2);
-				glVertex3fv((float *)&q->v3);
-				glVertex3fv((float *)&q->v4);
-				glEnd();
-			}
-		} break;
+			Quad *q = *it;
+			glBegin(GL_LINE_LOOP);
+			glVertex3fv((float *)&q->v1);
+			glVertex3fv((float *)&q->v2);
+			glVertex3fv((float *)&q->v3);
+			glVertex3fv((float *)&q->v4);
+			glEnd();
+		}
+	} break;
 
-		case TYPE_SYMBOL:
+	case TYPE_SYMBOL:
+	{
+		glDisable(GL_TEXTURE_2D);
+		for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
 		{
-			glDisable(GL_TEXTURE_2D);
-			for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
-			{
-				Quad *q = *it;
-				glBegin(GL_LINE_LOOP);
-				glVertex3fv((float *)&q->v1);
-				glVertex3fv((float *)&q->v2);
-				glVertex3fv((float *)&q->v3);
-				glVertex3fv((float *)&q->v4);
-				glEnd();
-			}
+			Quad *q = *it;
+			glBegin(GL_LINE_LOOP);
+			glVertex3fv((float *)&q->v1);
+			glVertex3fv((float *)&q->v2);
+			glVertex3fv((float *)&q->v3);
+			glVertex3fv((float *)&q->v4);
+			glEnd();
+		}
 
-		} break;
+	} break;
 
-		case TYPE_ROUND:
+	case TYPE_ROUND:
+	{
+		for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
 		{
-			for (vector<Quad*>::iterator it = m_quads.begin(); it != m_quads.end(); it++)
+			Quad *q = *it;
+			Vector3 v = q->v1 + q->v2 +	q->v3 + q->v4;
+			v *= 1 / 4.0f;
+			glBegin(GL_LINE_LOOP);
+			float r = m_size * fade;
+			for (float y = 0.0f; y < 2*3.141592f; y += roundcloudadd)
 			{
-				Quad *q = *it;
-				Vector3 v = q->v1 + q->v2 +	q->v3 + q->v4;
-				v *= 1 / 4.0f;
-				glBegin(GL_LINE_LOOP);
-				float r = m_size * fade;
-				for (float y = 0.0f; y < 2*3.141592f; y += roundcloudadd)
-				{
-					glVertex3f(v.x + sinf(y) * r, v.y + cosf(y) * r, v.z);
-				}
-				glEnd();
+				glVertex3f(v.x + sinf(y) * r, v.y + cosf(y) * r, v.z);
 			}
-		} break;
+			glEnd();
+		}
+	} break;
 
 	}
 
@@ -2385,7 +2385,7 @@ bool Cloud::isDead()
 }
 
 
- void TreeScene::init()
+void TreeScene::init()
 {
 	g_params.useNamespace("tree");
 	m_debug = g_params.getBool("debug");
@@ -2431,7 +2431,7 @@ bool Cloud::isDead()
 #ifdef _WIN32
 		srand(timeGetTime());
 #else
-                srand(time(NULL));
+		srand(time(NULL));
 #endif
 		m_angleTurnVelocity = 0.002f * Math::randBetween(-3.0f, 3.0f);
 		m_angleTurnSpeed = 200.0f * Math::randBetween(-3.0f, 3.0f);
@@ -2503,7 +2503,7 @@ void TreeScene::updatePlants(vector<Plant*> &plants)
 
 void TreeScene::update()
 {
-        g_params.useNamespace("tree");
+	g_params.useNamespace("tree");
 
 	Vector3 tgt = Vector3(0, 0, 0);
 	for (vector<Tree*>::iterator it = m_trees.begin(); it != m_trees.end(); it++)
@@ -2549,14 +2549,14 @@ void TreeScene::update()
 	}
 
 	sort(m_clouds.begin(), m_clouds.end(), cloudComparison());
-/*
-	g_debug << "---";
-	int count = 0;
-	for (vector<Cloud*>::iterator it = m_clouds.begin(); it != m_clouds.end(); it++)
-	{
-		g_debug << "cloud " << count << " height = " << (*it)->m_height << "\n";
-		count++;
-	}
+	/*
+ g_debug << "---";
+ int count = 0;
+ for (vector<Cloud*>::iterator it = m_clouds.begin(); it != m_clouds.end(); it++)
+ {
+  g_debug << "cloud " << count << " height = " << (*it)->m_height << "\n";
+  count++;
+ }
 */
 	Cloud::updateRain();
 
@@ -2689,7 +2689,7 @@ void TreeScene::update()
 			m_cloudTimer += 0.01f;
 
 			const float CLOUD_THRESHOLD = g_system.event("cloudsturnround").hasPassed() ? g_params.getFloat("cloudthreshold2") :
-				g_params.getFloat("cloudthreshold");
+																						  g_params.getFloat("cloudthreshold");
 
 			bool inCloudStop = g_system.event("cloudstopstart").hasPassed() && !g_system.event("cloudstopend").hasPassed();
 			bool initCloud = (!g_system.event("cloudsgoout").hasPassed()) && !inCloudStop;
@@ -2961,7 +2961,7 @@ void TreeScene::drawBackground()
 			glDisable(GL_DEPTH_TEST);
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-                        g_textures.bindTexture(kanjicheckertexture1, GL_TEXTURE0_ARB);
+			g_textures.bindTexture(kanjicheckertexture1, GL_TEXTURE0_ARB);
 
 			glBegin(GL_QUADS);
 			for (int y = 0; y < ysteps; y++)
@@ -2993,21 +2993,21 @@ void TreeScene::drawBackground()
 			glDisable(GL_TEXTURE_2D);
 		}
 
-/*
+		/*
 
-		glBegin(GL_LINES);
-		for (float y = start_y; y < end_y; y += stepsize)
-		{
-			glVertex3f(start_x, y, 0.0f);
-			glVertex3f(end_x, y, 0.0f);
-		}
+  glBegin(GL_LINES);
+  for (float y = start_y; y < end_y; y += stepsize)
+  {
+   glVertex3f(start_x, y, 0.0f);
+   glVertex3f(end_x, y, 0.0f);
+  }
 
-		for (float x = start_x; x < end_x; x += stepsize)
-		{
-			glVertex3f(x, start_y, 0.0f);
-			glVertex3f(x, end_y, 0.0f);
-		}
-		glEnd();
+  for (float x = start_x; x < end_x; x += stepsize)
+  {
+   glVertex3f(x, start_y, 0.0f);
+   glVertex3f(x, end_y, 0.0f);
+  }
+  glEnd();
 */
 		glDisable(GL_LINE_SMOOTH);
 		glDisable(GL_BLEND);
@@ -3096,7 +3096,7 @@ void TreeScene::drawShadows()
 
 void TreeScene::drawWind()
 {
-//	g_debug << "wind particles " << m_wind.size() << "\n";
+	//	g_debug << "wind particles " << m_wind.size() << "\n";
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	glBegin(GL_LINES);
@@ -3209,29 +3209,29 @@ void TreeScene::setCam()
 
 	switch(cameramode)
 	{
-		case 0: //default mode
-		{
-			gluLookAt(m_cameraPosition.x, m_cameraPosition.y, m_cameraPosition.z,
-					  m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z,
-					  cameraUp.x, cameraUp.y, cameraUp.z);
+	case 0: //default mode
+	{
+		gluLookAt(m_cameraPosition.x, m_cameraPosition.y, m_cameraPosition.z,
+				  m_cameraTarget.x, m_cameraTarget.y, m_cameraTarget.z,
+				  cameraUp.x, cameraUp.y, cameraUp.z);
 
-		} break;
-		case 1:
-		{
-			gluLookAt(m_cameraPosition.x,
-					  m_cameraPosition.y,
-					  m_cameraPosition.z,
-					  m_cameraPosition.x + (m_cameraTarget.x - m_cameraPosition.x) * camerafocus,
-					  m_cameraPosition.y + (m_cameraTarget.y - m_cameraPosition.y) * camerafocus,
-					  m_cameraPosition.z + (m_cameraTarget.z - m_cameraPosition.z) * camerafocus,
-					  cameraUp.x, cameraUp.y, cameraUp.z);
+	} break;
+	case 1:
+	{
+		gluLookAt(m_cameraPosition.x,
+				  m_cameraPosition.y,
+				  m_cameraPosition.z,
+				  m_cameraPosition.x + (m_cameraTarget.x - m_cameraPosition.x) * camerafocus,
+				  m_cameraPosition.y + (m_cameraTarget.y - m_cameraPosition.y) * camerafocus,
+				  m_cameraPosition.z + (m_cameraTarget.z - m_cameraPosition.z) * camerafocus,
+				  cameraUp.x, cameraUp.y, cameraUp.z);
 
-		} break;
+	} break;
 	}
 }
 void TreeScene::draw()
 {
-        g_params.useNamespace("tree");
+	g_params.useNamespace("tree");
 
 	glLoadIdentity();
 	setCam();
@@ -3246,7 +3246,7 @@ void TreeScene::draw()
 	drawTree(true);
 	drawPlantsMask(m_buildings);
 	g_postprocess.glow(RENDERTARGET_0, g_params.getInt("treeglowcount"), g_params.getFloat("treeglow_x"), g_params.getFloat("treeglow_y"),
-						g_params.getFloat("treeglow_alpha"), g_params.getFloat("treeglow_exp"), true);
+					   g_params.getFloat("treeglow_alpha"), g_params.getFloat("treeglow_exp"), true);
 	setCam();
 	g_postprocess.init(RENDERTARGET_0);
 	drawWind();
@@ -3254,8 +3254,8 @@ void TreeScene::draw()
 	drawPlants(m_buildings);
 	float s = sinf(g_system.triggers("sync").getValue()*3.141592f) * 0.04f;
 	g_postprocess.glow(RENDERTARGET_0, g_params.getInt("glowcount"), g_params.getFloat("glow_x") + s, g_params.getFloat("glow_y") + s,
-		g_params.getFloat("glow_alpha") + s,
-		g_params.getFloat("glow_exp"), true);
+					   g_params.getFloat("glow_alpha") + s,
+					   g_params.getFloat("glow_exp"), true);
 
 	//savu ja maskit
 	setCam();
@@ -3270,18 +3270,18 @@ void TreeScene::draw()
 	if (g_system.event("cloudstopend").hasPassed())
 	{
 		g_postprocess.glow(RENDERTARGET_0, g_params.getInt("cloudglowcount2"),
-										   g_params.getFloat("cloudglow_x2"),
-										   g_params.getFloat("cloudglow_y2"),
-										   g_params.getFloat("cloudglow_alpha2"),
-										   g_params.getFloat("cloudglow_exp2"), true);
+						   g_params.getFloat("cloudglow_x2"),
+						   g_params.getFloat("cloudglow_y2"),
+						   g_params.getFloat("cloudglow_alpha2"),
+						   g_params.getFloat("cloudglow_exp2"), true);
 	}
 	else
 	{
 		g_postprocess.glow(RENDERTARGET_0, g_params.getInt("cloudglowcount"),
-										   g_params.getFloat("cloudglow_x"),
-										   g_params.getFloat("cloudglow_y"),
-										   g_params.getFloat("cloudglow_alpha"),
-										   g_params.getFloat("cloudglow_exp"), true);
+						   g_params.getFloat("cloudglow_x"),
+						   g_params.getFloat("cloudglow_y"),
+						   g_params.getFloat("cloudglow_alpha"),
+						   g_params.getFloat("cloudglow_exp"), true);
 	}
 	float brsalpha = g_system.event("brsfadein").getValue() * (1.0f - g_system.event("brsfadeout").getValue());
 	if (brsalpha> 0.001f)

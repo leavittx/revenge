@@ -21,113 +21,113 @@ PostProcess g_postprocess;
 Demo *g_demo; //bad, mmkay
 
 #ifdef _WIN32
-    int APIENTRY WinMain(HINSTANCE hInstance,
-                         HINSTANCE hPrevInstance,
-                         LPSTR     lpCmdLine,
-                         int       nCmdShow) {
+int APIENTRY WinMain(HINSTANCE hInstance,
+					 HINSTANCE hPrevInstance,
+					 LPSTR     lpCmdLine,
+					 int       nCmdShow) {
 #else
-    int main(void) {
+int main(void) {
 #endif
 
-    //first initialize system
-    g_system.init();
-    //and then the demo
-    Demo *demo = new Demo("data/script.txt");
+	//first initialize system
+	g_system.init();
+	//and then the demo
+	Demo *demo = new Demo("data/script.txt");
 
-    //all ok?
-    if (demo->initOk())
-    {
-        g_demo = demo;
+	//all ok?
+	if (demo->initOk())
+	{
+		g_demo = demo;
 
-        //initalize managers
-        g_textures.init();
-        g_shaders.init();
+		//initalize managers
+		g_textures.init();
+		g_shaders.init();
 
-        g_textures.loadImages();
-        g_system.loadMeshes();
+		g_textures.loadImages();
+		g_system.loadMeshes();
 
-        //initialize the actual demo
-        demo->addScene("heart", new Heart());
-        demo->addScene("metablob", new Metablob());
+		//initialize the actual demo
+		demo->addScene("heart", new Heart());
+		demo->addScene("metablob", new Metablob());
 
-//        demo->addScene("treescene", new TreeScene());
+		//        demo->addScene("treescene", new TreeScene());
 
-//        demo->addScene("start", new Start());
-//        demo->addScene("underground", new Underground());
-//        demo->addScene("freefall", new Freefall());
-//        demo->addScene("lucifer", new Lucifer());
-//        demo->addScene("magellan", new Magellan());
-//        demo->addScene("kohina", new Kohina());
+		//        demo->addScene("start", new Start());
+		//        demo->addScene("underground", new Underground());
+		//        demo->addScene("freefall", new Freefall());
+		//        demo->addScene("lucifer", new Lucifer());
+		//        demo->addScene("magellan", new Magellan());
+		//        demo->addScene("kohina", new Kohina());
 
-//        demo->addScene("background11", new Background11());
-//        demo->addScene("disco", new Disco());
+		//        demo->addScene("background11", new Background11());
+		//        demo->addScene("disco", new Disco());
 
 #define COMPLETE_DEMO
 #ifdef COMPLETE_DEMO
 
-        //construct the timeline
-        demo->addSceneToTimeline("heart",         0,   7000, 1000); // "Heart" shader =)
-        demo->addSceneToTimeline("metablob",   7000,  15000, 2000);
+		//construct the timeline
+		demo->addSceneToTimeline("heart",         0,   7000, 1000); // "Heart" shader =)
+		demo->addSceneToTimeline("metablob",   7000,  15000, 2000);
 
-//        demo->addSceneToTimeline("treescene", 0, 240500, 666);
+		//        demo->addSceneToTimeline("treescene", 0, 240500, 666);
 
-//        demo->addSceneToTimeline("start", 0, 55000, 5000);
-//        demo->addSceneToTimeline("underground", 55000, 97000, 6000);
-//        demo->addSceneToTimeline("freefall", 90000, 130000, 6000);
-//        demo->addSceneToTimeline("lucifer", 120000, 190000, 4000);
-//        demo->addSceneToTimeline("magellan", 180000, 243000, 7000);
-//        demo->addSceneToTimeline("start", 243000, 296000, 7000);
+		//        demo->addSceneToTimeline("start", 0, 55000, 5000);
+		//        demo->addSceneToTimeline("underground", 55000, 97000, 6000);
+		//        demo->addSceneToTimeline("freefall", 90000, 130000, 6000);
+		//        demo->addSceneToTimeline("lucifer", 120000, 190000, 4000);
+		//        demo->addSceneToTimeline("magellan", 180000, 243000, 7000);
+		//        demo->addSceneToTimeline("start", 243000, 296000, 7000);
 
-//        demo->addSceneToTimeline("kohina", 0, 275000, 666*666);
-//        demo->addSceneToTimeline("disco", 68000, 96000, 5000); //disko
+		//        demo->addSceneToTimeline("kohina", 0, 275000, 666*666);
+		//        demo->addSceneToTimeline("disco", 68000, 96000, 5000); //disko
 #else
 #endif
 
-        //init the demo and play
-        g_textures.uploadImages();
-        g_system.uploadMeshes();
-        g_shaders.loadShaders();
-        demo->initEffects();
+		//init the demo and play
+		g_textures.uploadImages();
+		g_system.uploadMeshes();
+		g_shaders.loadShaders();
+		demo->initEffects();
 
-        g_system.dumpState();
-        demo->start();
+		g_system.dumpState();
+		demo->start();
 
-        bool demorunning = true;
-        while (demorunning)
-        {
-            //process keyboard input and adjust demo accordingly
-            g_system.handleInput(demo);
-            //update the system (sync etc)
-            g_system.update();
+		bool demorunning = true;
+		while (demorunning)
+		{
+			//process keyboard input and adjust demo accordingly
+			g_system.handleInput(demo);
+			//update the system (sync etc)
+			g_system.update();
 
-            stringstream ss;
-            ss << "time = " << g_system.getTime() << " fps = " << g_system.getFPS();
-            g_system.setWindowTitle(ss.str());
+			stringstream ss;
+			ss << "time = " << g_system.getTime() << " fps = " << g_system.getFPS();
+			g_system.setWindowTitle(ss.str());
 
-//            g_system.setWindowTitle("BMT :: Demo");
+			//            g_system.setWindowTitle("BMT :: Demo");
 
-            demorunning =
-                g_system.pollEvents() &&
-                g_system.demoRunning();
+			demorunning =
+					g_system.pollEvents() &&
+					g_system.demoRunning();
 
-//            usleep(30000);
+			//            usleep(30000);
 
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            demo->update();
-            demo->draw();
+			demo->update();
+			demo->draw();
 
-            g_system.swapBuffers();
-        }
-        demo->stop();
-        g_textures.dumpUnusedImages();
-    }
+			g_system.swapBuffers();
+		}
+		demo->stop();
+		g_textures.dumpUnusedImages();
+	}
 
-    delete demo;
+	delete demo;
 
-//#ifdef _WIN32
-//    return msg.wParam;
-//#else
-    return 0;
-//#endif
+	//#ifdef _WIN32
+	//    return msg.wParam;
+	//#else
+	return 0;
+	//#endif
 }

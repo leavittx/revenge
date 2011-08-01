@@ -33,7 +33,7 @@ void BillboardSystem::draw()
 	//get modelview matrix
 	//multiply position with modelview matrix
 	//sort by z
-	//draw 
+	//draw
 
 
 

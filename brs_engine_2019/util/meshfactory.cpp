@@ -137,16 +137,16 @@ Mesh* MeshFactory::loadOBJ(string filename)
 				}
 				if (tokens[0] == "mtllib")
 				{
-					//matlib? 
+					//matlib?
 				}
 				if (tokens[0] == "usemtl")
 				{
-					//use materials? 
+					//use materials?
 				}
 			}
 		}
 		mesh->end();
-//		mesh->center();
+		//		mesh->center();
 		mesh->createVBO();
 		return mesh;
 	}

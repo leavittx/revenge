@@ -18,18 +18,18 @@ string PostProcess::getRenderTargetName(RenderTarget target)
 {
 	switch(target)
 	{
-		case RENDERTARGET_0:
-			return "postprocess_1024"; 
-			break;
-		case RENDERTARGET_1:
-			return "postprocess_1024_2"; 
-			break;
-		case RENDERTARGET_2:
-			return "postprocess_1024_3"; 
-			break;
-		case RENDERTARGET_3:
-			return "postprocess_1024_4"; 
-			break;
+	case RENDERTARGET_0:
+		return "postprocess_1024";
+		break;
+	case RENDERTARGET_1:
+		return "postprocess_1024_2";
+		break;
+	case RENDERTARGET_2:
+		return "postprocess_1024_3";
+		break;
+	case RENDERTARGET_3:
+		return "postprocess_1024_4";
+		break;
 	}
 	return ""; //make compiler happy
 }
@@ -56,7 +56,7 @@ void PostProcess::blur(RenderTarget source, int steps, float xstep, float ystep,
 	glColor3f(1,1,1);
 	glUtil::blit(getRenderTargetName(source), "postprocess_512");
 	glUtil::blit("postprocess_512", "postprocess_256");
-//	glUtil::blit("postprocess_256", "postprocess_128");
+	//	glUtil::blit("postprocess_256", "postprocess_128");
 	//at this point, postprocess_128 contains a downsampled version of the full image
 
 	//get shaders
@@ -73,7 +73,7 @@ void PostProcess::blur(RenderTarget source, int steps, float xstep, float ystep,
 		blurx.setUniform1f("blurscale", xstep * t);
 		blurx.setUniform1f("bluralpha", bluralpha);
 		blurx.setUniform1i("tex", 0);
-//		glUtil::blit("postprocess_128", "postprocess_128_2");
+		//		glUtil::blit("postprocess_128", "postprocess_128_2");
 		glUtil::blit("postprocess_256", "postprocess_256_2");
 
 		//and then back to the original one with the vertical blur
@@ -81,14 +81,14 @@ void PostProcess::blur(RenderTarget source, int steps, float xstep, float ystep,
 		blury.setUniform1f("blurscale", ystep * t);
 		blury.setUniform1f("bluralpha", bluralpha);
 		blury.setUniform1i("tex", 0);
-//		glUtil::blit("postprocess_128_2", "postprocess_128");
+		//		glUtil::blit("postprocess_128_2", "postprocess_128");
 		glUtil::blit("postprocess_256_2", "postprocess_256");
 	}
 
 	//enable blend so that the alpha channel will work if necessary
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE,GL_ONE);
-	glColor4f(1,1,1,1); 
+	glColor4f(1,1,1,1);
 
 	//combine the two textures
 	combine.bind();
@@ -96,7 +96,7 @@ void PostProcess::blur(RenderTarget source, int steps, float xstep, float ystep,
 	combine.setUniform1i("tex1", 1);
 	combine.setUniform1f("bluralpha", mixalpha);
 	g_textures.bindTexture(getRenderTargetName(source), GL_TEXTURE0_ARB);
-//	g_system.bindTexture("postprocess_128", GL_TEXTURE1_ARB);
+	//	g_system.bindTexture("postprocess_128", GL_TEXTURE1_ARB);
 	g_textures.bindTexture("postprocess_256", GL_TEXTURE1_ARB);
 
 	g_system.setOrthoMode(1, 1);
@@ -170,7 +170,7 @@ void PostProcess::glow(RenderTarget source, int steps, float xstep, float ystep,
 	//enable blend so that the alpha channel will work if necessary
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE,GL_ONE);
-	glColor4f(1,1,1,1); 
+	glColor4f(1,1,1,1);
 
 	g_system.setOrthoMode(1, 1);
 	if (combine)
@@ -230,7 +230,7 @@ void PostProcess::pixelize(RenderTarget source, Color4& color, int blendmode)
 	glUtil::blit("postprocess_512", "postprocess_256");
 	glUtil::blit("postprocess_256", "postprocess_128");
 	glUtil::blit("postprocess_128", "postprocess_64");
-//	glUtil::blit("postprocess_64", "postprocess_32");
+	//	glUtil::blit("postprocess_64", "postprocess_32");
 
 	//draw original on the screen
 	glUtil::fullscreenQuad(getRenderTargetName(source));

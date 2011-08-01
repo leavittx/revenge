@@ -47,7 +47,7 @@ Color3 Color3::operator -= (Color3 const &col)
 }
 Color3 Color3::operator * (float const &value)
 {
-    float tr, tg, tb;
+	float tr, tg, tb;
 	tr = r * value;
 	tg = g * value;
 	tb = b * value;
@@ -71,7 +71,7 @@ void Color3::operator = (Color3 const &col)
 
 Color3 Color3::normalize()
 {
-    float l = sqrtf(r*r + g*g + b*b);
+	float l = sqrtf(r*r + g*g + b*b);
 	if (l < 0.00001f && l > -0.00001f)
 		return Color3(0,0,0);
 
@@ -79,7 +79,7 @@ Color3 Color3::normalize()
 	g /= l;
 	b /= l;
 
-    return Color3(r, g, b);
+	return Color3(r, g, b);
 }
 
 void Color3::use()
@@ -101,6 +101,6 @@ void Color3::useWithAlphaModulated(float alpha, float modulation)
 /*
 Color3 Color3::randomColor()
 {
-	return Color3(Math::randFloat(), Math::randFloat(), Math::randFloat());
+ return Color3(Math::randFloat(), Math::randFloat(), Math::randFloat());
 }
 */

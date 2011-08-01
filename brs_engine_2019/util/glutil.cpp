@@ -17,7 +17,7 @@ void glUtil::drawImage(Vector3& screenPos, float xsize, float ysize)
 void glUtil::antiRotate(Vector3& x, Vector3& y, Vector3& z)
 {
 	float matrix[16];
-	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);	
+	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	
 	x = Vector3(matrix[0], matrix[4], matrix[8]);
 	y = Vector3(matrix[1], matrix[5], matrix[9]);
@@ -55,7 +55,7 @@ void glUtil::fullscreenQuad(Color4& color)
 
 void glUtil::fullscreenQuad(string name)
 {
-        g_textures.bindTexture(name, GL_TEXTURE0_ARB);
+	g_textures.bindTexture(name, GL_TEXTURE0_ARB);
 	g_system.setOrthoMode(1, 1);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0, 0);

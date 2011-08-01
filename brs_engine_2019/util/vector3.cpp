@@ -54,15 +54,15 @@ Vector3 Vector3::crossProduct(Vector3 &vect)
 Vector3 Vector3::minim(Vector3 &vect)
 {
 	return Vector3((vect.x < x ? vect.x : x),
-				  (vect.y < y ? vect.y : y),
-				  (vect.z < z ? vect.z : z));
+				   (vect.y < y ? vect.y : y),
+				   (vect.z < z ? vect.z : z));
 }
 
 Vector3 Vector3::maxim(Vector3 &vect)
 {
 	return Vector3((vect.x > x ? vect.x : x),
-				  (vect.y > y ? vect.y : y),
-				  (vect.z > z ? vect.z : z));
+				   (vect.y > y ? vect.y : y),
+				   (vect.z > z ? vect.z : z));
 }
 
 Vector3 Vector3::clamp(Vector3 &min, Vector3 &max)

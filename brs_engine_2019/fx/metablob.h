@@ -5,16 +5,16 @@
 class Metablob : public Scene
 {
 public:
-  Metablob() {}
- ~Metablob() {}
+	Metablob() {}
+	~Metablob() {}
 
-  void init();
-  void update();
-  void draw();
-  void release();
+	void init();
+	void update();
+	void draw();
+	void release();
 
 private:
-  bool m_debug;
+	bool m_debug;
 
-  float res[2];
+	float res[2];
 };

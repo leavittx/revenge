@@ -5,16 +5,16 @@
 class Heart : public Scene
 {
 public:
-  Heart() {}
- ~Heart() {}
+	Heart() {}
+	~Heart() {}
 
-  void init();
-  void update();
-  void draw();
-  void release();
+	void init();
+	void update();
+	void draw();
+	void release();
 
 private:
-  bool m_debug;
+	bool m_debug;
 
-  float res[2];
+	float res[2];
 };

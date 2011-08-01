@@ -16,11 +16,11 @@ void Light::setDefaults()
 	setAmbient(0.0f, 0.0f, 0.0f, 0.0f);
 	setAttenuation(1.0f, 0.0f, 0.0f); //?
 
-//wtf
+	//wtf
 	setPosition(Vector3(1.0f, 0.0f, 0.0f));
 	setSpotDirection(Vector3(0.0f, 0.0f, 0.0f));
-//        setPosition(1.0f, 0.0f, 0.0f);
-//        setSpotDirection(0.0f, 0.0f, 0.0f);
+	//        setPosition(1.0f, 0.0f, 0.0f);
+	//        setSpotDirection(0.0f, 0.0f, 0.0f);
 	setSpotExponent(0.0f);
 }
 

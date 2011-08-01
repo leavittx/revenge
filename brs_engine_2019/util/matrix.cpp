@@ -57,9 +57,9 @@ Matrix Matrix::makeIdentity()
 	data[2][1]=0;
 	data[2][2]=1;
 
-	return Matrix(data[0][0], data[0][1], data[0][2], 
-					data[1][0], data[1][1], data[1][2], 
-					data[2][0], data[2][1], data[2][2]); 
+	return Matrix(data[0][0], data[0][1], data[0][2],
+				  data[1][0], data[1][1], data[1][2],
+				  data[2][0], data[2][1], data[2][2]);
 }
 
 Matrix Matrix::makeRotation(const Vector3 &rot)
@@ -83,9 +83,9 @@ Matrix Matrix::makeRotation(const Vector3 &rot)
 	data[2][1]=cx*sy*sz-sx*cz;
 	data[2][2]=cx*cy;
 
-	return Matrix(data[0][0], data[0][1], data[0][2], 
-					data[1][0], data[1][1], data[1][2], 
-					data[2][0], data[2][1], data[2][2]); 
+	return Matrix(data[0][0], data[0][1], data[0][2],
+				  data[1][0], data[1][1], data[1][2],
+				  data[2][0], data[2][1], data[2][2]);
 
 }
 Matrix Matrix::makeRotation(float x, float y, float z)
@@ -109,9 +109,9 @@ Matrix Matrix::makeRotation(float x, float y, float z)
 	data[2][1]=cx*sy*sz-sx*cz;
 	data[2][2]=cx*cy;
 
-	return Matrix(data[0][0], data[0][1], data[0][2], 
-					data[1][0], data[1][1], data[1][2], 
-					data[2][0], data[2][1], data[2][2]); 
+	return Matrix(data[0][0], data[0][1], data[0][2],
+				  data[1][0], data[1][1], data[1][2],
+				  data[2][0], data[2][1], data[2][2]);
 }
 
 
@@ -123,21 +123,21 @@ Matrix Matrix::identity()
 }
 Matrix Matrix::rotation(float x, float y, float z)
 {
-    Matrix m;
-    m.makeRotation(x, y, z);
-    return m;
+	Matrix m;
+	m.makeRotation(x, y, z);
+	return m;
 }
 
 Matrix Matrix::rotation(const Vector3 &v)
 {
-    Matrix m;
-    m.makeRotation(v.x, v.y, v.z);
-    return m;
+	Matrix m;
+	m.makeRotation(v.x, v.y, v.z);
+	return m;
 }
 
 Matrix& Matrix::scale(float x, float y, float z)
 {
-  static Matrix m;
+	static Matrix m;
 
 	m.data[0][0]=x;
 	m.data[0][1]=0;
@@ -149,13 +149,13 @@ Matrix& Matrix::scale(float x, float y, float z)
 	m.data[2][1]=0;
 	m.data[2][2]=z;
 
-    return m;
+	return m;
 
 }
 
 Matrix Matrix::makeScale(float x, float y, float z)
 {
-    Matrix m;
+	Matrix m;
 
 	m.data[0][0]=x;
 	m.data[0][1]=0;
@@ -167,11 +167,11 @@ Matrix Matrix::makeScale(float x, float y, float z)
 	m.data[2][1]=0;
 	m.data[2][2]=z;
 
-    return m;
+	return m;
 }
 Matrix Matrix::makeScale(Vector3 const &sca)
 {
-    Matrix m;
+	Matrix m;
 
 	m.data[0][0]=sca.x;
 	m.data[0][1]=0;
@@ -183,7 +183,7 @@ Matrix Matrix::makeScale(Vector3 const &sca)
 	m.data[2][1]=0;
 	m.data[2][2]=sca.z;
 
-    return m;
+	return m;
 }
 
 Matrix Matrix::makeTranspose()
@@ -257,9 +257,9 @@ Matrix Matrix::operator += (Matrix const &mat)
 	data[2][0]+=mat.data[2][0];
 	data[2][1]+=mat.data[2][1];
 	data[2][2]+=mat.data[2][2];
-	return Matrix(data[0][0], data[0][1], data[0][2], 
-					data[1][0], data[1][1], data[1][2], 
-					data[2][0], data[2][1], data[2][2]); 
+	return Matrix(data[0][0], data[0][1], data[0][2],
+				  data[1][0], data[1][1], data[1][2],
+				  data[2][0], data[2][1], data[2][2]);
 }
 
 Matrix Matrix::operator - (Matrix const &mat)
@@ -290,9 +290,9 @@ Matrix Matrix::operator -= (Matrix const &mat)
 	data[2][0]-=mat.data[2][0];
 	data[2][1]-=mat.data[2][1];
 	data[2][2]-=mat.data[2][2];
-	return Matrix(data[0][0], data[0][1], data[0][2], 
-					data[1][0], data[1][1], data[1][2], 
-					data[2][0], data[2][1], data[2][2]); 
+	return Matrix(data[0][0], data[0][1], data[0][2],
+				  data[1][0], data[1][1], data[1][2],
+				  data[2][0], data[2][1], data[2][2]);
 }
 
 Matrix Matrix::operator * (Matrix const &mat)
@@ -370,7 +370,7 @@ Matrix Matrix::operator *= (float const &value)
 	data[2][0] *= value;
 	data[2][1] *= value;
 	data[2][2] *= value;
-	return Matrix(data[0][0], data[0][1], data[0][2], 
-					data[1][0], data[1][1], data[1][2], 
-					data[2][0], data[2][1], data[2][2]); 
+	return Matrix(data[0][0], data[0][1], data[0][2],
+				  data[1][0], data[1][1], data[1][2],
+				  data[2][0], data[2][1], data[2][2]);
 }

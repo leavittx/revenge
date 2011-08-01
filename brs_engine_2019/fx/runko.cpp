@@ -16,4 +16,3 @@ void Runko::draw()
 {
 	g_params.useNamespace("runko");
 }
-	

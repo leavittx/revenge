@@ -55,53 +55,53 @@ int Config::smDesktopWidth;
 
 Config::Config()
 {
-    frequency = 60;
-    resolution = 0;
-    bpp = 32;
-    gamma = 0;
-    fullscreen = false;
-    sound = false;
-    vsync = false;
-    runFlag = false;
-    anaglyphic = false;
-    alwaysOnTop = false;
-    nv7 = false;
-    fsaa = 2;
-    aspectratio = 0;
-    glasses = 0;
+	frequency = 60;
+	resolution = 0;
+	bpp = 32;
+	gamma = 0;
+	fullscreen = false;
+	sound = false;
+	vsync = false;
+	runFlag = false;
+	anaglyphic = false;
+	alwaysOnTop = false;
+	nv7 = false;
+	fsaa = 2;
+	aspectratio = 0;
+	glasses = 0;
 
-    smDesktopWidth = 0;
-    smDesktopHeight = 0;
+	smDesktopWidth = 0;
+	smDesktopHeight = 0;
 
-    DEVMODE currentDevMode;
-    currentDevMode.dmSize = sizeof(DEVMODE);
-    currentDevMode.dmDriverExtra = 0;
-    EnumDisplaySettingsEx(NULL, ENUM_CURRENT_SETTINGS, &currentDevMode, 0);
+	DEVMODE currentDevMode;
+	currentDevMode.dmSize = sizeof(DEVMODE);
+	currentDevMode.dmDriverExtra = 0;
+	EnumDisplaySettingsEx(NULL, ENUM_CURRENT_SETTINGS, &currentDevMode, 0);
 
-    smDesktopWidth  = currentDevMode.dmPelsWidth;
-    smDesktopHeight = currentDevMode.dmPelsHeight;
+	smDesktopWidth  = currentDevMode.dmPelsWidth;
+	smDesktopHeight = currentDevMode.dmPelsHeight;
 
-    int  nModeExist;
-    DEVMODE devMode;
-    int lastW=0, lastH=0;
-    for (int i=0; ;i++)
-    {
-        ZeroMemory(&devMode, sizeof(DEVMODE));
-        devMode.dmSize = sizeof(DEVMODE);
-        nModeExist = EnumDisplaySettings(NULL, i, &devMode);
+	int  nModeExist;
+	DEVMODE devMode;
+	int lastW=0, lastH=0;
+	for (int i=0; ;i++)
+	{
+		ZeroMemory(&devMode, sizeof(DEVMODE));
+		devMode.dmSize = sizeof(DEVMODE);
+		nModeExist = EnumDisplaySettings(NULL, i, &devMode);
 
 
-        if (nModeExist != 1)
-        {
-            break;
-        }
-        else if(devMode.dmBitsPerPel >= 32
-                && devMode.dmPelsWidth >= DEFAULT_MIN_X)
-            //&& devMode.dmPelsWidth <= DEFAULT_MAX_X)
-        {
-            devModes.push_back(devMode);
-        }
-    }
+		if (nModeExist != 1)
+		{
+			break;
+		}
+		else if(devMode.dmBitsPerPel >= 32
+				&& devMode.dmPelsWidth >= DEFAULT_MIN_X)
+			//&& devMode.dmPelsWidth <= DEFAULT_MAX_X)
+		{
+			devModes.push_back(devMode);
+		}
+	}
 }
 Config::~Config()
 {
@@ -113,87 +113,87 @@ Config::~Config()
 
 bool Config::run()
 {
-    if(DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_SETUPDLG), NULL, (DLGPROC)ConfigProc) == 1)
-    {
-        return false;
-    }
+	if(DialogBox(GetModuleHandle(0), MAKEINTRESOURCE(IDD_SETUPDLG), NULL, (DLGPROC)ConfigProc) == 1)
+	{
+		return false;
+	}
 
-    if(!getRunFlag())
-        return false;
+	if(!getRunFlag())
+		return false;
 
-    return true;
+	return true;
 }
 
 int Config::getScreenX()
 {
-    return devModes[resolution].dmPelsWidth;
+	return devModes[resolution].dmPelsWidth;
 }
 
 int Config::getScreenY()
 {
-    return devModes[resolution].dmPelsHeight;
+	return devModes[resolution].dmPelsHeight;
 }
 
 int Config::getBpp()
 {
-    return bpp;
+	return bpp;
 }
 
 int Config::getGamma()
 {
-    return gamma;
+	return gamma;
 }
 int Config::getFsaa() 
 {
-    return fsaa;
+	return fsaa;
 }
 bool Config::getFullscreen()
 {
-    return fullscreen;
+	return fullscreen;
 }
 
 bool Config::getSound()
 {
-    return sound;
+	return sound;
 }
 
 bool Config::getVsync()
 {
-    return vsync;
+	return vsync;
 }
 
 int Config::getFrequency()
 {
-    return devModes[resolution].dmDisplayFrequency;
+	return devModes[resolution].dmDisplayFrequency;
 }
 
 bool Config::getAnaglyphic()
 {
-    return anaglyphic;
+	return anaglyphic;
 }
 bool Config::getOnTop()
 {
-    return alwaysOnTop;
+	return alwaysOnTop;
 }
 bool Config::getRandomized()
 {
-    return randomized;
+	return randomized;
 }
 
 
 bool Config::getRunFlag()
 {
-    return runFlag;
+	return runFlag;
 }
 
 int Config::getAspectRatio()
 {
-    return aspectratio;
+	return aspectratio;
 }
 
 int Config::getGlasses()
 {
-    return glasses;
+	return glasses;
 }
 
 //-------------------------------------------------------
@@ -202,34 +202,34 @@ int Config::getGlasses()
 
 int Config::ConfigProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {	
-    switch(uMsg)
-    {
-    case WM_INITDIALOG:
-    {
-        InitCommonControls();
+	switch(uMsg)
+	{
+	case WM_INITDIALOG:
+	{
+		InitCommonControls();
 
-        RECT rect, dlgRect;
-        HWND dlg;
+		RECT rect, dlgRect;
+		HWND dlg;
 
-        // Center the dialog box
-        dlg = GetDesktopWindow();
-        if(dlg)
-        {
-            GetWindowRect(dlg, &rect);
-            GetWindowRect(hwnd, &dlgRect);
-            SetWindowPos(hwnd, HWND_TOPMOST, (rect.right/2) - ((dlgRect.right - dlgRect.left) / 2), (rect.bottom/2) - ((dlgRect.bottom - dlgRect.top) / 2), 0, 0, SWP_NOSIZE);
-        }
+		// Center the dialog box
+		dlg = GetDesktopWindow();
+		if(dlg)
+		{
+			GetWindowRect(dlg, &rect);
+			GetWindowRect(hwnd, &dlgRect);
+			SetWindowPos(hwnd, HWND_TOPMOST, (rect.right/2) - ((dlgRect.right - dlgRect.left) / 2), (rect.bottom/2) - ((dlgRect.bottom - dlgRect.top) / 2), 0, 0, SWP_NOSIZE);
+		}
 
-        HWND hwndList;
+		HWND hwndList;
 
-        hwndList = GetDlgItem(hwnd, IDC_ASPECTRATIO);
-        SendMessage(hwndList,CB_ADDSTRING,0,(LPARAM)(LPCSTR)"4:3");
-        SendMessage(hwndList,CB_ADDSTRING,1,(LPARAM)(LPCSTR)"16:10");
-        SendMessage(hwndList,CB_ADDSTRING,2,(LPARAM)(LPCSTR)"16:9");
-        SendMessage(hwndList,CB_SETCURSEL,0,0);
-        aspectratio = 0;
+		hwndList = GetDlgItem(hwnd, IDC_ASPECTRATIO);
+		SendMessage(hwndList,CB_ADDSTRING,0,(LPARAM)(LPCSTR)"4:3");
+		SendMessage(hwndList,CB_ADDSTRING,1,(LPARAM)(LPCSTR)"16:10");
+		SendMessage(hwndList,CB_ADDSTRING,2,(LPARAM)(LPCSTR)"16:9");
+		SendMessage(hwndList,CB_SETCURSEL,0,0);
+		aspectratio = 0;
 
-        /*
+		/*
    hwndList = GetDlgItem(hwnd, IDC_GLASSES);
    SendMessage(hwndList,CB_ADDSTRING,0,(LPARAM)(LPCSTR)"No 3D [not recommended]");
    SendMessage(hwndList,CB_ADDSTRING,1,(LPARAM)(LPCSTR)"Red   +  Cyan");
@@ -239,41 +239,41 @@ int Config::ConfigProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
    glasses = 1;
    */
 
-        // -- resolution
+		// -- resolution
 
-        hwndList = GetDlgItem(hwnd, IDC_RESOLUTION);
+		hwndList = GetDlgItem(hwnd, IDC_RESOLUTION);
 
-        std::vector<DEVMODE>::iterator it;
-        int i=0, z=0, d=0;
-        //for (it=devModes.begin(); it!=devModes.end(); it++)
-        it=devModes.begin();
-        while(it!=devModes.end())
-        {
-            char buf[100];
-            sprintf(buf, "%dx%d 32 bpp %d hz", (*it).dmPelsWidth,  (*it).dmPelsHeight, (*it).dmDisplayFrequency);
-            z = SendMessage(hwndList, CB_ADDSTRING, i, (LPARAM)(LPCSTR)buf);
+		std::vector<DEVMODE>::iterator it;
+		int i=0, z=0, d=0;
+		//for (it=devModes.begin(); it!=devModes.end(); it++)
+		it=devModes.begin();
+		while(it!=devModes.end())
+		{
+			char buf[100];
+			sprintf(buf, "%dx%d 32 bpp %d hz", (*it).dmPelsWidth,  (*it).dmPelsHeight, (*it).dmDisplayFrequency);
+			z = SendMessage(hwndList, CB_ADDSTRING, i, (LPARAM)(LPCSTR)buf);
 
-            if (RELEASE_BUILD)
-            {
-                if((*it).dmPelsWidth==smDesktopWidth  && (*it).dmPelsHeight==smDesktopHeight)
-                    d = z;
-            }
-            else
-            {
-                if((*it).dmPelsWidth==DEV_RESOLUTION_X && (*it).dmPelsHeight==DEV_RESOLUTION_Y)
-                    d = z;
-            }
+			if (RELEASE_BUILD)
+			{
+				if((*it).dmPelsWidth==smDesktopWidth  && (*it).dmPelsHeight==smDesktopHeight)
+					d = z;
+			}
+			else
+			{
+				if((*it).dmPelsWidth==DEV_RESOLUTION_X && (*it).dmPelsHeight==DEV_RESOLUTION_Y)
+					d = z;
+			}
 
-            it++;
-            i++;
-        }
+			it++;
+			i++;
+		}
 
 
-        SendMessage(hwndList, CB_SETCURSEL, d, 0);
-        resolution = d;
-        bpp = 32;
+		SendMessage(hwndList, CB_SETCURSEL, d, 0);
+		resolution = d;
+		bpp = 32;
 
-        /*
+		/*
    hwndList = GetDlgItem(hwnd, IDC_FSAA);
    SendMessage(hwndList,CB_ADDSTRING,0,(LPARAM)(LPCSTR)"0");
    SendMessage(hwndList,CB_ADDSTRING,2,(LPARAM)(LPCSTR)"2");
@@ -281,12 +281,12 @@ int Config::ConfigProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
    SendMessage(hwndList,CB_ADDSTRING,6,(LPARAM)(LPCSTR)"6");
    SendMessage(hwndList,CB_SETCURSEL,1,0); // LAST INDEX MUST BE ZERO
    */
-        fsaa = 4;
+		fsaa = 4;
 
 
 
-        // Initialize values
-        /*
+		// Initialize values
+		/*
    //SendDlgItemMessage(hwnd, IDC_FSAA, WM_SETTEXT, 0, (LPARAM)"No FSAA");
 
    SendMessage(GetDlgItem(hwnd, IDC_FSAA), CB_ADDSTRING, 0, (LPARAM)"No FSAA");
@@ -296,170 +296,170 @@ int Config::ConfigProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
    SendDlgItemMessage(hwnd, IDC_FSAA, CB_SETCURSEL, 1, 0);
 
    lResult = SendMessage(// returns LRESULT in lResult
-      (HWND) hWndControl,// handle to destination control
-      (UINT) WM_SETFONT,// message ID
-      (WPARAM) wParam,// = (WPARAM) () wParam;
-      (LPARAM) lParam// = (LPARAM) () lParam;
+	  (HWND) hWndControl,// handle to destination control
+	  (UINT) WM_SETFONT,// message ID
+	  (WPARAM) wParam,// = (WPARAM) () wParam;
+	  (LPARAM) lParam// = (LPARAM) () lParam;
    );
    */
 
-        // initialize nvidia box 7xxx box
-        /*
+		// initialize nvidia box 7xxx box
+		/*
    char *rs = (char *) glGetString(GL_RENDERER);
    MessageBox(0,0,rs,0);
    if(strstr(rs, "GeForce 7") != NULL)
    {
-    //SendDlgItemMessage(hwnd, IDC_NVIDIA7, BM_SETCHECK, wParam, 0);
+	//SendDlgItemMessage(hwnd, IDC_NVIDIA7, BM_SETCHECK, wParam, 0);
    }
    */
 
-        // Show the dialog
-        ShowWindow(hwnd, SW_SHOW);
-        SetActiveWindow(hwnd);
-        SetForegroundWindow(hwnd);
-        SetFocus(hwnd);
+		// Show the dialog
+		ShowWindow(hwnd, SW_SHOW);
+		SetActiveWindow(hwnd);
+		SetForegroundWindow(hwnd);
+		SetFocus(hwnd);
 
-        // Set icon
-        SendMessage(hwnd,WM_SETICON,ICON_BIG,(LPARAM)LoadIcon(GetModuleHandle(NULL),MAKEINTRESOURCE(IDI_ICON1)));
+		// Set icon
+		SendMessage(hwnd,WM_SETICON,ICON_BIG,(LPARAM)LoadIcon(GetModuleHandle(NULL),MAKEINTRESOURCE(IDI_ICON1)));
 
-        // Check default values
-        if (RELEASE_BUILD)
-        {
-            SendDlgItemMessage(hwnd, IDC_FULLSCREEN, BM_SETCHECK, wParam, 0);
-        }
-        //SendDlgItemMessage(hwnd, IDC_RANDOMIZE, BM_SETCHECK, wParam, 0);
-        SendDlgItemMessage(hwnd, IDC_SOUND, BM_SETCHECK, wParam, 0);
+		// Check default values
+		if (RELEASE_BUILD)
+		{
+			SendDlgItemMessage(hwnd, IDC_FULLSCREEN, BM_SETCHECK, wParam, 0);
+		}
+		//SendDlgItemMessage(hwnd, IDC_RANDOMIZE, BM_SETCHECK, wParam, 0);
+		SendDlgItemMessage(hwnd, IDC_SOUND, BM_SETCHECK, wParam, 0);
 
-        // Set ONTOP to disabled or enabled at startup
-        if(IsDlgButtonChecked(hwnd, IDC_FULLSCREEN)==BST_CHECKED)
-            EnableWindow(GetDlgItem(hwnd, IDC_ONTOP), FALSE);
-        else
-            EnableWindow(GetDlgItem(hwnd, IDC_ONTOP), TRUE);
+		// Set ONTOP to disabled or enabled at startup
+		if(IsDlgButtonChecked(hwnd, IDC_FULLSCREEN)==BST_CHECKED)
+			EnableWindow(GetDlgItem(hwnd, IDC_ONTOP), FALSE);
+		else
+			EnableWindow(GetDlgItem(hwnd, IDC_ONTOP), TRUE);
 
-    } break;
+	} break;
 
-    case WM_COMMAND:
-    {
-        if(IsDlgButtonChecked(hwnd, IDC_FULLSCREEN)==BST_CHECKED)
-            EnableWindow(GetDlgItem(hwnd, IDC_ONTOP), FALSE);
-        else
-            EnableWindow(GetDlgItem(hwnd, IDC_ONTOP), TRUE);
-
-
-        switch(LOWORD(wParam))
-        {
-
-        /*
-    case IDC_ASPECTRATIO:
-
-     if(HIWORD(wParam) == CBN_SELCHANGE)
-      aspectratio = SendMessage(GetDlgItem(hwnd, IDC_ASPECTRATIO), CB_GETCURSEL, 0, 0);
-     break;
+	case WM_COMMAND:
+	{
+		if(IsDlgButtonChecked(hwnd, IDC_FULLSCREEN)==BST_CHECKED)
+			EnableWindow(GetDlgItem(hwnd, IDC_ONTOP), FALSE);
+		else
+			EnableWindow(GetDlgItem(hwnd, IDC_ONTOP), TRUE);
 
 
-    case IDC_GLASSES:
-     if(HIWORD(wParam) == CBN_SELCHANGE)
-      glasses = SendMessage(GetDlgItem(hwnd, IDC_GLASSES), CB_GETCURSEL, 0, 0);
-     break;
+		switch(LOWORD(wParam))
+		{
 
-    case IDC_RESOLUTION:
+		/*
+	case IDC_ASPECTRATIO:
 
-     if(HIWORD(wParam) == CBN_SELCHANGE)
-     {
-      resolution = SendMessage(GetDlgItem(hwnd, IDC_RESOLUTION), CB_GETCURSEL, 0, 0);
+	 if(HIWORD(wParam) == CBN_SELCHANGE)
+	  aspectratio = SendMessage(GetDlgItem(hwnd, IDC_ASPECTRATIO), CB_GETCURSEL, 0, 0);
+	 break;
 
-     }
-     break;
 
-    case IDC_FSAA:
+	case IDC_GLASSES:
+	 if(HIWORD(wParam) == CBN_SELCHANGE)
+	  glasses = SendMessage(GetDlgItem(hwnd, IDC_GLASSES), CB_GETCURSEL, 0, 0);
+	 break;
 
-     if(HIWORD(wParam) == CBN_SELCHANGE)
-     {
-      fsaa = SendMessage(GetDlgItem(hwnd, IDC_FSAA), CB_GETCURSEL, 0, 0);
-     }
+	case IDC_RESOLUTION:
 
-     break;
-    */
-        case IDOK:
-        {
-            resolution = SendMessage(GetDlgItem(hwnd, IDC_RESOLUTION), CB_GETCURSEL, 0, 0);
-            aspectratio = SendMessage(GetDlgItem(hwnd, IDC_ASPECTRATIO), CB_GETCURSEL, 0, 0);
+	 if(HIWORD(wParam) == CBN_SELCHANGE)
+	 {
+	  resolution = SendMessage(GetDlgItem(hwnd, IDC_RESOLUTION), CB_GETCURSEL, 0, 0);
 
-            if(SendDlgItemMessage(hwnd, IDC_FULLSCREEN, BM_GETSTATE, 0, 0) == BST_CHECKED)
-            {
-                fullscreen = true;
-            }
+	 }
+	 break;
 
-            if(SendDlgItemMessage(hwnd, IDC_SOUND, BM_GETSTATE, 0, 0) == BST_CHECKED)
-            {
-                sound = true;
-            }
-            else
-            {
-                sound = false;
-            }
+	case IDC_FSAA:
 
-            if (SendDlgItemMessage(hwnd, IDC_RANDOMIZE, BM_GETSTATE, 0, 0) == BST_CHECKED)
-            {
-                randomized = true;
-            }
-            else
-            {
-                randomized = false;
-            }
-            /*
+	 if(HIWORD(wParam) == CBN_SELCHANGE)
+	 {
+	  fsaa = SendMessage(GetDlgItem(hwnd, IDC_FSAA), CB_GETCURSEL, 0, 0);
+	 }
 
-     if(SendDlgItemMessage(hwnd, IDC_VSYNC, BM_GETSTATE, 0, 0) == BST_CHECKED)
-     {
-      vsync = true;
-     }
-                    if(SendDlgItemMessage(hwnd, IDC_ANAGLYPHIC, BM_GETSTATE, 0, 0) == BST_CHECKED)
-     {
-      anaglyphic = true;
-     }
+	 break;
+	*/
+		case IDOK:
+		{
+			resolution = SendMessage(GetDlgItem(hwnd, IDC_RESOLUTION), CB_GETCURSEL, 0, 0);
+			aspectratio = SendMessage(GetDlgItem(hwnd, IDC_ASPECTRATIO), CB_GETCURSEL, 0, 0);
+
+			if(SendDlgItemMessage(hwnd, IDC_FULLSCREEN, BM_GETSTATE, 0, 0) == BST_CHECKED)
+			{
+				fullscreen = true;
+			}
+
+			if(SendDlgItemMessage(hwnd, IDC_SOUND, BM_GETSTATE, 0, 0) == BST_CHECKED)
+			{
+				sound = true;
+			}
+			else
+			{
+				sound = false;
+			}
+
+			if (SendDlgItemMessage(hwnd, IDC_RANDOMIZE, BM_GETSTATE, 0, 0) == BST_CHECKED)
+			{
+				randomized = true;
+			}
+			else
+			{
+				randomized = false;
+			}
+			/*
+
+	 if(SendDlgItemMessage(hwnd, IDC_VSYNC, BM_GETSTATE, 0, 0) == BST_CHECKED)
+	 {
+	  vsync = true;
+	 }
+					if(SendDlgItemMessage(hwnd, IDC_ANAGLYPHIC, BM_GETSTATE, 0, 0) == BST_CHECKED)
+	 {
+	  anaglyphic = true;
+	 }
 */
 
-            if(SendDlgItemMessage(hwnd, IDC_ONTOP, BM_GETSTATE, 0, 0) == BST_CHECKED)
-            {
-                alwaysOnTop = true;
-            }
-            /*
-     if(SendDlgItemMessage(hwnd, IDC_NVIDIA7, BM_GETSTATE, 0, 0) == BST_CHECKED)
-     {
-      nv7 = true;
-     }
+			if(SendDlgItemMessage(hwnd, IDC_ONTOP, BM_GETSTATE, 0, 0) == BST_CHECKED)
+			{
+				alwaysOnTop = true;
+			}
+			/*
+	 if(SendDlgItemMessage(hwnd, IDC_NVIDIA7, BM_GETSTATE, 0, 0) == BST_CHECKED)
+	 {
+	  nv7 = true;
+	 }
 */
-            //gamma = 0.4f;//SendDlgItemMessage(hwnd, IDC_GAMMA, TBM_GETPOS, 0, 0);
+			//gamma = 0.4f;//SendDlgItemMessage(hwnd, IDC_GAMMA, TBM_GETPOS, 0, 0);
 
-            Config::runFlag = true;
-            EndDialog(hwnd, 0);
-        } break;
+			Config::runFlag = true;
+			EndDialog(hwnd, 0);
+		} break;
 
-        case IDCANCEL:
-        {
-            Config::runFlag = false;
-            SendMessage(hwnd, WM_CLOSE, 0, 0);
-        } break;
+		case IDCANCEL:
+		{
+			Config::runFlag = false;
+			SendMessage(hwnd, WM_CLOSE, 0, 0);
+		} break;
 
-        } break;
+		} break;
 
-    } break;
+	} break;
 
-    case WM_DESTROY:
-    {
-        SendMessage(hwnd, WM_CLOSE, 0, 0);
-    } break;
+	case WM_DESTROY:
+	{
+		SendMessage(hwnd, WM_CLOSE, 0, 0);
+	} break;
 
-    case WM_CLOSE:
-    {
-        EndDialog(hwnd, 0);
-    }
-        break;
-    }
+	case WM_CLOSE:
+	{
+		EndDialog(hwnd, 0);
+	}
+		break;
+	}
 
 
 
-    return 0;
+	return 0;
 }
 
 #endif /* _WIN32 */

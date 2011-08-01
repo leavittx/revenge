@@ -48,7 +48,7 @@ void VBO::render()
 	m_hasTexture = true;
 	if (m_hasTexture)
 	{
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);		
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_texCoordBufferID);
 		glTexCoordPointer(2, GL_FLOAT, 0, (char *)0);		//texture coordinates
 	}
@@ -68,14 +68,14 @@ void VBO::render()
 		glDisableClientState(GL_NORMAL_ARRAY);
 	}
 
-//	glEnable(GL_TEXTURE_2D);
+	//	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	glDrawArrays(GL_TRIANGLES, 0, m_drawCount);
 
 	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);				
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);				
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 void VBO::create(Mesh *mesh)
@@ -110,9 +110,9 @@ void VBO::create(Mesh *mesh)
 			Vertex& v2 = vertices[f.b];
 			Vertex& v3 = vertices[f.c];
 
-			vertexBufferData[vertexOffset++] = v1.position; 
-			vertexBufferData[vertexOffset++] = v2.position; 
-			vertexBufferData[vertexOffset++] = v3.position; 
+			vertexBufferData[vertexOffset++] = v1.position;
+			vertexBufferData[vertexOffset++] = v2.position;
+			vertexBufferData[vertexOffset++] = v3.position;
 
 			normalBufferData[normalOffset++] = v1.normal;
 			normalBufferData[normalOffset++] = v2.normal;

@@ -51,11 +51,11 @@ void Texture::upload(Image &sourceImage, TextureParameters &params)
 	int height = sourceImage.getHeight();
 
 	if(((width == 1024 && height == 1024) ||
-	   (width == 512 && height == 512) || 
-	   (width == 256 && height == 256) || 
-	   (width == 128 && height == 128) || 
-	   (width == 64  && height == 64) ||
-	   (width == 32  && height == 32)) && !params.m_mipmap)
+		(width == 512 && height == 512) ||
+		(width == 256 && height == 256) ||
+		(width == 128 && height == 128) ||
+		(width == 64  && height == 64) ||
+		(width == 32  && height == 32)) && !params.m_mipmap)
 	{
 		int filter = params.m_linear ? GL_LINEAR : GL_NEAREST;
 		int wrap = GL_REPEAT;//params.m_repeat ? GL_REPEAT : GL_CLAMP_TO_EDGE;
@@ -74,7 +74,7 @@ void Texture::upload(Image &sourceImage, TextureParameters &params)
 		glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
-		gluBuild2DMipmaps(GL_TEXTURE_2D, 4, width, height, GL_RGBA, GL_UNSIGNED_BYTE, sourceImage.getData()); 
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 4, width, height, GL_RGBA, GL_UNSIGNED_BYTE, sourceImage.getData());
 	}
 	m_params = params;
 }

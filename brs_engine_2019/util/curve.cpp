@@ -7,6 +7,6 @@ Curve::Curve()
 
 Curve::~Curve()
 {
-	//virtual destructor
+ //virtual destructor
 }
 */

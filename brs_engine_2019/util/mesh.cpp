@@ -154,17 +154,17 @@ void Mesh::draw(DWORD flags)
 			Vertex& v2 = m_vertices[f.b];
 			Vertex& v3 = m_vertices[f.c];
 
-			if (texture) 
+			if (texture)
 				glTexCoord2fv((float *)&v1.texcoord);
 			glNormal3fv((float *)&v1.normal);
 			glVertex3fv((float *)&v1.position);
 
-			if (texture) 
+			if (texture)
 				glTexCoord2fv((float *)&v2.texcoord);
 			glNormal3fv((float *)&v2.normal);
 			glVertex3fv((float *)&v2.position);
 
-			if (texture) 
+			if (texture)
 				glTexCoord2fv((float *)&v3.texcoord);
 			glNormal3fv((float *)&v3.normal);
 			glVertex3fv((float *)&v3.position);
@@ -208,7 +208,7 @@ void Mesh::end()
 
 	for (it = m_buildFaces.begin(); it != m_buildFaces.end(); it++)
 	{
-		BuildFace &f = *it; 
+		BuildFace &f = *it;
 		int vertexCount = f.m_vertices.size(); //how many vertices there are in the face
 
 		//TODO: n > 3
@@ -326,17 +326,17 @@ void Mesh::center()
 	if (vertexCount <= 0)
 		return;
 
-        Vector3 center = Vector3(0, 0, 0);
+	Vector3 center = Vector3(0, 0, 0);
 
 #ifdef _MSC_VER
-        for each (Vertex v in m_vertices) {
+	for each (Vertex v in m_vertices) {
 #else
-//#if defined(__GXX_EXPERIMENTAL_CXX0X__)
-//        for (Vertex& v: m_vertices) {
-//#else
-        for (int i = 0; i < vertexCount; i++) {
-            Vertex& v = m_vertices[i];
-//#error
+	//#if defined(__GXX_EXPERIMENTAL_CXX0X__)
+	//        for (Vertex& v: m_vertices) {
+	//#else
+	for (int i = 0; i < vertexCount; i++) {
+		Vertex& v = m_vertices[i];
+		//#error
 #endif
 		center += v.position;
 	}

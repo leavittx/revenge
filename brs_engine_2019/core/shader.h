@@ -15,10 +15,10 @@ public:
 	void bind();
 
 	//parameter passing
-	bool setUniform1f(char* name, GLfloat v0);  
-	bool setUniform2f(char* name, GLfloat v0, GLfloat v1); 
-	bool setUniform3f(char* name, GLfloat v0, GLfloat v1, GLfloat v2); 
-	bool setUniform4f(char* name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3); 
+	bool setUniform1f(char* name, GLfloat v0);
+	bool setUniform2f(char* name, GLfloat v0, GLfloat v1);
+	bool setUniform3f(char* name, GLfloat v0, GLfloat v1, GLfloat v2);
+	bool setUniform4f(char* name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
 	
 	bool setUniform1i(string name, GLint v0);
 	bool setUniform2i(char* name, GLint v0, GLint v1);
@@ -33,7 +33,7 @@ public:
 	bool setUniform2iv(char* name, GLsizei count, GLint *value);
 	bool setUniform3iv(char* name, GLsizei count, GLint *value);
 	bool setUniform4iv(char* name, GLsizei count, GLint *value);
-	   
+
 	bool setUniformMatrix2fv(char* name, GLsizei count, GLboolean transpose, GLfloat *value);
 	bool setUniformMatrix3fv(char* name, GLsizei count, GLboolean transpose, GLfloat *value);
 	bool setUniformMatrix4fv(char* name, GLsizei count, GLboolean transpose, GLfloat *value);
@@ -42,7 +42,7 @@ public:
 	bool setVertexAttrib1f(char* name, GLfloat v0);
 	bool setVertexAttrib2f(char* name, GLfloat v0, GLfloat v1);
 	bool setVertexAttrib3f(char* name, GLfloat v0, GLfloat v1, GLfloat v2);
-	bool setVertexAttrib4f(char* name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);	
+	bool setVertexAttrib4f(char* name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
 
 	const GLhandleARB getVS() const { return m_vertex; }
 	const GLhandleARB getFS() const { return m_fragment; }

@@ -1,7 +1,7 @@
 #pragma once
 
 /*
-	Base class for different curves 
+ Base class for different curves
 
 */
 

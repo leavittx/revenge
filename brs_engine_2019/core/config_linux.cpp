@@ -49,17 +49,17 @@ int Config::smDesktopWidth;
 //TODO: place this in some common place
 string exec(char* cmd)
 {
-    FILE* pipe = popen(cmd, "r");
-    if (!pipe) return "ERROR";
-    char buffer[128];
-    string result = "";
-    while (!feof(pipe))
-    {
-        if (fgets(buffer, 128, pipe) != NULL)
-                result += buffer;
-    }
-    pclose(pipe);
-    return result;
+	FILE* pipe = popen(cmd, "r");
+	if (!pipe) return "ERROR";
+	char buffer[128];
+	string result = "";
+	while (!feof(pipe))
+	{
+		if (fgets(buffer, 128, pipe) != NULL)
+			result += buffer;
+	}
+	pclose(pipe);
+	return result;
 }
 
 
@@ -69,53 +69,53 @@ string exec(char* cmd)
 
 Config::Config()
 {
-    frequency = 60;
-    resolution = 0;
-    bpp = 32;
-    gamma = 0;
-    fullscreen = false;
-    sound = false;
-    vsync = false;
-    runFlag = false;
-    anaglyphic = false;
-    alwaysOnTop = false;
-    nv7 = false;
-    fsaa = 2;
-    aspectratio = 0;
-    glasses = 0;
+	frequency = 60;
+	resolution = 0;
+	bpp = 32;
+	gamma = 0;
+	fullscreen = false;
+	sound = false;
+	vsync = false;
+	runFlag = false;
+	anaglyphic = false;
+	alwaysOnTop = false;
+	nv7 = false;
+	fsaa = 2;
+	aspectratio = 0;
+	glasses = 0;
 
-    smDesktopWidth = 0;
-    smDesktopHeight = 0;
+	smDesktopWidth = 0;
+	smDesktopHeight = 0;
 
-    XRRScreenConfiguration* screenInfo;
-    SizeID currentSize;
-    Rotation currentRotation;
-    short currentRate;
+	XRRScreenConfiguration* screenInfo;
+	SizeID currentSize;
+	Rotation currentRotation;
+	short currentRate;
 
-    int sizesCount;
-    XRRScreenSize* sizes;
+	int sizesCount;
+	XRRScreenSize* sizes;
 
-    Display* display = XOpenDisplay(0);
+	Display* display = XOpenDisplay(0);
 
-    screenInfo = XRRGetScreenInfo(display, DefaultRootWindow(display));
-    sizes = XRRConfigSizes(screenInfo, &sizesCount);
-    currentSize = XRRConfigCurrentConfiguration(screenInfo, &currentRotation);
-    currentRate = XRRConfigCurrentRate(screenInfo);
+	screenInfo = XRRGetScreenInfo(display, DefaultRootWindow(display));
+	sizes = XRRConfigSizes(screenInfo, &sizesCount);
+	currentSize = XRRConfigCurrentConfiguration(screenInfo, &currentRotation);
+	currentRate = XRRConfigCurrentRate(screenInfo);
 
-    for (int i = 0; i < sizesCount; i++)
-    {
-            Settings current;
-            current.Width = sizes[i].width;
-            current.Height = sizes[i].height;
-            current.RefreshRate = currentRate; // TODO
-            current.BitsPerPixel = 32; // TODO
-            settings.push_back(current);
-//            sizeIDs[j] = i;
-            //rateIDs[j] = r;
-            //bppIDs[j] = b;
-    }
+	for (int i = 0; i < sizesCount; i++)
+	{
+		Settings current;
+		current.Width = sizes[i].width;
+		current.Height = sizes[i].height;
+		current.RefreshRate = currentRate; // TODO
+		current.BitsPerPixel = 32; // TODO
+		settings.push_back(current);
+		//            sizeIDs[j] = i;
+		//rateIDs[j] = r;
+		//bppIDs[j] = b;
+	}
 
-    XCloseDisplay(display);
+	XCloseDisplay(display);
 }
 
 Config::~Config()
@@ -128,175 +128,175 @@ Config::~Config()
 
 bool Config::run()
 {
-    //TODO: check if zenity avaliable on system
-    ofstream configScript;
-    configScript.open("demo_config.sh");
-    configScript <<
-        "#!/bin/bash"                                               << endl <<
-        "if"                                                        << endl <<
-        "zenity \\"                                                 << endl <<
-        "   --display=:0.0 \\"                                      << endl <<
-        "   --window-icon=data/icon.bmp \\"                         << endl <<
-        "   --title=\"BMT :: Demo\" \\"                             << endl <<
-//        "   --hide-header \\"                                       << endl <<
-        "   --hide-column=1 \\"                                     << endl <<
-        "   --width="  << 80                        << " \\"        << endl <<
-        //TODO: figure out the way how to determine
-        //      actual zenity list entry height
-        //      (24 or 27 or whatever pixels)
-        "   --height=" << 128 + 27 * settings.size() << " \\"       << endl <<
-        "   --list \\"                                              << endl <<
-        "   --text=\"Screen Resolution\" \\"                        << endl <<
-//        "   --column=ID --column=Resolution \\"                     << endl;
-        "   --column=ID --column=Width --column=Height \\"          << endl;
+	//TODO: check if zenity avaliable on system
+	ofstream configScript;
+	configScript.open("demo_config.sh");
+	configScript <<
+					"#!/bin/bash"                                               << endl <<
+					"if"                                                        << endl <<
+					"zenity \\"                                                 << endl <<
+					"   --display=:0.0 \\"                                      << endl <<
+					"   --window-icon=data/icon.bmp \\"                         << endl <<
+					"   --title=\"BMT :: Demo\" \\"                             << endl <<
+					//"   --hide-header \\"                                       << endl <<
+					"   --hide-column=1 \\"                                     << endl <<
+					"   --width="  << 80                        << " \\"        << endl <<
+					//TODO: figure out the way how to determine
+					//      actual zenity list entry height
+					//      (24 or 27 or whatever pixels)
+					"   --height=" << 128 + 27 * settings.size() << " \\"       << endl <<
+					"   --list \\"                                              << endl <<
+					"   --text=\"Screen Resolution\" \\"                        << endl <<
+					//"   --column=ID --column=Resolution \\"                     << endl;
+					"   --column=ID --column=Width --column=Height \\"          << endl;
 
-    for (int i = 0; i < settings.size(); i++)
-    {
-        configScript << "   "                       <<
-                        i                  << " "   <<
-                        settings[i].Width  << " "   <<
-                        settings[i].Height << " \\" << endl;
-    }
+	for (int i = 0; i < settings.size(); i++)
+	{
+		configScript << "   "                       <<
+						i                  << " "   <<
+						settings[i].Width  << " "   <<
+						settings[i].Height << " \\" << endl;
+	}
 
-    configScript <<
-        "; then "                                                   << endl <<
-        "   echo DEMO_START"                                        << endl <<
-        "   if"                                                     << endl <<
-        "   zenity \\"                                              << endl <<
-        "       --display=:0.0 \\"                                  << endl <<
-        "       --window-icon=data/icon.bmp \\"                     << endl <<
-        "       --title=\"BMT :: Demo\" \\"                         << endl <<
-        "       --question --text=\"Run Mode\" \\"                  << endl <<
-        "       --ok-label=Fullscreen --cancel-label=Windowed \\"   << endl <<
-        "   ; then "                                                << endl <<
-        "       echo DEMO_FULLSCREEN_ENABLE"                        << endl <<
-        "   fi"                                                     << endl <<
-        "   if"                                                     << endl <<
-        "   zenity \\"                                              << endl <<
-        "       --display=:0.0 \\"                                  << endl <<
-        "       --window-icon=data/icon.bmp \\"                     << endl <<
-        "       --title=\"BMT :: Demo\" \\"                         << endl <<
-        "       --question --text=\"Enable Sound?\" \\"             << endl <<
-        "       --ok-label=Yes! --cancel-label=No \\"               << endl <<
-        "   ; then "                                                << endl <<
-        "       echo DEMO_SOUND_ENABLE"                             << endl <<
-        "   fi"                                                     << endl <<
-        "else"                                                      << endl <<
-        "   echo DEMO_EXIT"                                         << endl <<
-        "fi"                                                        << endl;
+	configScript <<
+					"; then "                                                   << endl <<
+					"   echo DEMO_START"                                        << endl <<
+					"   if"                                                     << endl <<
+					"   zenity \\"                                              << endl <<
+					"       --display=:0.0 \\"                                  << endl <<
+					"       --window-icon=data/icon.bmp \\"                     << endl <<
+					"       --title=\"BMT :: Demo\" \\"                         << endl <<
+					"       --question --text=\"Run Mode\" \\"                  << endl <<
+					"       --ok-label=Fullscreen --cancel-label=Windowed \\"   << endl <<
+					"   ; then "                                                << endl <<
+					"       echo DEMO_FULLSCREEN_ENABLE"                        << endl <<
+					"   fi"                                                     << endl <<
+					"   if"                                                     << endl <<
+					"   zenity \\"                                              << endl <<
+					"       --display=:0.0 \\"                                  << endl <<
+					"       --window-icon=data/icon.bmp \\"                     << endl <<
+					"       --title=\"BMT :: Demo\" \\"                         << endl <<
+					"       --question --text=\"Enable Sound?\" \\"             << endl <<
+					"       --ok-label=Yes! --cancel-label=No \\"               << endl <<
+					"   ; then "                                                << endl <<
+					"       echo DEMO_SOUND_ENABLE"                             << endl <<
+					"   fi"                                                     << endl <<
+					"else"                                                      << endl <<
+					"   echo DEMO_EXIT"                                         << endl <<
+					"fi"                                                        << endl;
 
-    string configOutput = exec("/bin/bash ./demo_config.sh");
+	string configOutput = exec("/bin/bash ./demo_config.sh");
 
-    //TODO: uncomment this for release version
-//    exec("/bin/rm ./demo_config.sh");
+	//TODO: uncomment this for release version
+	//    exec("/bin/rm ./demo_config.sh");
 
-    resolution = atoi(configOutput.c_str());
+	resolution = atoi(configOutput.c_str());
 
-    if (configOutput.find("DEMO_EXIT") == configOutput.npos)
-    {
-        //when user doesn't select any resolution from list,
-        //zenity prints no id, so this will be first
-        if (configOutput.find("DEMO_START") == 0)
-            resolution = 0;
-        Config::runFlag = true;
-    }
-    else
-    {
-        Config::runFlag = false;
-    }
+	if (configOutput.find("DEMO_EXIT") == configOutput.npos)
+	{
+		//when user doesn't select any resolution from list,
+		//zenity prints no id, so this will be first
+		if (configOutput.find("DEMO_START") == 0)
+			resolution = 0;
+		Config::runFlag = true;
+	}
+	else
+	{
+		Config::runFlag = false;
+	}
 
 
-    if (configOutput.find("DEMO_FULLSCREEN_ENABLE") == configOutput.npos)
-        fullscreen = false;
-    else
-        fullscreen = true;
+	if (configOutput.find("DEMO_FULLSCREEN_ENABLE") == configOutput.npos)
+		fullscreen = false;
+	else
+		fullscreen = true;
 
-    if (configOutput.find("DEMO_SOUND_ENABLE") == configOutput.npos)
-         sound = false;
-    else
-        sound = true;
+	if (configOutput.find("DEMO_SOUND_ENABLE") == configOutput.npos)
+		sound = false;
+	else
+		sound = true;
 
-    if (!getRunFlag())
-        return false;
+	if (!getRunFlag())
+		return false;
 
-    return true;
+	return true;
 }
 
 int Config::getScreenX()
 {
-    return settings[resolution].Width;
+	return settings[resolution].Width;
 }
 
 int Config::getScreenY()
 {
-    return settings[resolution].Height;
+	return settings[resolution].Height;
 }
 
 int Config::getBpp()
 {
-    return bpp;
+	return bpp;
 }
 
 int Config::getGamma()
 {
-    return gamma;
+	return gamma;
 }
 int Config::getFsaa()
 {
-    return fsaa;
+	return fsaa;
 }
 bool Config::getFullscreen()
 {
-    return fullscreen;
+	return fullscreen;
 }
 
 bool Config::getSound()
 {
-    return sound;
+	return sound;
 }
 
 bool Config::getVsync()
 {
-    return vsync;
+	return vsync;
 }
 
 int Config::getFrequency()
 {
 #ifdef _WIN32
-    return devModes[resolution].dmDisplayFrequency;
+	return devModes[resolution].dmDisplayFrequency;
 #else
-    //TODO
-    return 0;
+	//TODO
+	return 0;
 #endif
 }
 
 bool Config::getAnaglyphic()
 {
-    return anaglyphic;
+	return anaglyphic;
 }
 
 bool Config::getOnTop()
 {
-    return alwaysOnTop;
+	return alwaysOnTop;
 }
 
 bool Config::getRandomized()
 {
-    return randomized;
+	return randomized;
 }
 
 
 bool Config::getRunFlag()
 {
-    return runFlag;
+	return runFlag;
 }
 
 int Config::getAspectRatio()
 {
-    return aspectratio;
+	return aspectratio;
 }
 
 int Config::getGlasses()
 {
-    return glasses;
+	return glasses;
 }
