@@ -9,6 +9,7 @@
 //#include "fx/start.h"
 
 #include "fx/tree.h"
+#include "fx/heart.h"
 
 System g_system;
 ShaderHandler g_shaders;
@@ -47,7 +48,8 @@ Demo *g_demo; //bad, mmkay
         //demo->addScene("background11", new Background11());
         //demo->addScene("disco", new Disco());
 
-        demo->addScene("treescene", new TreeScene());
+//        demo->addScene("treescene", new TreeScene());
+        demo->addScene("heart", new Heart());
 
 /*
   demo->addScene("start", new Start());
@@ -62,6 +64,10 @@ Demo *g_demo; //bad, mmkay
 
         //construct the timeline
         demo->addSceneToTimeline("treescene", 0, 240500, 666);
+        /*
+        // "Heart" shader =)
+        demo->addSceneToTimeline("heart", 0, 20000, 666);
+        */
         /*
   demo->addSceneToTimeline("start", 0, 55000, 5000);
   demo->addSceneToTimeline("underground", 55000, 97000, 6000);
@@ -100,7 +106,7 @@ Demo *g_demo; //bad, mmkay
             demorunning =
                 g_system.pollEvents() &&
                 g_system.demoRunning();
-
+            usleep(30000);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             demo->update();

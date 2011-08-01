@@ -51,7 +51,8 @@ HEADERS += \
     util/bezier.h \
     util/catmullrom.h \
     core/GLUS/GL/glus.h \
-    core/keyboard.h
+    core/keyboard.h \
+    fx/heart.h
 
 SOURCES += \
     main.cpp \
@@ -106,7 +107,8 @@ SOURCES += \
     util/catmullrom.cpp \
     util/skybox.cpp \
     core/opengl_linux.cpp \
-    core/config_linux.cpp
+    core/config_linux.cpp \
+    fx/heart.cpp
 
 OTHER_FILES += \
     notes.txt \
@@ -134,7 +136,9 @@ OTHER_FILES += \
     data/shaders/lighting_directionaltexture.vs \
     data/shaders/lighting_directionaltexture.fs \
     data/shaders/lighting_directionalflat.vs \
-    data/shaders/lighting_directionalflat.fs
+    data/shaders/lighting_directionalflat.fs \
+    data/shaders/heart.fs \
+    data/shaders/heart.vs
 
 QMAKE_CXXFLAGS += \
     -std=c++0x \
@@ -159,8 +163,3 @@ INCLUDEPATH += \
     /usr/include/c++/4.6.1/ \
     /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/
 #    /usr/lib/gcc/x86_64-pc-linux-gnu/4.6.1/include/g++-v4/
-
-
-
-
-
