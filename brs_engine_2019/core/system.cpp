@@ -273,8 +273,7 @@ void System::swapBuffers()
 #ifdef _WIN32
     SwapBuffers(m_glWindow->getHDC());
 #else
-    glXSwapBuffers(m_glWindow->getDisplay(),
-                   m_glWindow->getWindow());
+    glXSwapBuffers(m_glWindow->getDisplay(), m_glWindow->getWindow());
 #endif
 }
 

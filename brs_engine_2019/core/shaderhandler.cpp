@@ -32,15 +32,19 @@ Shader& ShaderHandler::getShader(string name)
 
 void ShaderHandler::loadShaders()
 {
+    //.vert & .frag is more commonly used extension for shaders than .vs & .fs
 #ifdef _WIN32
-    string shaderPath = "data\\shaders\\";
-    string vertexDirectory = "data\\shaders\\*.vs";
-    string fragmentDirectory = "data\\shaders\\*.fs";
+//    string shaderPath = "data\\shaders\\";
+    string vertexDirectory = "data\\shaders\\*.vert";
+    string fragmentDirectory = "data\\shaders\\*.frag";
 #else
     string shaderPath = "data/shaders/";
-    string vertexDirectory = "data/shaders/*.vs";
-    string fragmentDirectory = "data/shaders/*.fs";
+    string vertexDirectory = "data/shaders/*.vert";
+    string fragmentDirectory = "data/shaders/*.frag";
 #endif
+
+    const int baselen = shaderPath.length();
+    const int extlen = string(".vert").length();
 
     vector<string> vertexFilenames;
     vector<string> fragmentFilenames;
@@ -63,9 +67,9 @@ void ShaderHandler::loadShaders()
         //#else
         for (int i = 0; i < vertexFilenames.size(); i++) {
             string& s = vertexFilenames[i];
-            //#error
+        //#error
 #endif
-            cout << "   vertex shader filename: " << s << endl;
+//            g_debug << "   vertex shader filename: " << s << endl;
         }
 #ifdef _MSC_VER
         for each (string s in fragmentFilenames) {
@@ -75,10 +79,9 @@ void ShaderHandler::loadShaders()
         //#else
         for (int i = 0; i < fragmentFilenames.size(); i++) {
             string& s = fragmentFilenames[i];
-            //#error
-            //#error
+        //#error
 #endif
-            cout << "   fragment shader filename: " << s << endl;
+//            g_debug << "   fragment shader filename: " << s << endl;
         }
         return;
     }
@@ -92,10 +95,10 @@ void ShaderHandler::loadShaders()
     for (int i = 0; i < shaderCount; i++)
     {
 #ifdef _WIN32
-        string shadername = vertexFilenames[i].substr(0, vertexFilenames[i].length()-3);
+        string shadername = vertexFilenames[i].substr(0, vertexFilenames[i].length()-extlen);
 #else
         //TODO: this is too dirty
-        string shadername = vertexFilenames[i].substr(13, vertexFilenames[i].length()-13-3);
+        string shadername = vertexFilenames[i].substr(baselen, vertexFilenames[i].length()-baselen-extlen);
 #endif
         g_debug << "shader #" << i << ": " << shadername << endl;
 

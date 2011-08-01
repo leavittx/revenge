@@ -5,8 +5,8 @@
 class Runko : public Scene
 {
 public:
-	Runko() {};
-	~Runko() {};
+        Runko() {}
+        ~Runko() {}
 	
 	void init();
 	void update();

@@ -2,11 +2,11 @@
 
 #include "../globals.h"
 
-class Heart : public Scene
+class Metablob : public Scene
 {
 public:
-  Heart() {}
- ~Heart() {}
+  Metablob() {}
+ ~Metablob() {}
 
   void init();
   void update();

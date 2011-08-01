@@ -7,9 +7,10 @@
 
 //scenes
 //#include "fx/start.h"
+//#include "fx/tree.h"
 
-#include "fx/tree.h"
 #include "fx/heart.h"
+#include "fx/metablob.h"
 
 System g_system;
 ShaderHandler g_shaders;
@@ -37,6 +38,7 @@ Demo *g_demo; //bad, mmkay
     if (demo->initOk())
     {
         g_demo = demo;
+
         //initalize managers
         g_textures.init();
         g_shaders.init();
@@ -45,42 +47,42 @@ Demo *g_demo; //bad, mmkay
         g_system.loadMeshes();
 
         //initialize the actual demo
-        //demo->addScene("background11", new Background11());
-        //demo->addScene("disco", new Disco());
+        demo->addScene("heart", new Heart());
+        demo->addScene("metablob", new Metablob());
 
 //        demo->addScene("treescene", new TreeScene());
-        demo->addScene("heart", new Heart());
 
-/*
-  demo->addScene("start", new Start());
-  demo->addScene("underground", new Underground());
-  demo->addScene("freefall", new Freefall());
-  demo->addScene("lucifer", new Lucifer());
-  demo->addScene("magellan", new Magellan());
-  demo->addScene("kohina", new Kohina());
-*/
+//        demo->addScene("start", new Start());
+//        demo->addScene("underground", new Underground());
+//        demo->addScene("freefall", new Freefall());
+//        demo->addScene("lucifer", new Lucifer());
+//        demo->addScene("magellan", new Magellan());
+//        demo->addScene("kohina", new Kohina());
+
+//        demo->addScene("background11", new Background11());
+//        demo->addScene("disco", new Disco());
+
 #define COMPLETE_DEMO
 #ifdef COMPLETE_DEMO
 
         //construct the timeline
-        demo->addSceneToTimeline("treescene", 0, 240500, 666);
-        /*
-        // "Heart" shader =)
-        demo->addSceneToTimeline("heart", 0, 20000, 666);
-        */
-        /*
-  demo->addSceneToTimeline("start", 0, 55000, 5000);
-  demo->addSceneToTimeline("underground", 55000, 97000, 6000);
-  demo->addSceneToTimeline("freefall", 90000, 130000, 6000);
-  demo->addSceneToTimeline("lucifer", 120000, 190000, 4000);
-  demo->addSceneToTimeline("magellan", 180000, 243000, 7000);
-  demo->addSceneToTimeline("start", 243000, 296000, 7000);
+        demo->addSceneToTimeline("heart",         0,   7000, 1000); // "Heart" shader =)
+        demo->addSceneToTimeline("metablob",   7000,  15000, 2000);
 
-*/
-        //		demo->addSceneToTimeline("kohina", 0, 275000, 666*666);
-        //		demo->addSceneToTimeline("disco", 68000, 96000, 5000); //disko
+//        demo->addSceneToTimeline("treescene", 0, 240500, 666);
+
+//        demo->addSceneToTimeline("start", 0, 55000, 5000);
+//        demo->addSceneToTimeline("underground", 55000, 97000, 6000);
+//        demo->addSceneToTimeline("freefall", 90000, 130000, 6000);
+//        demo->addSceneToTimeline("lucifer", 120000, 190000, 4000);
+//        demo->addSceneToTimeline("magellan", 180000, 243000, 7000);
+//        demo->addSceneToTimeline("start", 243000, 296000, 7000);
+
+//        demo->addSceneToTimeline("kohina", 0, 275000, 666*666);
+//        demo->addSceneToTimeline("disco", 68000, 96000, 5000); //disko
 #else
 #endif
+
         //init the demo and play
         g_textures.uploadImages();
         g_system.uploadMeshes();
@@ -101,12 +103,15 @@ Demo *g_demo; //bad, mmkay
             stringstream ss;
             ss << "time = " << g_system.getTime() << " fps = " << g_system.getFPS();
             g_system.setWindowTitle(ss.str());
-//            g_system.setWindowTitle("Brainstorm :: 2019");
+
+//            g_system.setWindowTitle("BMT :: Demo");
 
             demorunning =
                 g_system.pollEvents() &&
                 g_system.demoRunning();
-            usleep(30000);
+
+//            usleep(30000);
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             demo->update();

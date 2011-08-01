@@ -52,7 +52,8 @@ HEADERS += \
     util/catmullrom.h \
     core/GLUS/GL/glus.h \
     core/keyboard.h \
-    fx/heart.h
+    fx/heart.h \
+    fx/metablob.h
 
 SOURCES += \
     main.cpp \
@@ -108,37 +109,40 @@ SOURCES += \
     util/skybox.cpp \
     core/opengl_linux.cpp \
     core/config_linux.cpp \
-    fx/heart.cpp
+    fx/heart.cpp \
+    fx/metablob.cpp
 
 OTHER_FILES += \
     notes.txt \
     data/script.txt \
-    data/shaders/postprocess_glowcombine.vs \
-    data/shaders/postprocess_glowcombine.fs \
-    data/shaders/postprocess_exp.vs \
-    data/shaders/postprocess_exp.fs \
-    data/shaders/postprocess_blury.vs \
-    data/shaders/postprocess_blury.fs \
-    data/shaders/postprocess_blurx.vs \
-    data/shaders/postprocess_blurx.fs \
-    data/shaders/postprocess_blurcombine.vs \
-    data/shaders/postprocess_blurcombine.fs \
-    data/shaders/lighting_spotlighttexture.vs \
-    data/shaders/lighting_spotlighttexture.fs \
-    data/shaders/lighting_spotlightflat.vs \
-    data/shaders/lighting_spotlightflat.fs \
-    data/shaders/lighting_singlecolor.vs \
-    data/shaders/lighting_singlecolor.fs \
-    data/shaders/lighting_pointtexture.vs \
-    data/shaders/lighting_pointtexture.fs \
-    data/shaders/lighting_pointflat.vs \
-    data/shaders/lighting_pointflat.fs \
-    data/shaders/lighting_directionaltexture.vs \
-    data/shaders/lighting_directionaltexture.fs \
-    data/shaders/lighting_directionalflat.vs \
-    data/shaders/lighting_directionalflat.fs \
-    data/shaders/heart.fs \
-    data/shaders/heart.vs
+    data/shaders/lighting_directionalflat.frag \
+    data/shaders/lighting_directionalflat.vert \
+    data/shaders/lighting_directionaltexture.frag \
+    data/shaders/lighting_directionaltexture.vert \
+    data/shaders/lighting_pointflat.frag \
+    data/shaders/lighting_pointflat.vert \
+    data/shaders/lighting_pointtexture.frag \
+    data/shaders/lighting_pointtexture.vert \
+    data/shaders/lighting_singlecolor.frag \
+    data/shaders/lighting_singlecolor.vert \
+    data/shaders/lighting_spotlightflat.frag \
+    data/shaders/lighting_spotlightflat.vert \
+    data/shaders/lighting_spotlighttexture.frag \
+    data/shaders/lighting_spotlighttexture.vert \
+    data/shaders/postprocess_blurcombine.frag \
+    data/shaders/postprocess_blurcombine.vert \
+    data/shaders/postprocess_blurx.frag \
+    data/shaders/postprocess_blurx.vert \
+    data/shaders/postprocess_blury.frag \
+    data/shaders/postprocess_blury.vert \
+    data/shaders/postprocess_exp.frag \
+    data/shaders/postprocess_exp.vert \
+    data/shaders/postprocess_glowcombine.frag \
+    data/shaders/postprocess_glowcombine.vert \
+    data/shaders/heart.frag \
+    data/shaders/heart.vert \
+    data/shaders/metablob.frag \
+    data/shaders/metablob.vert
 
 QMAKE_CXXFLAGS += \
     -std=c++0x \
@@ -163,3 +167,59 @@ INCLUDEPATH += \
     /usr/include/c++/4.6.1/ \
     /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/
 #    /usr/lib/gcc/x86_64-pc-linux-gnu/4.6.1/include/g++-v4/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

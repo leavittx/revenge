@@ -59,7 +59,7 @@ GLWindow::GLWindow()
     sbpp = 8;
     fullscreen = false;
     active = true;
-    title = "Brainstorm :: 2019";
+    title = "BMT :: Demo";
     className = "DemoGL";
     onTop = false;
     fsaa = 0; //TODO - 2 ???
