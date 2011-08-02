@@ -49,6 +49,7 @@ int main(void) {
 		//initialize the actual demo
 		demo->addScene("heart", new Heart());
 		demo->addScene("metablob", new Metablob());
+		demo->addScene("brain", new Brain());
 
 		//        demo->addScene("treescene", new TreeScene());
 
@@ -66,8 +67,9 @@ int main(void) {
 #ifdef COMPLETE_DEMO
 
 		//construct the timeline
-		demo->addSceneToTimeline("heart",         0,   7000, 1000); // "Heart" shader =)
-		demo->addSceneToTimeline("metablob",   7000, 138000, 2000);
+		demo->addSceneToTimeline("heart",                0,   7000, 1000); // "Heart" shader =)
+		demo->addSceneToTimeline("metablob",   7000,  14000, 2000);
+		demo->addSceneToTimeline("brain",        14000, 138000, 3000);
 
 		//        demo->addSceneToTimeline("treescene", 0, 240500, 666);
 
