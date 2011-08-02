@@ -53,7 +53,8 @@ HEADERS += \
     core/GLUS/GL/glus.h \
     core/keyboard.h \
     fx/heart.h \
-    fx/metablob.h
+    fx/metablob.h \
+    fx/brain.h
 
 SOURCES += \
     main.cpp \
@@ -110,7 +111,8 @@ SOURCES += \
     core/opengl_linux.cpp \
     core/config_linux.cpp \
     fx/heart.cpp \
-    fx/metablob.cpp
+    fx/metablob.cpp \
+    fx/brain.cpp
 
 OTHER_FILES += \
     notes.txt \
@@ -167,6 +169,10 @@ INCLUDEPATH += \
     /usr/include/c++/4.6.1/ \
     /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/
 #    /usr/lib/gcc/x86_64-pc-linux-gnu/4.6.1/include/g++-v4/
+
+
+
+
 
 
 
