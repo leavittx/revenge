@@ -9,7 +9,8 @@ config
 {
 	sound = true;
 	debug = true;
-	song = hansee-its_alive.mp3
+;        song = hansee-its_alive.mp3
+        song = dig.mp3
 	endtime = 2000
 }
 

@@ -6,11 +6,11 @@
 #include "globals.h"
 
 //scenes
-//#include "fx/start.h"
-//#include "fx/tree.h"
-
 #include "fx/heart.h"
 #include "fx/metablob.h"
+
+//#include "fx/start.h"
+//#include "fx/tree.h"
 
 System g_system;
 ShaderHandler g_shaders;
@@ -67,7 +67,7 @@ int main(void) {
 
 		//construct the timeline
 		demo->addSceneToTimeline("heart",         0,   7000, 1000); // "Heart" shader =)
-		demo->addSceneToTimeline("metablob",   7000,  15000, 2000);
+		demo->addSceneToTimeline("metablob",   7000, 138000, 2000);
 
 		//        demo->addSceneToTimeline("treescene", 0, 240500, 666);
 
@@ -110,7 +110,7 @@ int main(void) {
 					g_system.pollEvents() &&
 					g_system.demoRunning();
 
-			//            usleep(30000);
+//			usleep(30000);
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
