@@ -4,7 +4,7 @@
 
 class Brain : public Scene
 {
-public:
+public:  
   Brain() {};
   ~Brain() {};
 
@@ -14,6 +14,9 @@ public:
   void release();
 
 private:
+  MeshFactory mf;
+  Mesh* brain;
+  float a;
   bool m_debug;
 
 };
