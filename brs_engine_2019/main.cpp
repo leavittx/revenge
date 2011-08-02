@@ -9,6 +9,7 @@
 //#include "fx/start.h"
 
 #include "fx/tree.h"
+#include "fx/brain.h"
 
 System g_system;
 ShaderHandler g_shaders;
@@ -47,7 +48,8 @@ Demo *g_demo; //bad, mmkay
         //demo->addScene("background11", new Background11());
         //demo->addScene("disco", new Disco());
 
-        demo->addScene("treescene", new TreeScene());
+        //demo->addScene("treescene", new TreeScene());
+        demo->addScene("brain", new Brain());
 
 /*
   demo->addScene("start", new Start());
@@ -61,7 +63,8 @@ Demo *g_demo; //bad, mmkay
 #ifdef COMPLETE_DEMO
 
         //construct the timeline
-        demo->addSceneToTimeline("treescene", 0, 240500, 666);
+        //demo->addSceneToTimeline("treescene", 0, 240500, 666);
+        demo->addSceneToTimeline("brain", 0, 240500, 666);
         /*
   demo->addSceneToTimeline("start", 0, 55000, 5000);
   demo->addSceneToTimeline("underground", 55000, 97000, 6000);
