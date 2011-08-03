@@ -22,6 +22,7 @@ Image* ImageFactory::createEmpty(int width, int height)
 	memset(image->m_data, 0, image->m_width*image->m_height*sizeof(unsigned int));
 	return image;
 }
+
 Image* ImageFactory::loadJPG(string filename)
 {
 	unsigned int imageID;
@@ -42,27 +43,38 @@ Image* ImageFactory::loadJPG(string filename)
 	image->m_width = ilGetInteger(IL_IMAGE_WIDTH);
 	image->m_height = ilGetInteger(IL_IMAGE_HEIGHT);
 	image->m_data = new unsigned int[image->m_width*image->m_height];
+	memset(image->m_data, 0, sizeof(unsigned int) * image->m_width * image->m_height);
 
-	ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+	//TODO: test on win32, common code for all platforms
+#ifdef _WIN32
+	ilConvertImage(IL_RGB, IL_BYTE);
 	ptr = ilGetData();
 	dest = (unsigned char *)image->m_data;
-	// Fix x64 texture bug
-	for(int i = 0; i < image->m_width*image->m_height; i++, dest++)
+
+	for(int i = 0; i < image->m_width*image->m_height; i++)
 	{
-		/*
 		*dest++ = *ptr++;
 		*dest++ = *ptr++;
 		*dest++ = *ptr++;
 		*dest++ = 255; //TODO: adjustable alpha channel?
-	   */
-		for(int j = 0, bytes = 16; j < 4; j++, bytes -= 8)
-			*dest |= (*ptr++ << bytes); // Correctly pack bytes into uint!
+	}
+#else
+	ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+	ptr = ilGetData();
+	dest = (unsigned char *)image->m_data;
+
+	for(int i = 0; i < image->m_width*image->m_height; i++, dest++)
+	{
+		//TODO: test that too
+		for (int bytes = 0; bytes <= 16; bytes += 8)
+			*dest |= (*ptr++ << bytes);
 		*dest |= 0xFF; //TODO: adjustable alpha channel?
 	}
+#endif
+
 	ilDeleteImages(1, &imageID);
 
 	return image;
-
 }
 
 Image* ImageFactory::loadPNG(string filename)
@@ -84,26 +96,33 @@ Image* ImageFactory::loadPNG(string filename)
 	image->m_width = ilGetInteger(IL_IMAGE_WIDTH);
 	image->m_height = ilGetInteger(IL_IMAGE_HEIGHT);
 	image->m_data = new unsigned int[image->m_width*image->m_height];
-	// Clear data buffer
-	memset(image->m_data, 0,
-		   sizeof(unsigned int) * image->m_width * image->m_height);
-	// Here is our "texture" bag: source == NULL(on x64):)
-	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+	memset(image->m_data, 0, sizeof(unsigned int) * image->m_width * image->m_height);
+
+	//TODO: test on win32, common code for all platforms
+#ifdef _WIN32
+	ilConvertImage(IL_RGBA, IL_BYTE);
+	unsigned int *source = (unsigned int *)ilGetData();
+	unsigned int *dest = image->m_data;
+	for(int i = 0; i < image->m_width*image->m_height; i++)
+	{
+		*dest++ = *source++;
+	}
+#else
+	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE); // IL_BYTE -> source == NULL (on x64)
 	unsigned char *source = (unsigned char *)ilGetData();
 	unsigned int *dest = image->m_data;
-	for(int i = 0; i < image->m_width*image->m_height; i++, dest++)
+	for (int i = 0; i < image->m_width * image->m_height; i++, dest++)
 	{
-		// Here our bug:
-		//*dest++ = *source++;
-		/* Little "black magic" trick(^__^)
-		*dest |= (*source++ << 24); // R
-		*dest |= (*source++ << 16); // G
-		*dest |= (*source++ << 8); // B
-		*dest |= (*source++); // A
-	  */
-		for(int j = 0, bytes = 24; j < 4; j++, bytes -= 8)
-			*dest |= (*source++ << bytes); // Correctly pack bytes into uint!
+//		*dest |= (*source++);       // R
+//		*dest |= (*source++ << 8);  // G
+//		*dest |= (*source++ << 16); // B
+//		*dest |= (*source++ << 24); // A
+		for (int bytes = 0; bytes <= 24; bytes += 8)
+		{
+			*dest |= (*source++ << bytes);
+		}
 	}
+#endif
 
 	/*
  ptr = ilGetData();
