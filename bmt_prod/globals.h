@@ -80,7 +80,6 @@ using namespace std;
 #include "core/system.h"
 
 #include "core/keyboard.h"
-#include <unistd.h>
 
 extern Debugger g_debug;
 extern class Parameters g_params;

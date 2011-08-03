@@ -34,7 +34,7 @@ void ShaderHandler::loadShaders()
 {
 	//.vert & .frag is more commonly used extension for shaders than .vs & .fs
 #ifdef _WIN32
-	//    string shaderPath = "data\\shaders\\";
+	string shaderPath = "data\\shaders\\";
 	string vertexDirectory = "data\\shaders\\*.vert";
 	string fragmentDirectory = "data\\shaders\\*.frag";
 #else
@@ -43,8 +43,8 @@ void ShaderHandler::loadShaders()
 	string fragmentDirectory = "data/shaders/*.frag";
 #endif
 
-	const int baselen = shaderPath.length();
-	const int extlen = string(".vert").length();
+	const int baselen = shaderPath.length();     //base directory name length
+	const int extlen = string(".vert").length(); //shader extension length
 
 	vector<string> vertexFilenames;
 	vector<string> fragmentFilenames;
@@ -62,26 +62,26 @@ void ShaderHandler::loadShaders()
 #ifdef _MSC_VER
 		for each (string s in vertexFilenames) {
 #else
-		//#if defined(__GXX_EXPERIMENTAL_CXX0X__)
-		//                for (string& s: vertexFilenames) {
-		//#else
-		for (int i = 0; i < vertexFilenames.size(); i++) {
+//		#if defined(__GXX_EXPERIMENTAL_CXX0X__)
+//		                for (string& s: vertexFilenames) {
+//		#else
+		for (int i = 0; i < (int)vertexFilenames.size(); i++) {
 			string& s = vertexFilenames[i];
-			//#error
+//		#endif
 #endif
-			//            g_debug << "   vertex shader filename: " << s << endl;
+			g_debug << "   vertex shader filename: " << s << endl;
 		}
 #ifdef _MSC_VER
 		for each (string s in fragmentFilenames) {
 #else
-		//#if defined(__GXX_EXPERIMENTAL_CXX0X__)
-		//                for (string& s: fragmentFilenames) {
-		//#else
-		for (int i = 0; i < fragmentFilenames.size(); i++) {
+//		#if defined(__GXX_EXPERIMENTAL_CXX0X__)
+//		                for (string& s: fragmentFilenames) {
+//		#else
+		for (int i = 0; i < (int)fragmentFilenames.size(); i++) {
 			string& s = fragmentFilenames[i];
-			//#error
+//		#endif
 #endif
-			//            g_debug << "   fragment shader filename: " << s << endl;
+			g_debug << "   fragment shader filename: " << s << endl;
 		}
 		return;
 	}
