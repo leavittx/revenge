@@ -10,7 +10,6 @@
 #include "fx/metablob.h"
 #include "fx/brain.h"
 
-//#include "fx/start.h"
 //#include "fx/tree.h"
 
 System g_system;
@@ -52,20 +51,14 @@ int main(void) {
 		demo->addScene("metablob", new Metablob());
 		demo->addScene("brain", new Brain());
 
-//		demo->addScene("treescene", new TreeScene());
-
-#define COMPLETE_DEMO
-#ifdef COMPLETE_DEMO
+//					demo->addScene("treescene", new TreeScene());
 
 		//construct the timeline
 		demo->addSceneToTimeline("heart",         0,   7000, 1000);
 		demo->addSceneToTimeline("metablob",   7000,  14000, 2000);
 		demo->addSceneToTimeline("brain",     14000, 138000, 3000);
 
-//		demo->addSceneToTimeline("treescene", 0, 240500, 666);
-
-#else
-#endif
+//					demo->addSceneToTimeline("treescene", 0, 240500, 666);
 
 		//init the demo and play
 		g_textures.uploadImages();
@@ -87,8 +80,7 @@ int main(void) {
 			stringstream ss;
 			ss << "time = " << g_system.getTime() << " fps = " << g_system.getFPS();
 			g_system.setWindowTitle(ss.str());
-
-			//g_system.setWindowTitle("BMT :: Demo");
+//			g_system.setWindowTitle("BMT :: Demo");
 
 			demorunning =
 					g_system.pollEvents() &&
@@ -106,10 +98,5 @@ int main(void) {
 	}
 
 	delete demo;
-
-	//#ifdef _WIN32
-	//    return msg.wParam;
-	//#else
 	return 0;
-	//#endif
 }
