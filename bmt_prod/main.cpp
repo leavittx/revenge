@@ -52,37 +52,18 @@ int main(void) {
 		demo->addScene("metablob", new Metablob());
 		demo->addScene("brain", new Brain());
 
-		//        demo->addScene("treescene", new TreeScene());
-
-		//        demo->addScene("start", new Start());
-		//        demo->addScene("underground", new Underground());
-		//        demo->addScene("freefall", new Freefall());
-		//        demo->addScene("lucifer", new Lucifer());
-		//        demo->addScene("magellan", new Magellan());
-		//        demo->addScene("kohina", new Kohina());
-
-		//        demo->addScene("background11", new Background11());
-		//        demo->addScene("disco", new Disco());
+//		demo->addScene("treescene", new TreeScene());
 
 #define COMPLETE_DEMO
 #ifdef COMPLETE_DEMO
 
 		//construct the timeline
-		demo->addSceneToTimeline("heart",         0,   7000, 1000); // "Heart" shader =)
+		demo->addSceneToTimeline("heart",         0,   7000, 1000);
 		demo->addSceneToTimeline("metablob",   7000,  14000, 2000);
 		demo->addSceneToTimeline("brain",     14000, 138000, 3000);
 
-		//        demo->addSceneToTimeline("treescene", 0, 240500, 666);
+//		demo->addSceneToTimeline("treescene", 0, 240500, 666);
 
-		//        demo->addSceneToTimeline("start", 0, 55000, 5000);
-		//        demo->addSceneToTimeline("underground", 55000, 97000, 6000);
-		//        demo->addSceneToTimeline("freefall", 90000, 130000, 6000);
-		//        demo->addSceneToTimeline("lucifer", 120000, 190000, 4000);
-		//        demo->addSceneToTimeline("magellan", 180000, 243000, 7000);
-		//        demo->addSceneToTimeline("start", 243000, 296000, 7000);
-
-		//        demo->addSceneToTimeline("kohina", 0, 275000, 666*666);
-		//        demo->addSceneToTimeline("disco", 68000, 96000, 5000); //disko
 #else
 #endif
 
@@ -107,13 +88,11 @@ int main(void) {
 			ss << "time = " << g_system.getTime() << " fps = " << g_system.getFPS();
 			g_system.setWindowTitle(ss.str());
 
-			//            g_system.setWindowTitle("BMT :: Demo");
+			//g_system.setWindowTitle("BMT :: Demo");
 
 			demorunning =
 					g_system.pollEvents() &&
 					g_system.demoRunning();
-
-//			usleep(30000);
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
