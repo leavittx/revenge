@@ -140,22 +140,35 @@ bool Config::run()
 					"   --title=\"BMT :: Demo\" \\"                             << endl <<
 					//"   --hide-header \\"                                       << endl <<
 					"   --hide-column=1 \\"                                     << endl <<
-					"   --width="  << 80                        << " \\"        << endl <<
+					"   --width="  << 300                         << " \\"       << endl <<
 					//TODO: figure out the way how to determine
 					//      actual zenity list entry height
 					//      (24 or 27 or whatever pixels)
-					"   --height=" << 128 + 27 * settings.size() << " \\"       << endl <<
+					"   --height=" << 160 + 27 * settings.size() << " \\"       << endl <<
 					"   --list \\"                                              << endl <<
 					"   --text=\"Screen Resolution\" \\"                        << endl <<
 					//"   --column=ID --column=Resolution \\"                     << endl;
-					"   --column=ID --column=Width --column=Height \\"          << endl;
+					"   --column=ID --column=Width --column=Height \\"          << endl <<
+					"   --column=Aspect \\"										<< endl;
 
-	for (int i = 0; i < settings.size(); i++)
+	for (int i = 0; i < (int)settings.size(); i++)
 	{
 		configScript << "   "                       <<
 						i                  << " "   <<
 						settings[i].Width  << " "   <<
-						settings[i].Height << " \\" << endl;
+						settings[i].Height << " ";//" \\" << endl;
+
+		double aspectRatio = (double)settings[i].Width / settings[i].Height;
+		if (aspectRatio      == (double)4/3)
+			configScript << "4:3 \\"     << endl;
+		else if (aspectRatio == (double)5/4)
+			configScript << "5:4 \\"   << endl;
+		else if (aspectRatio == (double)16/10)
+			configScript << "16:10 \\"   << endl;
+		else if (aspectRatio == (double)16/9)
+			configScript << "16:9 \\"    << endl;
+		else
+			configScript << "unknown \\" << endl;
 	}
 
 	configScript <<
