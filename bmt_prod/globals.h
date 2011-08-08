@@ -31,6 +31,20 @@ typedef unsigned int UNINT32;
 
 using namespace std;
 
+/**
+  Global stuff
+  */
+
+extern class Debugger g_debug;
+extern class Parameters g_params;
+extern class PostProcess g_postprocess;
+extern class System g_system;
+extern class Demo *g_demo;
+
+/**
+  Engine headers
+  */
+
 #include "util/stringutils.h"
 #include "util/vector3.h"
 #include "util/color3.h"
@@ -81,8 +95,4 @@ using namespace std;
 
 #include "core/keyboard.h"
 
-extern Debugger g_debug;
-extern class Parameters g_params;
-extern class PostProcess g_postprocess;
-extern class System g_system;
-extern class Demo *g_demo;
+#include "core/fonthandler.h"

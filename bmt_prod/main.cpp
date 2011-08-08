@@ -15,6 +15,7 @@
 System g_system;
 ShaderHandler g_shaders;
 TextureHandler g_textures;
+FontHandler g_fonts;
 Parameters g_params;
 PostProcess g_postprocess;
 
@@ -45,6 +46,7 @@ int main(void) {
 
 		g_textures.loadImages();
 		g_system.loadMeshes();
+		g_fonts.loadFonts();
 
 		//initialize the actual demo
 		demo->addScene("heart", new Heart());

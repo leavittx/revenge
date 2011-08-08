@@ -54,7 +54,8 @@ HEADERS += \
     core/keyboard.h \
     fx/heart.h \
     fx/metablob.h \
-    fx/brain.h
+    fx/brain.h \
+    core/fonthandler.h
 
 SOURCES += \
     main.cpp \
@@ -112,7 +113,8 @@ SOURCES += \
     core/config_linux.cpp \
     fx/heart.cpp \
     fx/metablob.cpp \
-    fx/brain.cpp
+    fx/brain.cpp \
+    core/fonthandler.cpp
 
 OTHER_FILES += \
     notes.txt \
@@ -162,13 +164,22 @@ LIBS += \
     -lXrandr \
     -lGLEW -lGLU -lGL \
     -lIL -lILU -lILUT \
-    -lfmodex
+    -lfmodex \
+    -lftgl \
+    -lfreetype
 
 INCLUDEPATH += \
     /usr/include/ \
     /usr/include/c++/4.6.1/ \
-    /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/
+    /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/ \
+    /usr/include/freetype2
 #    /usr/lib/gcc/x86_64-pc-linux-gnu/4.6.1/include/g++-v4/
+
+
+
+
+
+
 
 
 
