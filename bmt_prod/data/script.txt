@@ -10,7 +10,8 @@ config
 	sound = true;
 	debug = true;
 ;        song = hansee-its_alive.mp3
-        song = dig.mp3
+;        song = dig.mp3
+        song = Dig(v0.9).mp3
 	endtime = 2000
 }
 
