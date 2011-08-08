@@ -18,5 +18,4 @@ private:
 	Mesh* brain;
 	float a;
 	bool m_debug;
-
 };
