@@ -6,12 +6,12 @@ void main(void)
 {
     //the centre point for each blob
     vec2 move1;
-    time *= 0.001;
-    move1.x = cos(time)*0.4;
-    move1.y = sin(time*1.5)*0.4;
+    float ctime = time * 0.001;
+    move1.x = cos(ctime)*0.4;
+    move1.y = sin(ctime*1.5)*0.4;
     vec2 move2;
-    move2.x = cos(time*2.0)*0.4;
-    move2.y = sin(time*3.0)*0.4;
+    move2.x = cos(ctime*2.0)*0.4;
+    move2.y = sin(ctime*3.0)*0.4;
 
     //screen coordinates
     vec2 p = -1.0 + 2.0 * gl_FragCoord.xy / resolution.xy;
@@ -26,5 +26,5 @@ void main(void)
     float col = pow(metaball,8.0);
 
     //set the output color
-    gl_FragColor = vec4(sin(10*time),cos(10*time),col,1.0);
+    gl_FragColor = vec4(sin(10.0*ctime),cos(10.0*ctime),col,1.0);
 }
