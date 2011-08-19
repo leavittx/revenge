@@ -165,7 +165,8 @@ bool Config::run()
 			configScript << "5:4 \\"   << endl;
 		else if (aspectRatio == (double)16/10)
 			configScript << "16:10 \\"   << endl;
-		else if (aspectRatio == (double)16/9)
+		else if (aspectRatio == (double)16/9 ||
+		         aspectRatio == (double)1366/768)
 			configScript << "16:9 \\"    << endl;
 		else
 			configScript << "unknown \\" << endl;
