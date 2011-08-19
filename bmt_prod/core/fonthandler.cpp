@@ -203,7 +203,8 @@ template <class FontType>
 	if (m_fonts.find(name) != m_fonts.end())
 	{
 		for (int i = 0; i < (int)(m_fonts[name].size()); i++)
-			if (typeid (FontType) == typeid (m_fonts[name][i]))
+//			if (typeid (FontType) == typeid (m_fonts[name][i]))
+			if (dynamic_cast<FontType*>(m_fonts[name][i]))
 				return *((FontType *)m_fonts[name][i]);
 	}
 
