@@ -18,6 +18,7 @@ TextureHandler g_textures;
 FontHandler g_fonts;
 Parameters g_params;
 PostProcess g_postprocess;
+PitchDetector g_pitch;
 
 Demo *g_demo; //bad, mmkay
 
@@ -49,16 +50,17 @@ int main(void) {
 		g_fonts.loadFonts();
 
 		//initialize the actual demo
-		demo->addScene("heart", new Heart());
+		demo->addScene("heart",    new Heart());
 		demo->addScene("metablob", new Metablob());
-		demo->addScene("brain", new Brain());
+		demo->addScene("brain",    new Brain());
 
 //					demo->addScene("treescene", new TreeScene());
 
 		//construct the timeline
-		demo->addSceneToTimeline("heart",         0,   7000, 1000);
-		demo->addSceneToTimeline("metablob",   7000,  14000, 2000);
-		demo->addSceneToTimeline("brain",     14000, 260000, 3000);
+//		demo->addSceneToTimeline("heart",         0,   7000, 1000);
+//		demo->addSceneToTimeline("metablob",   7000,  14000, 2000);
+//		demo->addSceneToTimeline("brain",     14000, 260000, 3000);
+		demo->addSceneToTimeline("metablob",      0, 260000, 2000);
 
 //					demo->addSceneToTimeline("treescene", 0, 240500, 666);
 
@@ -78,6 +80,11 @@ int main(void) {
 			g_system.handleInput(demo);
 			//update the system (sync etc)
 			g_system.update();
+			//update fft data
+			g_pitch.update();
+
+//			if (g_system.getTime() > 5000)
+//				g_pitch.match();
 
 			stringstream ss;
 			ss << "time = " << g_system.getTime() << " fps = " << g_system.getFPS();

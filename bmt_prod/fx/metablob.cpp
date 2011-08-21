@@ -24,10 +24,33 @@ void Metablob::draw()
 	g_params.useNamespace("metablob");
 	Color4 col(1, 1, 1, 1);
 
+//	static float oldwave = 0;
+
+//	float fft[512];
+//	g_system.getWaveData(fft, 512);
+//	float wave = 0;
+//	for (int i = 0; i < 512; i++)
+//	{
+//		wave += fft[i];
+//	}
+	float wave = g_system.getSpectrumSum();
+
+//	if (fabs(oldwave - wave) > 0.1)
+//	{
+//		g_debug << "wave = " << wave << endl;
+//	}
+//	oldwave = wave;
+
+	if (!g_pitch.matchHiBassBeat())
+	{
+		wave = PIf / 2;
+	}
+
 	Shader &heart = g_shaders.getShader("metablob");
 	heart.bind();
 	heart.setUniform1f("time", g_system.getTime());
 	heart.setUniform2fv("resolution", 1, res);
+	heart.setUniform1f("wave", wave);
 	glUtil::fullscreenQuad(col);
 }
 

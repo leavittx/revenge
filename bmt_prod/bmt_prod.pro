@@ -55,7 +55,8 @@ HEADERS += \
     fx/heart.h \
     fx/metablob.h \
     fx/brain.h \
-    core/fonthandler.h
+    core/fonthandler.h \
+    core/pitchdetector.h
 
 SOURCES += \
     main.cpp \
@@ -86,7 +87,6 @@ SOURCES += \
     core/texturehandler.cpp \
     core/texture.cpp \
     core/system.cpp \
-    core/sound.cpp \
     core/shaderhandler.cpp \
     core/scene.cpp \
     core/postprocess.cpp \
@@ -114,7 +114,12 @@ SOURCES += \
     fx/heart.cpp \
     fx/metablob.cpp \
     fx/brain.cpp \
+<<<<<<< HEAD
     core/fonthandler.cpp
+=======
+    core/pitchdetector.cpp \
+    core/sound.cpp
+>>>>>>> master
 
 OTHER_FILES += \
     notes.txt \
@@ -172,7 +177,11 @@ INCLUDEPATH += \
     /usr/include/ \
     /usr/include/c++/4.6.1/ \
     /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/ \
+<<<<<<< HEAD
     /usr/include/freetype2
+=======
+    /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.3/include/g++-v4/
+>>>>>>> master
 #    /usr/lib/gcc/x86_64-pc-linux-gnu/4.6.1/include/g++-v4/
 
 
@@ -238,5 +247,8 @@ INCLUDEPATH += \
 
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> master

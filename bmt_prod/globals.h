@@ -96,3 +96,4 @@ extern class Demo *g_demo;
 #include "core/keyboard.h"
 
 #include "core/fonthandler.h"
+#include "core/pitchdetector.h"
