@@ -57,10 +57,10 @@ int main(void) {
 //					demo->addScene("treescene", new TreeScene());
 
 		//construct the timeline
-//		demo->addSceneToTimeline("heart",         0,   7000, 1000);
-//		demo->addSceneToTimeline("metablob",   7000,  14000, 2000);
-//		demo->addSceneToTimeline("brain",     14000, 260000, 3000);
-		demo->addSceneToTimeline("metablob",      0, 260000, 2000);
+		demo->addSceneToTimeline("heart",         0,   7000, 1000);
+		demo->addSceneToTimeline("metablob",   7000,  14000, 2000);
+		demo->addSceneToTimeline("brain",     14000, 260000, 3000);
+//		demo->addSceneToTimeline("metablob",      0, 260000, 2000);
 
 //					demo->addSceneToTimeline("treescene", 0, 240500, 666);
 

@@ -2,7 +2,11 @@
 
 #include "../globals.h"
 
+#ifdef _WIN32
+#include "FTGL/ftgl.h"
+#else
 #include <FTGL/ftgl.h>
+#endif
 
 /**
   DataBuffer - buffer for storing file data
@@ -52,7 +56,7 @@ public:
 		FTGLPolygonFont
 		FTGLTextureFont
 	  */
-	template <class FontType> FontType& font(string name, unsigned int size = 50);
+	template <class FontType> FontType& font(string name, unsigned int size);
 
 private:
 	//hide these 'cause this is a singleton

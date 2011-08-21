@@ -259,8 +259,8 @@ template <class FontType>
 //this allows to define templates outside header (http://www.parashift.com/c++-faq-lite/templates.html#faq-35.13)
 template FTGLBitmapFont&  FontHandler::font<FTGLBitmapFont> (string name, unsigned int size);
 template FTBufferFont&    FontHandler::font<FTBufferFont>   (string name, unsigned int size);
-template FTGLExtrdFont&   FontHandler::font<FTGLExtrdFont>  (string name, unsigned int size = 5);
-template FTGLOutlineFont& FontHandler::font<FTGLOutlineFont>(string name, unsigned int size = 5);
+template FTGLExtrdFont&   FontHandler::font<FTGLExtrdFont>  (string name, unsigned int size);
+template FTGLOutlineFont& FontHandler::font<FTGLOutlineFont>(string name, unsigned int size);
 template FTGLPixmapFont&  FontHandler::font<FTGLPixmapFont> (string name, unsigned int size);
-template FTGLPolygonFont& FontHandler::font<FTGLPolygonFont>(string name, unsigned int size = 5);
+template FTGLPolygonFont& FontHandler::font<FTGLPolygonFont>(string name, unsigned int size);
 template FTGLTextureFont& FontHandler::font<FTGLTextureFont>(string name, unsigned int size);

@@ -50,6 +50,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -144,6 +145,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -341,6 +343,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\core\fonthandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\core\fonthandler.h"
+				>
+			</File>
+			<File
 				RelativePath="core\frametimer.cpp"
 				>
 				<FileConfiguration
@@ -450,6 +460,14 @@
 			</File>
 			<File
 				RelativePath="core\parser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\core\pitchdetector.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\core\pitchdetector.h"
 				>
 			</File>
 			<File
@@ -925,6 +943,38 @@
 			Name="Effects"
 			>
 			<File
+				RelativePath=".\fx\brain.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\fx\brain.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fx\heart.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\fx\heart.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fx\metablob.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\fx\metablob.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fx\runko.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\fx\runko.h"
+				>
+			</File>
+			<File
 				RelativePath=".\fx\tree.cpp"
 				>
 			</File>
@@ -939,10 +989,6 @@
 			>
 			<File
 				RelativePath=".\resources\bitmap1.bmp"
-				>
-			</File>
-			<File
-				RelativePath=".\resources\bitmap2.bmp"
 				>
 			</File>
 			<File
@@ -1022,6 +1068,14 @@
 			</File>
 			<File
 				RelativePath="lib\fmodex_vc.lib"
+				>
+			</File>
+			<File
+				RelativePath=".\lib\freetype.lib"
+				>
+			</File>
+			<File
+				RelativePath=".\lib\ftgl_D.lib"
 				>
 			</File>
 			<File
