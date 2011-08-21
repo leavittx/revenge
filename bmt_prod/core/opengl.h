@@ -7,10 +7,10 @@
 #include "../globals.h"
 
 #ifdef _WIN32
-#include <windows.h>
+	#include <windows.h>
 #else
-#include <GL/glx.h>
-#include <X11/Xlib.h>
+	#include <GL/glx.h>
+	#include <X11/Xlib.h>
 #endif
 
 class GLWindow
@@ -72,9 +72,9 @@ public:
 	bool getKeyDown(int i);
 	bool getKeyPressed(int i);
 
-	bool    leftMouse;
-	bool    rightMouse;
-	float   mouseX, mouseY;
+	bool  leftMouse;
+	bool  rightMouse;
+	float mouseX, mouseY;
 
 private:
 

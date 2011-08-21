@@ -6,8 +6,8 @@ void Heart::init()
 	m_debug = g_params.getBool("debug");
 
 	GLWindow& glWindow = g_system.getGLWindow();
-	res[0] = glWindow.getWidth();
-	res[1] = glWindow.getHeight();
+	res[0] = float(glWindow.getWidth());
+	res[1] = float(glWindow.getHeight());
 }
 
 void Heart::release()
@@ -26,7 +26,7 @@ void Heart::draw()
 
 	Shader &heart = g_shaders.getShader("heart");
 	heart.bind();
-	heart.setUniform1f("time", g_system.getTime());
+	heart.setUniform1f("time", float(g_system.getTime()));
 	heart.setUniform2fv("resolution", 1, res);
 	glUtil::fullscreenQuad(col);
 	//uniform float time;

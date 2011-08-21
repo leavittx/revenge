@@ -646,7 +646,7 @@ void System::loadMeshes()
 		}
 		else
 		{
-			g_debug << "non-mesh or material file " << filename << " found in graphics directory!" << endl;
+			g_debug << "non-mesh or material file " << filename << " found in meshes directory!" << endl;
 		}
 		drawLoadingScreen();
 	}
@@ -683,6 +683,7 @@ Material& System::material(string name)
 	}
 	return *m_materials[name];
 }
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -6,8 +6,8 @@ void Metablob::init()
 	m_debug = g_params.getBool("debug");
 
 	GLWindow& glWindow = g_system.getGLWindow();
-	res[0] = glWindow.getWidth();
-	res[1] = glWindow.getHeight();
+	res[0] = float(glWindow.getWidth());
+	res[1] = float(glWindow.getHeight());
 }
 
 void Metablob::release()
@@ -48,7 +48,7 @@ void Metablob::draw()
 
 	Shader &heart = g_shaders.getShader("metablob");
 	heart.bind();
-	heart.setUniform1f("time", g_system.getTime());
+	heart.setUniform1f("time", float(g_system.getTime()));
 	heart.setUniform2fv("resolution", 1, res);
 	heart.setUniform1f("wave", wave);
 	glUtil::fullscreenQuad(col);

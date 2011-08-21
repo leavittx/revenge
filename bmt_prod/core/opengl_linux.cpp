@@ -17,7 +17,7 @@
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 
-#include <X11/XKBlib.h>
+#include <X11/XKBlib.h> //XkbSetDetectableAutoRepeat
 
 #ifndef GLX_CONTEXT_DEBUG_BIT_ARB
 #define GLX_CONTEXT_DEBUG_BIT_ARB 0x0001

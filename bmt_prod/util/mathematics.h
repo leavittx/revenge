@@ -3,6 +3,14 @@
 #include "../globals.h"
 
 /*
+	pi constant
+*/
+
+#ifndef PIf
+#define PIf		3.1415926535897932384626433832795f
+#endif
+
+/*
 	A class that contains mathematics-related static helper methods.
 
 */
