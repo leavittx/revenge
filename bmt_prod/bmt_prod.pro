@@ -114,12 +114,9 @@ SOURCES += \
     fx/heart.cpp \
     fx/metablob.cpp \
     fx/brain.cpp \
-<<<<<<< HEAD
-    core/fonthandler.cpp
-=======
+    core/fonthandler.cpp \
     core/pitchdetector.cpp \
     core/sound.cpp
->>>>>>> master
 
 OTHER_FILES += \
     notes.txt \
@@ -177,78 +174,5 @@ INCLUDEPATH += \
     /usr/include/ \
     /usr/include/c++/4.6.1/ \
     /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/ \
-<<<<<<< HEAD
-    /usr/include/freetype2
-=======
-    /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.3/include/g++-v4/
->>>>>>> master
-#    /usr/lib/gcc/x86_64-pc-linux-gnu/4.6.1/include/g++-v4/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> master
+    /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.3/include/g++-v4/ \
+	/usr/include/freetype2
