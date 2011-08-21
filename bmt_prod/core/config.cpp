@@ -14,9 +14,7 @@
 #include "../resources/resource.h"
 #include "config.h"
 
-#ifdef _MSC_VER
 #pragma warning (disable : 4996)
-#endif
 
 //-------------------------------------------------------
 //	Globals and static members
