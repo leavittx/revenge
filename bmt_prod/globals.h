@@ -3,6 +3,8 @@
 #ifdef _MSC_VER
 //fix visual studio "debug information truncated to 255 bytes"-whining
 #pragma warning ( disable : 4786)
+//no warnings about unsafe functions
+#define _CRT_SECURE_NO_WARNINGS
 #endif
 
 #define GLEW_STATIC /* use static version and not the DLL */
