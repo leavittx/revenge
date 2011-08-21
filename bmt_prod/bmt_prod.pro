@@ -158,6 +158,7 @@ QMAKE_CXXFLAGS += \
     -Wno-ignored-qualifiers \
     -Wno-sign-compare \
     -Wno-unused-variable \
+    -Wno-switch \
     -fno-permissive
 #    -Os
 
