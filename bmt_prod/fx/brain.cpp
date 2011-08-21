@@ -25,14 +25,14 @@ void Brain::draw()
 
 	glPushMatrix();
 	glTranslated(0, 0, -10);
-	glRotated(a += 0.2, 0, 1, 0);
+	glRotated(a += 0.2f, 0, 1, 0);
 	glScaled(0.5, 0.5, 0.5);
 	brain->draw(MESH_DRAW_WIREFRAME);
 
-	FTFont &my_font = g_fonts.font<FTGLOutlineFont>("el&font BLOCK.ttf", 3);
+	FTFont &my_font = g_fonts.font<FTGLOutlineFont>("el&font block.ttf", 3);
 	my_font.Render("COW COW COW");
 
-	FTFont &my_font1 = g_fonts.font<FTGLBitmapFont>("el&font BLOCK.ttf");
+	FTFont &my_font1 = g_fonts.font<FTGLBitmapFont>("el&font block.ttf", 50);
 	my_font1.Render("Scene by FL3");
 
 	glPopMatrix();
