@@ -13,12 +13,12 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Finnish resources
+// нейтральный resources
 
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FIN)
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
 #ifdef _WIN32
-LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
-#pragma code_page(1252)
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1251)
 #endif //_WIN32
 
 /////////////////////////////////////////////////////////////////////////////
@@ -28,7 +28,7 @@ LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
 
 IDD_SETUPDLG DIALOGEX 0, 0, 136, 232
 STYLE DS_SETFONT | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
-CAPTION "Brainstorm :: 2019"
+CAPTION "BMT :: Demo"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "+",IDOK,6,211,48,14
@@ -41,7 +41,6 @@ BEGIN
     GROUPBOX        "",IDC_STATIC,6,119,123,40
     GROUPBOX        "",IDC_STATIC,6,157,72,52
     CONTROL         106,IDC_STATIC,"Static",SS_BITMAP,6,7,124,110,WS_EX_CLIENTEDGE
-    CONTROL         "Randomize",IDC_RANDOMIZE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,193,51,10
     CONTROL         114,IDC_STATIC,"Static",SS_BITMAP,80,161,49,46,WS_EX_CLIENTEDGE
 END
 
@@ -64,6 +63,35 @@ BEGIN
 END
 #endif    // APSTUDIO_INVOKED
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "icon1.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP                  "bitmap1.bmp"
+IDB_BITMAP2             BITMAP                  "brslogo.bmp"
+#endif    // нейтральный resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// финский resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FIN)
+#ifdef _WIN32
+LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
+#pragma code_page(1252)
+#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -90,24 +118,7 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_ICON1               ICON                    "icon1.ico"
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
-
-IDB_BITMAP1             BITMAP                  "bitmap1.bmp"
-IDB_BITMAP2             BITMAP                  "brslogo.bmp"
-#endif    // Finnish resources
+#endif    // финский resources
 /////////////////////////////////////////////////////////////////////////////
 
 
