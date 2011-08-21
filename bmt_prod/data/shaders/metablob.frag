@@ -6,14 +6,14 @@ uniform float wave;
 void main(void)
 {
     float itime = time * 0.001;
-    float iwave = abs(wave) / 10.0;
+    float iwave = abs(wave);
 
     //the centre point for each blob
     vec2 move1;
-    move1.x = cos(itime)*0.4;
-    move1.y = sin(itime*1.5)*0.4;
+	move1.x = cos(itime*sin(iwave))*0.4;
+    move1.y = sin(itime*(1.0/(cos(iwave)+0.1))*1.5)*0.4;
     vec2 move2;
-    move2.x = cos(itime*2.0)*0.4;
+    move2.x = cos(itime*sin(iwave)*2.0)*0.4;
     move2.y = sin(itime*3.0)*0.4;
 
     //screen coordinates
