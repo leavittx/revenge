@@ -4,11 +4,9 @@
 
 extern class PitchDetector g_pitch;
 
-//namespace Pitch
-//{
-
 //TODO
 #define NUM_NOTES 120
+#define OUTPUT_RATE 48000
 #define SPECTRUM_SIZE 512 //8192
 
 static const char *note[NUM_NOTES] =
@@ -39,8 +37,6 @@ static const float notefreq[NUM_NOTES] =
 	  4186.01f, 4434.92f, 4698.64f, 4978.03f,  5274.04f,  5587.65f,  5919.91f,  6271.92f,  6644.87f,  7040.00f,  7458.62f,  7902.13f,
 	  8372.01f, 8869.84f, 9397.27f, 9956.06f, 10548.08f, 11175.30f, 11839.82f, 12543.85f, 13289.75f, 14080.00f, 14917.24f, 15804.26f
 };
-//}
-
 
 class PitchDetector
 {
@@ -52,20 +48,49 @@ public:
 	void update();
 	void countDominantNote();
 
-	bool matchFreq(float freq);
-	bool matchLowBassBeat();
-	bool matchBassBeat();
-	bool matchHiBassBeat();
+	inline
+	bool matchFreq(float freq)
+	{
+		return (notefreq[dominantnote] == freq);
+	}
+
+	inline
+	bool matchFreqInterval(float freq1, float freq2)
+	{
+		return (notefreq[dominantnote] >= freq1 &&
+				notefreq[dominantnote] <= freq2);
+	}
+
+	inline
+	bool matchLowBassBeat()
+	{
+	//	return matchFreq(16.4);
+		return matchFreqInterval(0, 50);
+	}
+
+	inline
+	bool matchBassBeat()
+	{
+	//	return matchFreq(92.5);
+		return matchFreqInterval(50, 100);
+	}
+
+	inline
+	bool matchHiBassBeat()
+	{
+	//	return matchFreq(185.0);
+		return matchFreqInterval(100, 200);
+	}
 
 private:
-	int   OUTPUTRATE;
-	int   SPECTRUMSIZE;
-	float SPECTRUMRANGE;
-	float BINSIZE;
+	int   outputRate;
+	int   spectrumSize;
+	float spectrumRange;
+	float binSize;
 
 	vector<float> spectrum;
 
-	int bin, bin_prev;
+	int   bin, bin_prev;
 	float dominanthz;
-	int dominantnote;
+	int   dominantnote;
 };
