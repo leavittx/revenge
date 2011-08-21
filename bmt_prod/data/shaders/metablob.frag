@@ -1,17 +1,20 @@
 uniform float time;
 uniform vec2 resolution;
 uniform vec4 mouse;
+uniform float wave;
 
 void main(void)
 {
+    float itime = time * 0.001;
+    float iwave = abs(wave) / 10.0;
+
     //the centre point for each blob
     vec2 move1;
-    float ctime = time * 0.001;
-    move1.x = cos(ctime)*0.4;
-    move1.y = sin(ctime*1.5)*0.4;
+    move1.x = cos(itime)*0.4;
+    move1.y = sin(itime*1.5)*0.4;
     vec2 move2;
-    move2.x = cos(ctime*2.0)*0.4;
-    move2.y = sin(ctime*3.0)*0.4;
+    move2.x = cos(itime*2.0)*0.4;
+    move2.y = sin(itime*3.0)*0.4;
 
     //screen coordinates
     vec2 p = -1.0 + 2.0 * gl_FragCoord.xy / resolution.xy;
@@ -26,5 +29,7 @@ void main(void)
     float col = pow(metaball,8.0);
 
     //set the output color
-    gl_FragColor = vec4(sin(10.0*ctime),cos(10.0*ctime),col,1.0);
+//    gl_FragColor = vec4(sin(10.0*itime),cos(10.0*itime),col,1.0);
+//    gl_FragColor = vec4(col*sin(wave),col*wave,col*sin(itime),1.0);
+    gl_FragColor = vec4(col*sin(wave),col*sin(0.1*wave),col*sin(itime),1.0);
 }

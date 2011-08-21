@@ -66,7 +66,7 @@ Sound *Sound::create()
 }
 
 bool Sound::init()
-{		
+{
 	FMOD_RESULT result;
 	FMOD_CAPS   caps;
 	FMOD_SPEAKERMODE speakermode;
@@ -165,7 +165,7 @@ bool Sound::getEnabled( )
 }
 
 bool Sound::checkSync()
-{		
+{
 	return syncFlag;
 }
 
@@ -403,11 +403,14 @@ int Song::getPosition()
 
 	return time;
 }
+
 void Song::getWaveData(float *array, int size)
 {
 	m_channel->getWaveData(array, size, 0);
 }
+
 void Song::getSpectrum(float *array, int size)
 {
-	m_channel->getSpectrum(array, size, 0,  FMOD_DSP_FFT_WINDOW_RECT);
+//	m_channel->getSpectrum(array, size, 0,  FMOD_DSP_FFT_WINDOW_RECT);
+	m_channel->getSpectrum(array, size, 0,  FMOD_DSP_FFT_WINDOW_TRIANGLE);
 }

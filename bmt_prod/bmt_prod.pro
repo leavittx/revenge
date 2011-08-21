@@ -54,7 +54,8 @@ HEADERS += \
     core/keyboard.h \
     fx/heart.h \
     fx/metablob.h \
-    fx/brain.h
+    fx/brain.h \
+    core/pitchdetector.h
 
 SOURCES += \
     main.cpp \
@@ -85,7 +86,6 @@ SOURCES += \
     core/texturehandler.cpp \
     core/texture.cpp \
     core/system.cpp \
-    core/sound.cpp \
     core/shaderhandler.cpp \
     core/scene.cpp \
     core/postprocess.cpp \
@@ -112,7 +112,9 @@ SOURCES += \
     core/config_linux.cpp \
     fx/heart.cpp \
     fx/metablob.cpp \
-    fx/brain.cpp
+    fx/brain.cpp \
+    core/pitchdetector.cpp \
+    core/sound.cpp
 
 OTHER_FILES += \
     notes.txt \
@@ -167,8 +169,13 @@ LIBS += \
 INCLUDEPATH += \
     /usr/include/ \
     /usr/include/c++/4.6.1/ \
-    /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/
+    /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/ \
+    /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.3/include/g++-v4/
 #    /usr/lib/gcc/x86_64-pc-linux-gnu/4.6.1/include/g++-v4/
+
+
+
+
 
 
 
