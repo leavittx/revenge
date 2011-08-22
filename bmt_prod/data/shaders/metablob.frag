@@ -10,7 +10,7 @@ void main(void)
 
     //the centre point for each blob
     vec2 move1;
-	move1.x = cos(itime*sin(iwave))*0.4;
+    move1.x = cos(itime*sin(iwave))*0.4;
     move1.y = sin(itime*(1.0/(cos(iwave)+0.1))*1.5)*0.4;
     vec2 move2;
     move2.x = cos(itime*sin(iwave)*2.0)*0.4;
