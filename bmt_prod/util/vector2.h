@@ -89,7 +89,7 @@ public:
 		x = vect.x;
 		y = vect.y;
 		return *this;
-	} //TODO: self assigment check
+	}
 
 	Vector2 normalize()
 	{
