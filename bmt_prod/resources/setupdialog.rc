@@ -1,25 +1,7 @@
 // Microsoft Visual C++ generated resource script.
 //
+#include <windows.h>
 #include "resource.h"
-
-#define APSTUDIO_READONLY_SYMBOLS
-/////////////////////////////////////////////////////////////////////////////
-//
-// Generated from the TEXTINCLUDE 2 resource.
-//
-#include "afxres.h"
-
-/////////////////////////////////////////////////////////////////////////////
-#undef APSTUDIO_READONLY_SYMBOLS
-
-/////////////////////////////////////////////////////////////////////////////
-// нейтральный resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
-#ifdef _WIN32
-LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
-#pragma code_page(1251)
-#endif //_WIN32
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -44,26 +26,6 @@ BEGIN
     CONTROL         114,IDC_STATIC,"Static",SS_BITMAP,80,161,49,46,WS_EX_CLIENTEDGE
 END
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
-BEGIN
-    IDD_SETUPDLG, DIALOG
-    BEGIN
-        LEFTMARGIN, 6
-        RIGHTMARGIN, 129
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 225
-    END
-END
-#endif    // APSTUDIO_INVOKED
-
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Icon
@@ -80,56 +42,6 @@ IDI_ICON1               ICON                    "icon1.ico"
 
 IDB_BITMAP1             BITMAP                  "bitmap1.bmp"
 IDB_BITMAP2             BITMAP                  "brslogo.bmp"
-#endif    // нейтральный resources
 /////////////////////////////////////////////////////////////////////////////
 
-
-/////////////////////////////////////////////////////////////////////////////
-// финский resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FIN)
-#ifdef _WIN32
-LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
-#pragma code_page(1252)
-#endif //_WIN32
-
-#ifdef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// TEXTINCLUDE
-//
-
-1 TEXTINCLUDE 
-BEGIN
-    "resource.h\0"
-END
-
-2 TEXTINCLUDE 
-BEGIN
-    "#include ""afxres.h""\r\n"
-    "\0"
-END
-
-3 TEXTINCLUDE 
-BEGIN
-    "\r\n"
-    "\0"
-END
-
-#endif    // APSTUDIO_INVOKED
-
-#endif    // финский resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-
-#ifndef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// Generated from the TEXTINCLUDE 3 resource.
-//
-
-
-/////////////////////////////////////////////////////////////////////////////
-#endif    // not APSTUDIO_INVOKED
 
