@@ -23,10 +23,16 @@ public:
 	void ZeroMatrix() {
 		memset(m, 0, 16 * sizeof(T));
 	}
-	void IdentityMatrix() {
+	void MakeIdentity() {
 		for(int i = 0; i < 4; i++)
 			for(int j = 0; j < 4; j++)
 				m[i][j] = (i == j);
+	}
+	static Matrix4 Identity() {
+		Matrix4 M;
+
+		M.Identity();
+		return M;
 	}
 	Matrix4& operator+(const Matrix4& rhs) {
 		for(int i = 0; i < 4; i++)
@@ -80,7 +86,7 @@ public:
 			for(int j = 0; j < 4; j++)
 				m[i][j] = m[j][i];
 	}
-	static Matrix4 Translation(Vector3 &V)
+	static Matrix4 Translation(const Vector3 &V)
 	{
 		Matrix4 M;
 
@@ -127,7 +133,7 @@ public:
 		M.m[1][0] = s; M.m[1][1] = c;
 		return M;
 	}
-	static Matrix4 RotationWithAxis(Vector3 &axis, float ang) {
+	static Matrix4 RotationWithAxis(const Vector3 &axis, float ang) {
 		Matrix4 M;
 
 		M.IdentityMatrix();
@@ -144,7 +150,7 @@ public:
 		M.m[2][2] = c + az * az * (1 - c);
 		return M;
 	}
-	static Matrix4 Scaling(Vector3 &S) {
+	static Matrix4 Scaling(const Vector3 &S) {
 		Matrix4 M;
 		
 		M.IdentityMatrix();
@@ -157,6 +163,67 @@ public:
 		M.IdentityMatrix();
 		M.m[0][0] = sx; M.m[1][1] = sy; M.m[2][2] = sz;
 		return M;
+	}
+	static Matrix4 Inverse(const Matrix4 &rhs) {
+		Matrix4 M;
+		/*T l[4][4] = {0}, u[4][4] = {0};
+		
+
+		for(int j = 0; j < 4; j++)
+			u[0][j] = rhs.m[0][j];
+		for(int i = 1; i < 4; i++)
+			l[i][0] = rhs.m[i][0] / u[0][0];
+		for(int i = 0; i < 4; i++)
+			l[i][i] = 1;
+		for(int i = 1; i < 4; i++)
+			for(int j = 1; j < 4; j++)
+			{
+				if(i <= j)
+				{
+					u[i][j] = rhs.m[i][j];
+					T sum = 0;
+					for(int k = 0; k < i; k++)
+						sum += l[i][k] * u[k][j];
+					u[i][j] -= sum;
+				}
+				else
+				{
+					l[i][j] = rhs.m[i][j];
+					T sum = 0;
+					for(int k = 0; k < j; k++)
+						sum += l[i][k] * u[k][j];
+					l[j][i] -= sum;
+					l[j][i] /= u[j][j];
+				}
+			}
+		for(int i = 0; i < 4; i++)
+			for(int j = 0; j < 4; j++)
+			{
+				if(i == j)
+				{
+					T sum = 0;
+					for(int k = j + 1; k < 4; k++)
+						sum += u[j][k] * M.m[k][j];
+					M.m[j][j] = (1 - sum) / u[j][j];
+				}
+				else if(i < j) {
+					T sum = 0;
+					for(int k = i + 1; k < 4; k++)
+						sum += u[i][k] * M.m[k][j];
+					M.m[i][j] = -sum / u[i][i];
+				}
+				else
+				{
+					T sum = 0;
+					for(int k = j + 1; k < 4; k++)
+						sum += M.m[i][k] * l[k][j];
+					M.m[i][j] = -sum;
+				}
+			}*/
+			return M;
+	}
+	T& operator()(int i, int j) {
+		return m[i][j];
 	}
 };
 
