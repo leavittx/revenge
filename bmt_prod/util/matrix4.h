@@ -31,7 +31,7 @@ public:
 	static Matrix4 Identity() {
 		Matrix4 M;
 
-		M.Identity();
+		M.MakeIdentity();
 		return M;
 	}
 	Matrix4& operator+(const Matrix4& rhs) {
