@@ -10,11 +10,30 @@ class Vector2
 {
 public:
 
-	Vector2(float px = 0, float py = 0) : x(px), y(py) {}
-	Vector2(const class Vector2 &v) { this->x = v.x; this->y = v.y; }
+	Vector2()
+	{
+		x = y = 0.0f;
+	}
+	Vector2(float val)
+	{
+		x = y = val;
+	}
+	Vector2(float px, float py)
+	{
+		x = px;
+		y = py;
+	}
+	Vector2(const class Vector2 &v)
+	{
+		this->x = v.x;
+		this->y = v.y;
+	}
 	~Vector2() {}
 
-	float dotProduct(Vector2 &vect) { return x*vect.x + y*vect.y; }
+	float dotProduct(Vector2 &vect)
+	{
+		return x*vect.x + y*vect.y;
+	}
 
 	Vector2 minim(Vector2 &vect)
 	{
@@ -81,7 +100,10 @@ public:
 		return Vector2(tx, ty);
 	}
 
-	bool operator == (Vector2 const &vect) { return (vect.x == x && vect.y == y); }
+	bool operator == (Vector2 const &vect)
+	{
+		return (vect.x == x && vect.y == y);
+	}
 	Vector2& operator = (const Vector2 &vect)
 	{
 		if (this == &vect)
@@ -101,8 +123,14 @@ public:
 		return Vector2(x, y);
 	}
 
-	float squaredLength() { return (float)(x*x + y*y); }
-	float length() { return (float)sqrt(x*x + y*y); }
+	float squaredLength()
+	{
+		return (float)(x*x + y*y);
+	}
+	float length()
+	{
+		return (float)sqrt(x*x + y*y);
+	}
 
 	float x, y;
 
