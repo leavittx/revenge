@@ -54,6 +54,7 @@ extern class Demo *g_demo;
 #include "util/color4.h"
 #include "util/range.h"
 #include "util/matrix.h"
+#include "util/matrix4.h"
 #include "util/curve.h"
 #include "util/linearcurve.h"
 #include "util/catmullrom.h"
