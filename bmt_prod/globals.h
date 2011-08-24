@@ -48,6 +48,7 @@ extern class Demo *g_demo;
   */
 
 #include "util/stringutils.h"
+#include "util/vector2.h"
 #include "util/vector3.h"
 #include "util/color3.h"
 #include "util/color4.h"
