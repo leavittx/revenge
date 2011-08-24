@@ -21,9 +21,7 @@ public:
 	}
 	~Matrix4() {}
 	void ZeroMatrix() {
-		for(int i = 0; i < 4; i++)
-			for(int j = 0; j < 4; j++)
-				m[i][j] = 0;
+		memset(m, 0, 16 * sizeof(T));
 	}
 	void IdentityMatrix() {
 		for(int i = 0; i < 4; i++)
@@ -51,7 +49,7 @@ public:
 	Matrix4& operator/(float r) {
 		for(int i = 0; i < 4; i++)
 			for(int j = 0; j < 4; j++)
-				m[i][j] *= r;
+				m[i][j] /= r;
 		return *this;
 	}
 	friend Matrix4& operator*(float r, Matrix4& M) {
