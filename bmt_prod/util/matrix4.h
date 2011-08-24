@@ -1,7 +1,7 @@
 #pragma once
 #include <cstring>
 #include <cmath>
-#include "util\vector3.h"
+
 template<typename T>
 class Matrix4
 {
