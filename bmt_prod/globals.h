@@ -1,5 +1,7 @@
 #pragma once
 
+#define RELEASE_DEMO false
+
 #ifdef _MSC_VER
 //fix visual studio "debug information truncated to 255 bytes"-whining
 #pragma warning ( disable : 4786)
@@ -55,6 +57,7 @@ extern class Demo *g_demo;
 #include "util/range.h"
 #include "util/matrix.h"
 #include "util/matrix4.h"
+#include "util/rect.h"
 #include "util/curve.h"
 #include "util/linearcurve.h"
 #include "util/catmullrom.h"
