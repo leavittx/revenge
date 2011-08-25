@@ -170,12 +170,12 @@ void TextureHandler::bindTexture(string name, int texunit)
 			}
 		}
 		//there is a bug here
-		glTexParameteri(GL_TEXTURE_2D,
-						GL_TEXTURE_WRAP_S,
-						GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D,
-						GL_TEXTURE_WRAP_T,
-						GL_CLAMP_TO_EDGE);
+//		glTexParameteri(GL_TEXTURE_2D,
+//						GL_TEXTURE_WRAP_S,
+//						GL_CLAMP_TO_EDGE);
+//		glTexParameteri(GL_TEXTURE_2D,
+//						GL_TEXTURE_WRAP_T,
+//						GL_CLAMP_TO_EDGE);
 		m_textures[name]->bind(texunit);
 		m_lastBoundTexture[texunitoffset] = name;
 	}
