@@ -65,7 +65,7 @@ public:
 		return M;
 	}
 	Matrix4& operator*(const Matrix4& rhs) {
-		float t[4][4] = {0};
+		float t[4][4] = {{0}};
 		
 		for(int i = 0; i < 4; i++)
 			for(int j = 0; j < 4; j++)
@@ -233,4 +233,4 @@ public:
 	T* ptr() { return (T *)m[0]; }
 };
 
-typedef Matrix4<GLfloat> Matrix4f;
+typedef Matrix4<float> Matrix4f;
