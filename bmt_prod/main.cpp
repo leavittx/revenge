@@ -8,7 +8,11 @@
 //scenes
 #include "fx/heart.h"
 #include "fx/metablob.h"
+
 #include "fx/brain.h"
+#include "fx/ear.h"
+#include "fx/pandazoom.h"
+#include "fx/credits.h"
 
 //#include "fx/tree.h"
 
@@ -46,21 +50,48 @@ int main(void) {
 		g_shaders.init();
 
 		g_textures.loadImages();
-		g_system.loadMeshes();
+//		g_system.loadMeshes();
 		g_fonts.loadFonts();
 
 		//initialize the actual demo
-		demo->addScene("heart",    new Heart());
-		demo->addScene("metablob", new Metablob());
-		demo->addScene("brain",    new Brain());
+		demo->addScene("heart",     new Heart());
+		demo->addScene("metablob",  new Metablob());
+		demo->addScene("brain",     new Brain());
+
+		demo->addScene("ear",       new EarScene());
+		demo->addScene("pandazoom", new PandaZoomScene());
+		demo->addScene("credits",   new CreditsScene());
 
 //					demo->addScene("treescene", new TreeScene());
 
 		//construct the timeline
-		demo->addSceneToTimeline("heart",         0,   7000, 1000);
-		demo->addSceneToTimeline("metablob",   7000,  14000, 2000);
-		demo->addSceneToTimeline("brain",     14000, 260000, 3000);
-//		demo->addSceneToTimeline("metablob",      0, 260000, 2000);
+//		demo->addSceneToTimeline("heart",         0,   4470, 1000);
+//		demo->addSceneToTimeline("metablob",   4470,  26180, 2000);
+//		demo->addSceneToTimeline("brain",     26180,  62300, 3000);
+
+		demo->addSceneToTimeline("pandazoom",     0,  43000, 2000);
+		demo->addSceneToTimeline("ear",		  43000, 260000, 2000);
+
+//		demo->addSceneToTimeline("credits",       0, 260000, 2000);
+
+
+		//Наш примерный таймлайн
+//   начало     конец  длител   музыка                рисуется
+//	      0      4670    4670   mute                  хз
+//     4670     26180   21510   beat			      сцена1
+//    26180     62300   36120   пиу-пиу+beat1+beat2   сцена2
+//    62300     69840    7540   пиу-пиу+beat1         сцена2'
+//    69840     72320    2480   дзззз                 какой-то переход
+//    72320     82100    9780   новая пищалка         сцена3
+//    82100     90160    8060   она же+ещё эффект     сцена3'
+//    90160    114389   24229   то же+бубен фигачит   сцена3''
+//   114389    122159    7770   то же без пищ соло    хз
+//   122159    146200   24041   фигачит мягко         сцена4
+//   146200    170090   23890   фигачит космос        сцена5
+//   170090    182370   12280   трааанс               сцена6
+//   182370    246258   63888   транс+дисторшн        сцена7
+//   246258    260000   13742   просто дисторшн       титры
+
 
 //					demo->addSceneToTimeline("treescene", 0, 240500, 666);
 
@@ -82,9 +113,6 @@ int main(void) {
 			g_system.update();
 			//update fft data
 			g_pitch.update();
-
-//			if (g_system.getTime() > 5000)
-//				g_pitch.match();
 
 			stringstream ss;
 			ss << "time = " << g_system.getTime() << " fps = " << g_system.getFPS();
