@@ -46,11 +46,11 @@ void Metablob::draw()
 		wave = PIf / 2;
 	}
 
-	Shader &heart = g_shaders.getShader("metablob");
-	heart.bind();
-	heart.setUniform1f("time", float(g_system.getTime()));
-	heart.setUniform2fv("resolution", 1, res);
-	heart.setUniform1f("wave", wave);
+	Shader &metablob = g_shaders.getShader("metablob");
+	metablob.bind();
+	metablob.setUniform1f("time", float(g_system.getTime()));
+	metablob.setUniform2fv("resolution", 1, res);
+	metablob.setUniform1f("wave", wave);
 	glUtil::fullscreenQuad(col);
 }
 
