@@ -30,7 +30,7 @@ public:
 		y = py;
 		z = pz;
 	}
-	Vector3(Vector2 const &vect, float pz = 0)
+	Vector3(Vector2f const &vect, float pz = 0)
 	{
 		x = vect.x;
 		y = vect.y;

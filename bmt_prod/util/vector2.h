@@ -6,19 +6,20 @@
 	A simple two-dimensional vector class
 */
 
+template <class T>
 class Vector2
 {
 public:
 
 	Vector2()
 	{
-		x = y = 0.0f;
+		x = y = 0;
 	}
-	Vector2(float val)
+	Vector2(T val)
 	{
 		x = y = val;
 	}
-	Vector2(float px, float py)
+	Vector2(T px, T py)
 	{
 		x = px;
 		y = py;
@@ -30,7 +31,7 @@ public:
 	}
 	~Vector2() {}
 
-	float dotProduct(Vector2 &vect)
+	T dotProduct(Vector2 &vect)
 	{
 		return x*vect.x + y*vect.y;
 	}
@@ -53,17 +54,21 @@ public:
 
 	Vector2 operator + (Vector2 const &vect)
 	{
-		float tx, ty, tz;
+		T tx, ty;
 		tx = x + vect.x;
 		ty = y + vect.y;
 		return Vector2(tx, ty);
 	}
 	Vector2 operator - (Vector2 const &vect)
 	{
-		float tx, ty;
+		T tx, ty;
 		tx = x - vect.x;
 		ty = y - vect.y;
 		return Vector2(tx, ty);
+	}
+	Vector2 operator - ()
+	{
+		return Vector2(-x, -y);
 	}
 	Vector2 operator += (Vector2 const &vect)
 	{
@@ -78,23 +83,23 @@ public:
 		return Vector2(x, y);
 	}
 
-	Vector2 operator * (const float &value)
+	Vector2 operator * (const T &value)
 	{
-		float tx, ty;
+		T tx, ty;
 		tx = x * value;
 		ty = y * value;
 		return Vector2(tx, ty);
 	}
-	Vector2 operator *= (float const &value)
+	Vector2 operator *= (const T &value)
 	{
 		x *= value;
 		y *= value;
 		return Vector2(x, y);
 	}
-	Vector2 operator / (const float &value)
+	Vector2 operator / (const T &value)
 	{
 		if (value == 0) return Vector2(0.0f, 0.0f);
-		float tx, ty;
+		T tx, ty;
 		tx = x / value;
 		ty = y / value;
 		return Vector2(tx, ty);
@@ -115,7 +120,7 @@ public:
 
 	Vector2 normalize()
 	{
-		float l = length();
+		T l = length();
 		if (l < 0.00001f && l > -0.00001f)
 			return Vector2(0, 0);
 		x /= l;
@@ -123,17 +128,21 @@ public:
 		return Vector2(x, y);
 	}
 
-	float squaredLength()
+	T squaredLength()
 	{
-		return (float)(x*x + y*y);
+		return (T)(x*x + y*y);
 	}
-	float length()
+	T length()
 	{
-		return (float)sqrt(x*x + y*y);
+		return (T)sqrt(x*x + y*y);
 	}
 
-	float x, y;
+	T x, y;
 
 private:
 
 };
+
+typedef Vector2<int>    Vector2i;
+typedef Vector2<float>  Vector2f;
+typedef Vector2<double> Vector2d;
