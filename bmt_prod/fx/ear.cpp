@@ -61,7 +61,7 @@ void EarScene::draw()
 	fx_radial_blur.bind();
 	fx_radial_blur.setUniform1f("time", float(g_system.getTime()));
 	fx_radial_blur.setUniform2fv("resolution", 1, res);
-	g_textures.bindTexture("starfield.png", GL_TEXTURE0_ARB);
+	g_textures.bindTexture("rblur000.png", GL_TEXTURE0_ARB);
 	fx_radial_blur.setUniform1i("tex0", 0);
 
 
