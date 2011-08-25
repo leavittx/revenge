@@ -69,3 +69,35 @@ void glUtil::fullscreenQuad(string name)
 	glEnd();
 	g_system.setPerspectiveMode();
 }
+
+const GLint glUtil::cullMode_toGL[lastCullMode + 1] =
+{
+	GL_POINT,
+	GL_LINE,
+	GL_FILL,
+	0 // unused
+};
+
+const GLint glUtil::blendMode_toGL[lastBlendMode + 1] =
+{
+	GL_FUNC_ADD,
+	GL_FUNC_SUBTRACT,
+	GL_FUNC_REVERSE_SUBTRACT,
+	GL_MIN,
+	GL_MAX
+};
+
+const GLint glUtil::blendFactor_toGL[lastBlendFactor + 1] =
+{
+	GL_ZERO,
+	GL_ONE,
+	GL_DST_COLOR,
+	GL_SRC_COLOR,
+	GL_ONE_MINUS_DST_COLOR,
+	GL_ONE_MINUS_SRC_COLOR,
+	GL_SRC_ALPHA,
+	GL_ONE_MINUS_SRC_ALPHA,
+	GL_DST_ALPHA,
+	GL_ONE_MINUS_DST_ALPHA,
+	GL_SRC_ALPHA_SATURATE
+};
