@@ -56,11 +56,16 @@ HEADERS += \
     fx/metablob.h \
     fx/brain.h \
     core/fonthandler.h \
-    core/pitchdetector.h
+    core/pitchdetector.h \
+    fx/ear.h \
+    fx/credits.h \
+    fx/pandazoom.h \
+    util/vector2.h \
+    util/matrix4.h \
+    util/rect.h
 
 SOURCES += \
     main.cpp \
-    util/vector3.cpp \
     util/vbo.cpp \
     util/stringutils.cpp \
     util/range.cpp \
@@ -116,7 +121,11 @@ SOURCES += \
     fx/brain.cpp \
     core/fonthandler.cpp \
     core/pitchdetector.cpp \
-    core/sound.cpp
+    core/sound.cpp \
+    fx/ear.cpp \
+    fx/credits.cpp \
+    fx/pandazoom.cpp \
+    util/vector3.cpp
 
 OTHER_FILES += \
     notes.txt \
@@ -148,7 +157,15 @@ OTHER_FILES += \
     data/shaders/heart.frag \
     data/shaders/heart.vert \
     data/shaders/metablob.frag \
-    data/shaders/metablob.vert
+    data/shaders/metablob.vert \
+    data/shaders/fx_radial_blur.frag \
+    data/shaders/fx_radial_blur.vert \
+    data/shaders/fx_monjori.vert \
+    data/shaders/fx_monjori.frag \
+    data/shaders/fx_tunnel.frag \
+    data/shaders/fx_tunnel.vert \
+    data/shaders/postprocess_blit.frag \
+    data/shaders/postprocess_blit.vert
 
 QMAKE_CXXFLAGS += \
     -std=c++0x \
@@ -177,3 +194,32 @@ INCLUDEPATH += \
     /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.2/include/g++-v4/ \
     /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.3/include/g++-v4/ \
     /usr/include/freetype2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
