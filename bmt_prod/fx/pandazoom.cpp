@@ -9,6 +9,12 @@ void PandaZoomScene::init()
 	tex.resize(DEPTH);
 	mat.resize(DEPTH);
 
+//	m_steps.push_back(RStep("zoom_maya_03.png", Vector2f(521, 1024-517),  25, -0.802788973)); //42
+//	m_steps.push_back(RStep("zoom_maya_02.png", Vector2f(520, 1024-476),  50,  0.448208988)); //84
+//	m_steps.push_back(RStep("zoom_maya_01.png", Vector2f(491, 1024-539),  70, -1.503780007)); //120
+
+
+
 	m_steps.push_back(RStep("000.png", Vector2f(506, 521),  27.7569, -1.570799947));
 	m_steps.push_back(RStep("001.png", Vector2f(518, 510),  83.2221, -0.978792012));
 	m_steps.push_back(RStep("001.png", Vector2f(518, 513),  80.5489, -0.353789985));
@@ -69,7 +75,7 @@ void PandaZoomScene::init()
 	m_steps.push_back(RStep("001.png", Vector2f(511, 509),  25.6503,  1.570799947));
 	m_steps.push_back(RStep("001.png", Vector2f(515, 516),  24.4867,  0.073786803));
 
-	reverse(m_steps.begin(), m_steps.end());
+//	reverse(m_steps.begin(), m_steps.end());
 
 
 	//	for (int i = 0; i < 20000; i++)
@@ -159,7 +165,7 @@ void PandaZoomScene::update()
 
 //	if (gt < EVENT3)
 //	{
-		float prog1 = Math::calcPosFloat(g_system.getTime(), 0, 40000);
+		float prog1 = Math::calcPosFloat(g_system.getTime(), 0, 80000);
 
 		m_state = 0.5 + prog1 * 34.5;
 //	}
@@ -200,7 +206,7 @@ void PandaZoomScene::draw()
 	Matrix4f m(Matrix4f::Scaling(Vector3(invRatio, 1.f, 1.f) * 0.99f));
 	glUtil::projectionMatrix(m); // to span all the screen
 
-	float decal = Math::calcPosFloat(g_system.getTime()/* * (g_pitch.matchLowBassBeat()?200:1)*/, 0, 200000) * 0.168;
+	float decal = Math::calcPosFloat(g_system.getTime()/* * (g_pitch.matchLowBassBeat()?200:1)*/, 0, 80000) * 0.168;
 
 	glUtil::modelviewMatrix(Matrix4f::Identity() * Matrix4f::Translation(Vector3(decal, 0, 0)));
 

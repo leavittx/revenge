@@ -69,8 +69,8 @@ int main(void) {
 //		demo->addSceneToTimeline("metablob",   4470,  26180, 2000);
 //		demo->addSceneToTimeline("brain",     26180,  62300, 3000);
 
-		demo->addSceneToTimeline("pandazoom",     0,  43000, 2000);
-		demo->addSceneToTimeline("ear",		  43000, 260000, 2000);
+		demo->addSceneToTimeline("pandazoom",     0, 260000, 2000);
+//		demo->addSceneToTimeline("ear",			  0, 260000, 2000);
 
 //		demo->addSceneToTimeline("credits",       0, 260000, 2000);
 
